@@ -1,5 +1,5 @@
-// import { getProducts } from '@/app/lib/queries.ts'
-import { getProducts } from '@/app/lib/queries_local.ts'
+// import { getProducts } from '@/app/lib/queries'
+import { getProducts } from '@/app/lib/queries_local'
 
 export default async function Catalogo() {
 	const p = await getProducts();

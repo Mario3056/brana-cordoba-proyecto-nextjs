@@ -1,8 +1,8 @@
 type Params = {
-	properties: string[],
+	props: string[],
 }
 
-const filterByProps = (obj, props) => {
+const filterByProps = (obj: any, props: string[]) => {
 	let newObj = Object.create(obj.__proto__);
 	let propsToKeep = Object.keys(obj).filter((p) => props.includes(p));
 	for (let prop of propsToKeep) {

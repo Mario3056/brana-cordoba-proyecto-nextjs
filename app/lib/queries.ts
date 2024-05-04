@@ -1,8 +1,8 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-import { AdminUser, Product } from '@/types'
+import { AdminUser, Product } from '@/app/lib/types';
 
-export async function getUsers(): AdminUser[] {
+export async function getUsers(): Promise<AdminUser[]> {
 	noStore();
 	try {
 		const user = await sql`SELECT * FROM tienda.administradores`;
@@ -14,7 +14,7 @@ export async function getUsers(): AdminUser[] {
 	}
 }
 
-export async function getProducts(): Product[] {
+export async function getProducts(): Promise<Product[]> {
 	noStore();
 	try {
 		const user = await sql`SELECT * FROM tienda.catalogo`;
