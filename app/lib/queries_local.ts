@@ -1,4 +1,4 @@
-import { AdminUser, Product } from '@/definitions'
+import { AdminUser, Product } from '@/types'
 
 import pg from 'pg'
 const { Client } = pg

@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-import { AdminUser, Product } from '@/definitions'
+import { AdminUser, Product } from '@/types'
 
 export async function getUsers(): AdminUser[] {
 	noStore();
