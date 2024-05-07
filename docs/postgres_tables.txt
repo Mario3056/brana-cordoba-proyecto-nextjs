@@ -2,6 +2,7 @@
 ------------------
 
 CREATE SCHEMA IF NOT EXISTS tienda;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS tienda.administradores (
 	id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -9,22 +10,19 @@ CREATE TABLE IF NOT EXISTS tienda.administradores (
 	password TEXT NOT NULL
 );
 
+CREATE SEQUENCE IF NOT EXISTS tienda.serial_id START WITH 33575;
 CREATE TABLE IF NOT EXISTS tienda.catalogo (
-	id serial,
+	id integer NOT NULL DEFAULT nextval('tienda.serial_id'),
 	name text DEFAULT 'Producto'::text,
 	description text DEFAULT 'Una descripcion elocuente y util para el usuario'::text,
 	category text DEFAULT 'Misc.'::text,
-	price integer DEFAULT 0,
-	rating real DEFAULT 0,
+	price integer DEFAULT 0, -- en centavos
+	rating real DEFAULT 0, -- idealmente, solo insertar en rango [0.0, 5.0]
 	image text DEFAULT '/products/placeholder.png'::text,
+	created_at timestamp with time zone DEFAULT NOW(),
+	modified_at timestamp with time zone DEFAULT NOW(), -- modificado si el admin lo edita
 	CONSTRAINT catalogo_pk PRIMARY KEY (id)
 );
-
-insert into tienda.catalogo (name) values ('p1');
-insert into tienda.catalogo (name) values ('p2');
-insert into tienda.catalogo (name) values ('p3');
-insert into tienda.catalogo (name) values ('p4');
-select * from tienda.catalogo;
 
 ------------------------------------------------------------------------------------
 
