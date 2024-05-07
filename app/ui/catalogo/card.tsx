@@ -1,7 +1,9 @@
-export default function Card() {
+import { Product } from '@/app/lib/types';
+
+export default function Card( {product}: {product: Product}) {
     return (
         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-            <a href="/producto/5" className="group block overflow-hidden">
+			<a href="/producto/5" className="group block overflow-hidden">
                 <img
                     src="https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg"
                     alt=""
