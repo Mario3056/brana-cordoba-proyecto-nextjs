@@ -4,7 +4,7 @@ import { Product } from '@/app/lib/types';
 
 /* To implement: search, getProductsByCategory(category: string, pageNumber: number), authenticate */
 
-const productsPerPage = 10;
+const productsPerPage = 8;
 
 export async function getProductsByPage(pageNumber: number): Promise<Product[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
