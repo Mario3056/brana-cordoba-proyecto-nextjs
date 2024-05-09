@@ -1,7 +1,13 @@
-import Producto from "../ui/carrito/producto";
+'use client';
 
+import Producto from "../ui/carrito/producto";
+import type { Product } from '@/app/lib/types';
+import { useCarrito } from '@/app/lib/carrito';
 
 export default function Carrito() {
+	const currentCarritoPrice = useCarrito(state => state.totalPrice);
+	const carrito = useCarrito(state => state.cart);
+
 	return (
 		<section>
 			<div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -12,17 +18,11 @@ export default function Carrito() {
 
 					<div className="mt-8">
 						<ul className="space-y-4">
-							<li className="flex items-center gap-4">
-								<Producto />
-							</li>
-
-							<li className="flex items-center gap-4">
-								<Producto />
-							</li>
-
-							<li className="flex items-center gap-4">
-								<Producto />
-							</li>
+							{carrito.map((product: Product) => (
+								<li className="flex items-center gap-4">
+									<Producto product={product}/>
+								</li>								
+							))}
 						</ul>
 
 						<div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
@@ -30,7 +30,7 @@ export default function Carrito() {
 								<dl className="space-y-0.5 text-sm text-gray-700">
 									<div className="flex justify-between !text-base font-medium">
 										<dt>Total</dt>
-										<dd>$300.00</dd>
+										<dd>{"$" + currentCarritoPrice + ".00"}</dd>
 									</div>
 								</dl>
 

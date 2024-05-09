@@ -10,7 +10,7 @@ export type Product = {
 	description?: string;
 	category?: string; // enum?
 	rating?: number;
-	price?: number;
+	price: number;
 	image?: string;
 	created_at?: string;
 	modified_at?: string;

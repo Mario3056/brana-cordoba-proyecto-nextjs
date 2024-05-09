@@ -1,18 +1,24 @@
-export default function Producto() {
+'use client';
+
+import type { Product } from '@/app/lib/types';
+import { useCarrito } from '@/app/lib/carrito';
+export default function Producto({ product }: { product: Product }) {
+    const removeFromCarrito = useCarrito(state => state.removeFromCart);
+
     return (
         <>
             <img
-                src="https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg"
+                src={product.image}
                 alt=""
                 className="size-16 rounded object-cover"
             />
 
             <div>
-                <h3 className="text-sm text-gray-900">Producto</h3>
+                <h3 className="text-sm text-gray-900">{product.name}</h3>
 
                 <dl className="mt-0.5 space-y-px text-[10px] text-gray-600">
                     <div>
-                        <p className="inline">Categoria</p>
+                        <p className="inline">{product.category}</p>
                     </div>
                 </dl>
             </div>
@@ -21,10 +27,10 @@ export default function Producto() {
                 <form>
                     <label htmlFor="Line2Qty" className="sr-only"> Precio </label>
 
-                    <h3 className="text-sm text-gray-900">$100.00</h3>
+                    <h3 className="text-sm text-gray-900">{"$" + product.price + ".00"}</h3>
                 </form>
 
-                <button className="text-gray-600 transition hover:text-red-600">
+                <button className="text-gray-600 transition hover:text-red-600" onClick={() => removeFromCarrito(product)}>
                     <span className="sr-only">Remove item</span>
 
                     <svg
