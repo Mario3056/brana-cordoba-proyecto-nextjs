@@ -19,7 +19,7 @@ export default function Carrito() {
 					<div className="mt-8">
 						<ul className="space-y-4">
 							{carrito.map((product: Product) => (
-								<li className="flex items-center gap-4">
+								<li key={product.id} className="flex items-center gap-4">
 									<Producto product={product}/>
 								</li>								
 							))}

@@ -5,15 +5,15 @@ export type AdminUser = {
 }
 
 export type Product = {
-	id?: string;
-	name?: string;
-	description?: string;
-	category?: string; // enum?
-	rating?: number;
+	id: string;
+	name: string;
+	description: string;
+	category: string; // enum?
+	rating: number;
 	price: number;
-	image?: string;
-	created_at?: string;
-	modified_at?: string;
+	image: string;
+	created_at: string;
+	modified_at: string;
 }
 
 export const placeholderProduct: Product = {

@@ -1,6 +1,6 @@
 import Card from "../ui/catalogo/card";
 
-// import { getProductsByPage, getProductById, debug_getAllProducts } from '@/app/lib/queries';
+// import { getProductsByPage } from '@/app/lib/queries';
 import { getProductsByPage } from '@/app/lib/queries_local';
 
 export default async function Catalogo() {

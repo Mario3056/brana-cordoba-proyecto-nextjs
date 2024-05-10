@@ -1,9 +1,15 @@
+// import { getProductById } from '@/app/lib/queries';
+import { getProductById } from '@/app/lib/queries_local';
+
+import { Product } from '@/app/lib/types.d';
+
 type Params = {
+	id: string,
 	props: string[],
 }
 
 const filterByProps = (obj: any, props: string[]) => {
-	let newObj = Object.create(obj.__proto__);
+	let newObj = Object.create(obj.__proto__); // Empty object created from the original object's prototype - if this is not needed, it's also valid to do Object.create(null);
 	let propsToKeep = Object.keys(obj).filter((p) => props.includes(p));
 	for (let prop of propsToKeep) {
 		newObj[prop] = obj[prop]
@@ -13,7 +19,10 @@ const filterByProps = (obj: any, props: string[]) => {
 }
 
 export async function GET(request: Request, context: { params: Params }) {
-	/* fetch product by id |> filter by properties */
-	const testProduct = { id: 1, name: "test", description: "description", price: 0.0, rating: 0.0, image: "/products/placeholder.png" };
-	return Response.json( filterByProps(testProduct, context.params.props) );
+	if (Number.isNaN(Number(context.params.id))) {
+		/* error */
+	} else {
+		const product: Product = await getProductById(context.params.id.toString());
+		return Response.json( filterByProps(product, context.params.props) );
+	}
 }

@@ -1,10 +1,17 @@
+// import { getProductById } from '@/app/lib/queries';
+import { getProductById } from '@/app/lib/queries_local';
+
+import { Product } from '@/app/lib/types.d';
+
 type Params = {
 	id: number,
 };
 
 export async function GET(request: Request, context: { params: Params }) {
-	return Response.json( {
-		url: request.url,
-		givenP: context.params.id,
-	});
+	if (Number.isNaN(Number(context.params.id))) {
+		/* error */
+	} else {
+		const product: Product = await getProductById(context.params.id.toString());
+		return Response.json( product );
+	}
 }

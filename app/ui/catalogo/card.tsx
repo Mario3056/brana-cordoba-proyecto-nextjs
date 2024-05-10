@@ -1,4 +1,5 @@
 import { Product } from '@/app/lib/types';
+import StarRating from '@/app/ui/starRating';
 
 export default function Card( {product}: {product: Product}) {
     return (
@@ -16,8 +17,10 @@ export default function Card( {product}: {product: Product}) {
                     </h3>
 
                     <p className="mt-2">
-                        <span className="tracking-wider text-gray-900"> {"$" + product.price + ".00"} </span>
+                        <span className="tracking-wider text-gray-900"> {"$" + (product.price / 100)} </span>
                     </p>
+					
+					<span> <StarRating rating={product.rating}/> </span>
                 </div>
             </a>
         </div>

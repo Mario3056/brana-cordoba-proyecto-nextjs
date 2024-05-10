@@ -17,7 +17,7 @@ export default function Card({ product }: { product: Product }) {
                         <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{product.name}</h1>
                         <div className="flex mb-4">
                             <span className="flex items-center">
-                                <StarRating rating={5.0} />
+                                <StarRating rating={product.rating} />
                                 <span className="text-gray-600 ml-3">Puntuación</span>
                             </span>
                         </div>
@@ -25,7 +25,7 @@ export default function Card({ product }: { product: Product }) {
                             <p className="leading-relaxed">{product.description}</p>
                         </div>
                         <div className="flex">
-                            <span className="title-font font-medium text-2xl text-gray-900">{"$" + product.price + ".00"}</span>
+                            <span className="title-font font-medium text-2xl text-gray-900">{"$" + (product.price / 100)}</span>
                             <button
                                 className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                                 onClick={() => addToCarrito(product)}

@@ -1,7 +1,8 @@
-export default function StarRating({ rating } : { rating: number}) {
+export default function StarRating({ rating } : { rating?: number}) {
 	const values = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
 
-	const closestValueToRating = (r: number) => {
+	const closestValueToRating = (r?: number) => {
+		if (r == undefined) { return values[0]; }
 		if (r <= values[0]) { return values[0]; }
 		if (r >= values[-1]) { return values[-1]; }
 		for (let i = 0; i < values.length-1; i++) {
@@ -11,7 +12,9 @@ export default function StarRating({ rating } : { rating: number}) {
 		}
 	}
 
-	const makeRatingHTML = (r: number) => {
+	const makeRatingHTML = (r?: number) => {
+		if (r == undefined) { r = values[0]; }
+	
 		let inputs = [];
 
 		for (let i = 0; i < values.length; i++) {
