@@ -2,11 +2,11 @@
 
 'use client';
 // import { useSession } from "next-auth/react"
-import { useCarrito } from "../lib/carrito";
-import useFromStore from "../lib/hooks/useFromStore";
+import { useCartStore } from "@/app/lib/cart/useCartStore";
+import useFromStore from "@/app/lib/cart/hooks/useFromStore";
 
 export default function CartButton() {
-    const totalItems = useFromStore(useCarrito, state => state.totalItems)
+    const totalItems = useFromStore(useCartStore, state => state.totalItems)
 	// const { data: session, status } = useSession()
 
 	// if (status === "authenticated") {

@@ -1,4 +1,4 @@
-import CartButton from '@/app/ui/cartButton'
+import CartButton from "./cart/cartButton";
 
 export default function Navbar() {
     return (

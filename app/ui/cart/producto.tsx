@@ -1,9 +1,9 @@
 'use client';
 
 import type { Product } from '@/app/lib/types';
-import { useCarrito } from '@/app/lib/carrito';
+import { useCartStore } from '@/app/lib/cart/useCartStore';
 export default function Producto({ product }: { product: Product }) {
-    const removeFromCarrito = useCarrito(state => state.removeFromCart);
+    const removeFromCarrito = useCartStore(state => state.removeFromCart);
 
     return (
         <>

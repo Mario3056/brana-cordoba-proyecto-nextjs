@@ -1,11 +1,11 @@
 'use client';
 
 import StarRating from '@/app/ui/starRating';
-import { useCarrito } from '@/app/lib/carrito';
+import { useCartStore } from '@/app/lib/cart/useCartStore';
 import type { Product } from '@/app/lib/types';
 
 export default function Card({ product }: { product: Product }) {
-    const addToCarrito = useCarrito(state => state.addToCart);
+    const addToCarrito = useCartStore(state => state.addToCart);
 
     return (
         <section className="text-gray-600 body-font overflow-hidden">

@@ -1,7 +1,5 @@
 import { create } from "zustand"
-
-import { Product } from "../lib/types"
-
+import { Product } from "../types"
 import { persist } from "zustand/middleware"
 
 // Define the interface of the Cart state
@@ -25,7 +23,7 @@ const INITIAL_STATE: State = {
 }
 
 // Create the store with Zustand, combining the status interface and actions
-export const useCarrito = create(persist<State & Actions>((set, get) => ({
+export const useCartStore = create(persist<State & Actions>((set, get) => ({
     cart: INITIAL_STATE.cart,
     totalItems: INITIAL_STATE.totalItems,
     totalPrice: INITIAL_STATE.totalPrice,
@@ -33,9 +31,8 @@ export const useCarrito = create(persist<State & Actions>((set, get) => ({
         const cart = get().cart
         const cartItem = cart.find(item => item.id === product.id)
 
-        // If the item already exists in the Cart, increase its quantity
         if (cartItem == undefined) {
-            const updatedCart = [...cart, { ...product, quantity: 1 }]
+            const updatedCart = [...cart, { ...product}]
 
             set(state => ({
                 cart: updatedCart,

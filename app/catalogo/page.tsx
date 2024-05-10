@@ -13,7 +13,7 @@ export default async function Catalogo() {
 			
 				<div className="flex flex-wrap -m-4">
 					{products.map((product) => (
-						<Card product={product} />
+						<Card key={product.id} product={product} />
 					))}
 				</div>
 			</div>

@@ -1,12 +1,12 @@
 'use client';
 
-import Producto from "../ui/carrito/producto";
+import Producto from "../ui/cart/producto";
 import type { Product } from '@/app/lib/types';
-import { useCarrito } from '@/app/lib/carrito';
+import { useCartStore } from "../lib/cart/useCartStore";
 
 export default function Carrito() {
-	const currentCarritoPrice = useCarrito(state => state.totalPrice);
-	const carrito = useCarrito(state => state.cart);
+	const currentCarritoPrice = useCartStore(state => state.totalPrice);
+	const carrito = useCartStore(state => state.cart);
 
 	return (
 		<section>
