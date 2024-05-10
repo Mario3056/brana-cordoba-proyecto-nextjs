@@ -1,7 +1,7 @@
 // import { getProductById } from '@/app/lib/queries';
 import { getProductById } from '@/app/lib/queries_local';
 
-import { Product } from '@/app/lib/types.d';
+import type { Product } from '@/app/lib/types.d';
 
 type Params = {
 	id: string,

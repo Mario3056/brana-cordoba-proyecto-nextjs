@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { Product } from "../types"
+import type { Product } from "../types"
 import { persist } from "zustand/middleware"
 
 // Define the interface of the Cart state

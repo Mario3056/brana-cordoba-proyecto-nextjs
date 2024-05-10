@@ -2,6 +2,8 @@
 
 import type { Product } from '@/app/lib/types';
 import { useCartStore } from '@/app/lib/cart/useCartStore';
+import Image from 'next/image';
+
 export default function Producto({ product }: { product: Product }) {
     const removeFromCarrito = useCartStore(state => state.removeFromCart);
 	
@@ -22,9 +24,11 @@ export default function Producto({ product }: { product: Product }) {
 
     return (
         <>
-            <img
+            <Image
                 src={product.image}
-                alt=""
+                alt={product.description}
+				width={128}
+				height={128}
                 className="size-16 rounded object-cover"
             />
 

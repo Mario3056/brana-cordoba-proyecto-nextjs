@@ -1,13 +1,18 @@
-import { Product } from '@/app/lib/types';
+import type { Product } from '@/app/lib/types';
 import StarRating from '@/app/ui/starRating';
+
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Card( {product}: {product: Product}) {
     return (
         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-			<a href={"/producto/" + product.id} className="group block overflow-hidden">
-                <img
+			<Link href={"/producto/" + product.id} className="group block overflow-hidden">
+                <Image
                     src={product.image}
-                    alt=""
+                    alt={product.description}
+					width={600}
+					height={450}
                     className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
                 />
 
@@ -22,7 +27,7 @@ export default function Card( {product}: {product: Product}) {
 					
 					<span> <StarRating rating={product.rating}/> </span>
                 </div>
-            </a>
+            </Link>
         </div>
     );
 }

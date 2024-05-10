@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-import { Product } from '@/app/lib/types';
+import type { Product } from '@/app/lib/types';
 
 /* To implement: search, getProductsByCategory(category: string, pageNumber: number), authenticate */
 

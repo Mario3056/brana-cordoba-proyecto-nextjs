@@ -1,6 +1,6 @@
 import pg from 'pg'
 const { Client } = pg;
-import { Product } from '@/app/lib/types';
+import type { Product } from '@/app/lib/types';
 
 /* To implement: search, getProductsByCategory(category: string, pageNumber: number), authenticate */
 
