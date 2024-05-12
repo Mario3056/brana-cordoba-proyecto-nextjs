@@ -27,6 +27,19 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 	}
 }
 
+export async function getRandomProducts(n: number): Promise<Product[]> {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect()
+		const p = await client.query(`SELECT * FROM tienda.catalogo ORDER BY random() LIMIT ${n};`);
+		await client.end()
+		return p.rows as Product[];
+	} catch (error) {
+		console.error('[DEBUG] Failed to fetch all products:', error);
+		throw new Error('[DEBUG] Failed to fetch all products');
+	}
+}
+
 export async function debug_getAllProducts(): Promise<Product[]> {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});

@@ -24,6 +24,17 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 	}
 }
 
+export async function getRandomProducts(n: number): Promise<Product[]> {
+	noStore();
+	try {
+		const page = await sql`SELECT * FROM tienda.catalogo ORDER BY random() LIMIT ${n};`;
+		return page.rows as Product[];
+	} catch (error) {
+		console.error('[DEBUG] Failed to fetch page of products:', error);
+		throw new Error('[DEBUG] Failed to fetch page of products');
+	}
+}
+
 export async function debug_getAllProducts(): Promise<Product[]> {
 	noStore();
 	try {
