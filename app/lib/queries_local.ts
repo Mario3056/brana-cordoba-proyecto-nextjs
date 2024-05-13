@@ -66,11 +66,18 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
 		
+		console.log(`SELECT * FROM tienda.catalogo
+				WHERE name ILIKE '%${query}%' OR
+					  description ILIKE '%${query}%' OR
+					  category ILIKE '%${query}%'
+				ORDER BY created_at DESC
+				OFFSET ${pageOffset} LIMIT ${productsPerPage}`);
+		
 		await client.connect();
 		const page = await client.query(`SELECT * FROM tienda.catalogo
-				WHERE name ILIKE ${`%${query}%`} OR
-					  description ILIKE ${`%${query}%`} OR
-					  category ILIKE ${`%${query}%`}
+				WHERE name ILIKE '%${query}%' OR
+					  description ILIKE '%${query}%' OR
+					  category ILIKE '%${query}%'
 				ORDER BY created_at DESC
 				OFFSET ${pageOffset} LIMIT ${productsPerPage}`);
 		await client.end();
