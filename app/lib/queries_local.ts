@@ -2,6 +2,8 @@ import pg from 'pg'
 const { Client } = pg;
 import { Product } from '@/app/lib/types';
 
+import { placeholderProduct } from '@/app/lib/types.d';
+
 /* To implement: search, getProductsByCategory(category: string, pageNumber: number), authenticate */
 
 const productsPerPage = 8;
@@ -63,12 +65,31 @@ export async function getProductById(id: string): Promise<Product> {
 		const product = await client.query(`SELECT * FROM tienda.catalogo WHERE id = ${id}`);
 
 		console.log('Data fetch completed after 3 seconds.');
-		
+
 		await client.end()
 		return product.rows[0] as Product;
 	} catch (error) {
 		console.error('Failed to fetch product:', error);
 		throw new Error('Failed to fetch product');
 	}
+}
+
+export async function getRandomProducts(): Promise<Product[]>{
+	// We artificially delay a response for demo purposes.
+    // Don't do this in production :)
+	const arrayOfProducts = [];
+
+	console.log('Fetching random products...');
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+	console.log('Data fetch completed after 3 seconds.');
+
+	for (let i=0; i<4; i++){
+		arrayOfProducts.push(placeholderProduct);
+	}
+
+	return(
+		arrayOfProducts
+	)
 }
 
