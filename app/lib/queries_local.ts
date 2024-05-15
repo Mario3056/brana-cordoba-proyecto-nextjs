@@ -18,12 +18,12 @@ import type { Product } from '@/app/lib/types';
 
 /* To implement: authenticate */
 
-export const productsPerPage = 8;
+export const ITEMS_PER_PAGE = 8;
 
 export async function getProductsByPage(pageNumber: number): Promise<Product[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
 	
-	const pageOffset = (pageNumber - 1) * productsPerPage;
+	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
 
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
@@ -36,7 +36,7 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 
 		const page = await client.query(`SELECT * FROM tienda.catalogo
 				ORDER BY created_at DESC
-				OFFSET ${pageOffset} LIMIT ${productsPerPage}`
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
 		);
 		
 		console.log('Data fetch completed after 3 seconds.'); // [DEBUG]
@@ -66,7 +66,7 @@ export async function getRandomProducts(n: number): Promise<Product[]> {
 
 export async function getFilteredProductsByPage(pageNumber: number, query: string): Promise<Product[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
-	const pageOffset = (pageNumber - 1) * productsPerPage;
+	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
 
 	// sanitize query: escape all characters? prepared statements?
 	// https://www.postgresql.org/docs/current/sql-prepare.html
@@ -81,7 +81,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 					  description ILIKE '%${query}%' OR
 					  category ILIKE '%${query}%'
 				ORDER BY created_at DESC
-				OFFSET ${pageOffset} LIMIT ${productsPerPage}`);
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
 		
 		await client.connect();
 		const page = await client.query(`SELECT * FROM tienda.catalogo
@@ -89,7 +89,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 					  description ILIKE '%${query}%' OR
 					  category ILIKE '%${query}%'
 				ORDER BY created_at DESC
-				OFFSET ${pageOffset} LIMIT ${productsPerPage}`);
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
 		await client.end();
 		return page.rows as Product[];
 		
@@ -101,7 +101,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 
 export async function getProductsByCategory(category: string, pageNumber: number): Promise<Product[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
-	const pageOffset = (pageNumber - 1) * productsPerPage;
+	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
 
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
@@ -109,7 +109,7 @@ export async function getProductsByCategory(category: string, pageNumber: number
 		const page = await client.query(`SELECT * FROM tienda.catalogo
 				WHERE category LIKE ${category}
 				ORDER BY created_at DESC
-				OFFSET ${pageOffset} LIMIT ${productsPerPage}`);
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
 		await client.end();
 		return page.rows as Product[];
 		
@@ -151,5 +151,26 @@ export async function getProductById(id: string): Promise<Product> {
 	} catch (error) {
 		console.error('Failed to fetch product:', error);
 		throw new Error('Failed to fetch product');
+	}
+}
+
+export async function fetchProductsPages(query: string) {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+
+		const count = await client.query(`SELECT COUNT(*) 
+			FROM tienda.catalogo
+			WHERE 
+				name ILIKE '%${query}%' OR
+				description ILIKE '%${query}%' OR
+				category ILIKE '%${query}%'`
+		);
+
+		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+		return totalPages;
+	} catch (error) {
+		console.error('Database Error:', error);
+		throw new Error('Failed to fetch total number of products.');
 	}
 }
