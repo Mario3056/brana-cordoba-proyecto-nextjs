@@ -18,7 +18,7 @@ import type { Product } from '@/app/lib/types';
 
 /* To implement: authenticate */
 
-const productsPerPage = 8;
+export const productsPerPage = 8;
 
 export async function getProductsByPage(pageNumber: number): Promise<Product[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
@@ -28,10 +28,20 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
 		await client.connect()
+
+
+		// [DEBUG] Test for skeletons - remove before production
+   	 	console.log('Fetching products by page...');
+    	await new Promise((resolve) => setTimeout(resolve, 3000));
+
 		const page = await client.query(`SELECT * FROM tienda.catalogo
 				ORDER BY created_at DESC
-				OFFSET ${pageOffset} LIMIT ${productsPerPage}`);
-		// console.log(page.rows);
+				OFFSET ${pageOffset} LIMIT ${productsPerPage}`
+		);
+		
+		console.log('Data fetch completed after 3 seconds.'); // [DEBUG]
+		// console.log(page.rows); // [DEBUG]
+
 		await client.end()
 		return page.rows as Product[];
 		
@@ -127,7 +137,15 @@ export async function getProductById(id: string): Promise<Product> {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
 		await client.connect()
+
+		// [DEBUG] Test for skeletons - remove before production
+		console.log('Fetching product by id...');
+    	await new Promise((resolve) => setTimeout(resolve, 3000));
+
 		const product = await client.query(`SELECT * FROM tienda.catalogo WHERE id = ${id}`);
+
+		console.log('Data fetch completed after 3 seconds.'); // [DEBUG]
+
 		await client.end()
 		return product.rows[0] as Product;
 	} catch (error) {
@@ -135,4 +153,3 @@ export async function getProductById(id: string): Promise<Product> {
 		throw new Error('Failed to fetch product');
 	}
 }
-

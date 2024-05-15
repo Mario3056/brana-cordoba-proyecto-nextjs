@@ -4,7 +4,7 @@ import type { Product } from '@/app/lib/types';
 
 /* To implement: authenticate */
 
-const productsPerPage = 10;
+export const productsPerPage = 10;
 
 export async function getProductsByPage(pageNumber: number): Promise<Product[]> {
 	noStore();
@@ -84,7 +84,6 @@ export async function debug_getAllProducts(): Promise<Product[]> {
 	noStore();
 	try {
 		const page = await sql`SELECT * FROM tienda.catalogo`;
-		// console.log(page.rows);
 		return page.rows as Product[];
 	} catch (error) {
 		console.error('[DEBUG] Failed to fetch page of products:', error);
