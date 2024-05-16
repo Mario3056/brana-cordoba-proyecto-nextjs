@@ -70,7 +70,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 
 	// sanitize query: escape all characters? prepared statements?
 	// https://www.postgresql.org/docs/current/sql-prepare.html
-	const escapeAll = (s) => s.split("").map(c => "\\" + c).join("");
+	const escapeAll = (s: string) => s.split("").map(c => "\\" + c).join("");
 	query = escapeAll(query);
 
 	try {

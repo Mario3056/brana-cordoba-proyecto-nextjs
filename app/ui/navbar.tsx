@@ -1,19 +1,37 @@
+'use client';
+
+import Link from "next/link";
 import CartButton from "./cart/cartButton";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+    const pathName = usePathname();
+
     return (
         <header className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
             <a href="/" className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-                <span className="ml-3 text-xl">Empresa</span>
+                <div className="text-indigo-500">
+			        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24"
+				    stroke="currentColor">
+				        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+					    d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+			        </svg>
+		        </div>
+                <span className="ml-3 text-xl">LibreMercado</span>
             </a>
 
             <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
-                <a href="/" className="link link-hover mr-5 hover:text-gray-900">Home</a>
-                <a href="/catalogo" className="link link-hover mr-5 hover:text-gray-900">Catalogo</a>
-                <a href="#" className="link link-hover mr-5 hover:text-gray-900">Login</a>
+                <div className="text-gray-500 font-semibold">
+                    <Link  href="/catalogo" 
+                        className={pathName === "/catalogo" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
+                            Catálogo
+                    </Link>
+                    <Link href="/admin/login" 
+                        className={pathName === "/admin/login" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
+                            Login
+                    </Link>
+                </div>
+                
             </nav>
 
             <CartButton />
