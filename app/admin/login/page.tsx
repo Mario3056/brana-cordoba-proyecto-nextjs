@@ -1,12 +1,17 @@
-export default function AdminLogin() {
+'use client';
 
+import { useFormState, useFormStatus } from 'react-dom';
+import { authenticate } from '@/app/lib/authenticate';
+
+export default function AdminLogin() {
+	const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
 	return (
 		<div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
 			<div className="mx-auto max-w-lg">
 				<h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Bienvenido!</h1>
 				
-				<form action="#" id="adminLogin" className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+				<form action={dispatch} id="adminLogin" className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
 					<p className="text-center text-lg font-medium">Ingresa tus credenciales</p>
 
 					<div>
@@ -16,6 +21,7 @@ export default function AdminLogin() {
 							<input
 								type="email"
 								id="email"
+								name="email"
 								className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
 								placeholder="Enter email"
 								autoComplete="off"
@@ -47,6 +53,7 @@ export default function AdminLogin() {
 							<input
 								type="password"
 								id="password"
+								name="password"
 								className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
 								placeholder="Enter password"
 								autoComplete="off"
@@ -77,14 +84,17 @@ export default function AdminLogin() {
 						</div>
 					</div>
 
-					<button
-						type="submit"
-						className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
-					>
-						Ingresar
-					</button>
+					<LoginButton/>
 				</form>
 			</div>
 		</div>
+	);
+}
+
+function LoginButton() {
+	const { pending } = useFormStatus();
+	return (<button aria-disabled={pending} className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50">
+			<p>Ingresar</p>
+		</button>
 	);
 }

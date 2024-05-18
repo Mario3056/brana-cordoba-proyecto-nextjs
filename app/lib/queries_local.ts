@@ -14,9 +14,7 @@ DEALLOCATE  searchquery;
 
 import pg from 'pg'
 const { Client } = pg;
-import type { Product } from '@/app/lib/types';
-
-/* To implement: authenticate */
+import type { AdminUser, Product } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
 
@@ -119,17 +117,16 @@ export async function getProductsByCategory(category: string, pageNumber: number
 	}
 }
 
-export async function debug_getAllProducts(): Promise<Product[]> {
+export async function API_getAllProducts(): Promise<Product[]> {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
 		await client.connect()
 		const p = await client.query(`SELECT * FROM tienda.catalogo`);
-		// console.log(p.rows);
-		await client.end()
+		await client.end();
 		return p.rows as Product[];
 	} catch (error) {
-		console.error('[DEBUG] Failed to fetch all products:', error);
-		throw new Error('[DEBUG] Failed to fetch all products');
+		console.error('[API] Failed to fetch all products:', error);
+		throw new Error('[API] Failed to fetch all products');
 	}
 }
 
@@ -146,7 +143,7 @@ export async function getProductById(id: string): Promise<Product> {
 
 		console.log('Data fetch completed after 3 seconds.'); // [DEBUG]
 
-		await client.end()
+		await client.end();
 		return product.rows[0] as Product;
 	} catch (error) {
 		console.error('Failed to fetch product:', error);
@@ -168,9 +165,23 @@ export async function fetchProductsPages(query: string) {
 		);
 
 		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+		await client.end();
 		return totalPages;
 	} catch (error) {
 		console.error('Database Error:', error);
 		throw new Error('Failed to fetch total number of products.');
+	}
+}
+
+export async function getUser(email: string): Promise<AdminUser> {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect();
+		const user = await client.query(`SELECT * FROM tienda.administradores WHERE email = ${email}`);
+		await client.end();
+		return user.rows[0] as AdminUser;
+	} catch (error) {
+		console.error('Failed to fetch random products:', error);
+		throw new Error('Failed to fetch random products');
 	}
 }
