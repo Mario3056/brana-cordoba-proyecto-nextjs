@@ -1,7 +1,7 @@
 import Card from './card';
 import { getProductsByPage, getFilteredProductsByPage } from '@/app/lib/queries_local';
 
-export default async function Table({
+export default async function Cards({
     query,
     currentPage,
 }: {

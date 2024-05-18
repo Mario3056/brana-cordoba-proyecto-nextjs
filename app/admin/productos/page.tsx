@@ -1,9 +1,9 @@
-import Catalogo from '@/app/catalogo/page'; {/* placeholder */}
+import Table from '@/app/ui/admin/productos/table';
 
- export default function AdminProductView() {
+ export default function Productos() {
 	return (
-		<main id="adminProductView">
-			<Catalogo />
-		</main>
+		<section className="text-gray-600 body-font">
+			<Table query={""} currentPage={1}/>
+		</section>
 	);
  }

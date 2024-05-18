@@ -1,10 +1,10 @@
 // import { getProductsByPage, getFilteredProductsByPage } from '@/app/lib/queries';
-import { getProductsByPage, getFilteredProductsByPage, fetchProductsPages } from '@/app/lib/queries_local';
-import Table from "../ui/catalogo/table";
+import { fetchProductsPages } from '@/app/lib/queries_local';
 import { Suspense } from "react";
-import TableSkeleton from '../ui/catalogo/tableSkeleton';
 import SearchBar from '@/app/ui/catalogo/searchBar';
 import Pagination from '../ui/catalogo/pagination';
+import Cards from '../ui/catalogo/cards';
+import CardsSkeleton from '../ui/catalogo/cardsSkeleton';
 
 export default async function Catalogo({ searchParams }: { searchParams?: { page?: number, query?: string } }) {
 
@@ -15,8 +15,8 @@ export default async function Catalogo({ searchParams }: { searchParams?: { page
 	return (
 		<section className="text-gray-600 body-font">
 			<SearchBar />
-			<Suspense key={query + currentPage} fallback={<TableSkeleton />}>
-				<Table query={query} currentPage={currentPage} />
+			<Suspense key={query + currentPage} fallback={<CardsSkeleton />}>
+				<Cards query={query} currentPage={currentPage} />
 			</Suspense>
 			<div className="mb-5 mt-5 flex w-full justify-center">
         		<Pagination totalPages={totalPages} />

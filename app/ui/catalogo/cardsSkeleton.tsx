@@ -1,6 +1,6 @@
 import CardSkeleton from "./cardSkeleton";
 
-export default function TableSkeleton() {
+export default function CardsSkeleton() {
     return (
         <section className="text-gray-600 body-font">
 
