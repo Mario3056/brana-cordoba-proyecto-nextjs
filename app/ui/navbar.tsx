@@ -4,6 +4,8 @@ import Link from "next/link";
 import CartButton from "./cart/cartButton";
 import { usePathname } from "next/navigation";
 
+import SignOutOrCartButton from '@/app/ui/signOutOrCart';
+
 export default function Navbar() {
     const pathName = usePathname();
 
@@ -20,7 +22,9 @@ export default function Navbar() {
                 <span className="ml-3 text-xl">LibreMercado</span>
             </a>
 
+			
             <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+			
                 <div className="text-gray-500 font-semibold">
                     <Link  href="/catalogo" 
                         className={pathName === "/catalogo" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
@@ -34,7 +38,7 @@ export default function Navbar() {
                 
             </nav>
 
-            <CartButton />
+			<SignOutOrCartButton />
         </header>
 
     );
