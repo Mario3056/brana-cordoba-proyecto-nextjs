@@ -12,6 +12,4 @@ export default async function SignOutOrCartButton() {
 	} else {
 		return <CartButton />	
 	}
-	
-	
 }

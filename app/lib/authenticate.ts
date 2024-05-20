@@ -23,5 +23,5 @@ export async function authenticate(
 }
 
 export async function log_out() {
-	await signOut({ callbackUrl: '/admin/login', redirect: true });
+	await signOut({ redirectTo: '/admin/login', redirect: true });
 }
