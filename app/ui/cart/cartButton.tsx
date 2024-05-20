@@ -1,19 +1,11 @@
-// Otra alternativa: https://next-auth.js.org/configuration/nextjs#getserversession
-
 'use client';
-// import { useSession } from "next-auth/react"
+
 import { useCartStore } from "@/app/lib/cart/useCartStore";
 import useFromStore from "@/app/lib/cart/hooks/useFromStore";
-
 import Link from 'next/link';
 
 export default function CartButton() {
     const totalItems = useFromStore(useCartStore, state => state.totalItems)
-	// const { data: session, status } = useSession()
-
-	// if (status === "authenticated") {
-	//	return <div id="noCart"></div>
-	//}
 
 	return <>
 		<Link href="/carrito">
