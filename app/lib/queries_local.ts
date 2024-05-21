@@ -30,7 +30,7 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 
 		// [DEBUG] Test for skeletons - remove before production
    	 	console.log('Fetching products by page...');
-    	await new Promise((resolve) => setTimeout(resolve, 3000));
+    	await new Promise((resolve) => setTimeout(resolve, 100));
 
 		const page = await client.query(`SELECT * FROM tienda.catalogo
 				ORDER BY created_at DESC

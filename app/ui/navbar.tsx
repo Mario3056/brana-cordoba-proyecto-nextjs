@@ -1,10 +1,11 @@
 'use client';
 
 import Link from "next/link";
-import CartButton from "./cart/cartButton";
 import { usePathname } from "next/navigation";
 
+
 import SignOutOrCartButton from '@/app/ui/signOutOrCart';
+
 
 export default function Navbar() {
     const pathName = usePathname();
@@ -38,7 +39,9 @@ export default function Navbar() {
                 
             </nav>
 
+
 			<SignOutOrCartButton />
+
         </header>
 
     );

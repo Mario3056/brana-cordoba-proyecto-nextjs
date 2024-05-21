@@ -1,4 +1,4 @@
-import SearchBar from "../../catalogo/searchBar";
+
 import { getProductsByPage, getFilteredProductsByPage } from "@/app/lib/queries_local";
 
 export default async function Table({
