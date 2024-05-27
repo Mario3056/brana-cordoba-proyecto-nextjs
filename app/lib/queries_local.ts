@@ -7,7 +7,7 @@ PREPARE searchquery (text) AS
  		WHERE name ILIKE '%' || $1 || '%' OR
  		      description ILIKE '%' || $1 || '%' OR
  		      category ILIKE '%' || $1 || '%'
- 		ORDER BY created_at DESC;
+ 		ORDER BY created_at ASC;
 EXECUTE searchquery ('pro');
 DEALLOCATE  searchquery;
 */
@@ -30,10 +30,10 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 
 		// [DEBUG] Test for skeletons - remove before production
    	 	console.log('Fetching products by page...');
-    	await new Promise((resolve) => setTimeout(resolve, 100));
+    	await new Promise((resolve) => setTimeout(resolve, 1500));
 
 		const page = await client.query(`SELECT * FROM tienda.catalogo
-				ORDER BY created_at DESC
+				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
 		);
 		
@@ -78,7 +78,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 				WHERE name ILIKE '%${query}%' OR
 					  description ILIKE '%${query}%' OR
 					  category ILIKE '%${query}%'
-				ORDER BY created_at DESC
+				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
 		
 		await client.connect();
@@ -86,7 +86,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 				WHERE name ILIKE '%${query}%' OR
 					  description ILIKE '%${query}%' OR
 					  category ILIKE '%${query}%'
-				ORDER BY created_at DESC
+				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
 		await client.end();
 		return page.rows as Product[];
@@ -106,7 +106,7 @@ export async function getProductsByCategory(category: string, pageNumber: number
 		await client.connect();
 		const page = await client.query(`SELECT * FROM tienda.catalogo
 				WHERE category LIKE ${category}
-				ORDER BY created_at DESC
+				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
 		await client.end();
 		return page.rows as Product[];
@@ -137,7 +137,7 @@ export async function getProductById(id: string): Promise<Product> {
 
 		// [DEBUG] Test for skeletons - remove before production
 		console.log('Fetching product by id...');
-    	await new Promise((resolve) => setTimeout(resolve, 3000));
+    	await new Promise((resolve) => setTimeout(resolve, 1500));
 
 		const product = await client.query(`SELECT * FROM tienda.catalogo WHERE id = ${id}`);
 

@@ -12,7 +12,7 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 	
 	try {
 		const page = await sql`SELECT * FROM tienda.catalogo
-				ORDER BY created_at DESC
+				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`;
 		// console.log(page.rows);
 		return page.rows as Product[];
@@ -49,7 +49,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 				WHERE name ILIKE ${`%${query}%`} OR
 					  description ILIKE ${`%${query}%`} OR
 					  category ILIKE ${`%${query}%`}
-				ORDER BY created_at DESC
+				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`;
 				
 		return page.rows as Product[];
@@ -68,7 +68,7 @@ export async function getProductsByCategory(category: string, pageNumber: number
 	try {
 		const page = await sql`SELECT * FROM tienda.catalogo
 				WHERE category LIKE ${category}
-				ORDER BY created_at DESC
+				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`;
 		
 		return page.rows as Product[];

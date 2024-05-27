@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "local_seed": "node ./scripts/seed_local.js",
+    "seed_local": "node ./scripts/seed_local.js",
     "seed": "node -r dotenv/config ./scripts/seed.js"
   },
   "dependencies": {

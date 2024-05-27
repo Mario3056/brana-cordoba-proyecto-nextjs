@@ -6,7 +6,7 @@ import { createProduct } from '@/app/lib/actions';
 export default async function AdminProductCreator() {
 	return (
 		<main className="flex justify-center">
-			<ProductEditForm product={placeholderProduct} serverAction={createProduct}/>
+			<ProductEditForm product={emptyProduct} serverAction={createProduct}/>
 		</main>
 	);
  }

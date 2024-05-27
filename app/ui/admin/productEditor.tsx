@@ -5,6 +5,7 @@ import { Product, emptyProduct } from '@/app/lib/types';
 import { useFormState } from 'react-dom';
 import Image from 'next/image';
 
+// TODO: definir formato de ProductEditForm -> definir skeleton
 export default function ProductEditForm ( { product, serverAction } : { product?: Producto, serverAction: any } ) {
 	const initialState = { message: '', errors: {} };
 	const [state, dispatch] = useFormState(serverAction, initialState);
