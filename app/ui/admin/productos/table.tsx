@@ -1,7 +1,7 @@
+import { CreateProductButton, EditProductButton, DeleteProductButton } from "@/app/ui/admin/productos/buttons";
 import { getProductsByPage, getFilteredProductsByPage } from "@/app/lib/queries_local";
 import Link from 'next/link';
 
-import { CreateProductButton, EditProductButton, DeleteProductButton } from "@/app/ui/admin/productos/buttons";
 
 export default async function Table({
     query,

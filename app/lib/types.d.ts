@@ -16,13 +16,6 @@ export type Product = {
 	modified_at: string;
 }
 
-export type FormError = {
-	message: string;
-	// errors: object; // ?
-	// https://zod.dev/ERROR_HANDLING
-	// https://github.com/colinhacks/zod/issues/93
-}
-
 export const placeholderProduct: Product = {
 	id: 'placeholder-id',
 	name: 'placeholder product',
