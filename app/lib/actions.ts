@@ -50,12 +50,13 @@ const ProductSchema = z.object({
 		.number()
 		.gt(0, { message: 'Please enter an amount greater than $0.' }),
 		
-	image: z
-		.any()
+	image: z.any()
 		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
 		.refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
 				"Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
 });
+
+
 
 function extractFormData(fd: FormData) {
 	return {
@@ -118,39 +119,52 @@ export async function editProduct(prevState: State, fd: FormData) {
 	console.log("~~~~~~~~~~~~~~");
 	console.log("edit");
 	console.log(fd);
+	console.log(fd.get('id'));
 	console.log("~~~~~~~~~~~~~~");
 	
 	const fields = FormProductSchema.safeParse(extractFormData(fd));
+	console.log(fields);
 	
 	if (!fields.success) {
+		console.log(fields.error);
+		console.log(fields.error.flatten().fieldErrors);
+		
 		return {
 			errors: fields.error.flatten().fieldErrors,
 			message: 'Missing fields. Failed to create product.',
 		};
 	}
 	
-	// try {
-		// const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
-		// await client.connect();
-		// const editInfo = await client.query(`UPDATE tienda.catalogo SET ... WHERE id = ${id}`);
-		// console.log(editInfo) // [DEBUG]
-		// // remember to update the modified_at timestamp to NOW()
-		// // e.g. UPDATE tienda.catalogo SET modified_at = NOW() WHERE id = 33595;
-		// await client.end();
-		
-		// /* return { message: 'Successfully edited product with ID ' + id }; */
-	// } catch (error) {
-		// console.error('Failed to edit product with ID ' + id + ':', error);
-		// /* return { message: 'Failed to edit product with ID ' + id, error: error}; */
-	// }
+	console.log(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '/products/1.jpeg' WHERE id = ${fd.get('id')}`);
 	
-	// revalidatePath('/admin/productos');
-	// redirect('/admin/productos');
+	
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect();
+		
+		// remember to update the modified_at timestamp to NOW()
+		// e.g. UPDATE tienda.catalogo SET modified_at = NOW() WHERE id = 33595;
+		const editInfo = await client.query(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '/products/1.jpeg', modified_at = NOW() WHERE id = ${fd.get('id')}`);
+		// console.log(editInfo) // [DEBUG]
+		// assert(editInfo.rowCount == 1)
+		
+		await client.end();
+		
+		/* return { message: 'Successfully edited product with ID ' + id }; */
+	} catch (error) {
+		console.error('Failed to edit product with ID ' + id + ':', error);
+		/* return { message: 'Failed to edit product with ID ' + id, error: error}; */
+	}
+	
+	revalidatePath('/admin/productos');
+	redirect('/admin/productos');
 }
 
 // call with
 // const imageBlob = formData.get("image");
-// const uploadedURL: string = uploadToCloudinary(imageBlob);
+// const URL_promise = await uploadToCloudinary(imageBlob);
+// const uploadedURL = await URL_promise;
+
 async function uploadToCloudinary(imageBlob: File) {
 	// does this have to be called every time or once per run?
 	cloudinary.config({

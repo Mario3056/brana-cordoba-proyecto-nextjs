@@ -5,8 +5,17 @@ import { Product, emptyProduct } from '@/app/lib/types';
 import { useFormState } from 'react-dom';
 import Image from 'next/image';
 
+import { usePathname } from 'next/navigation';
+import { placeholderProduct } from '@/app/lib/types.d';
+
 // TODO: definir formato de ProductEditForm -> definir skeleton
 export default function ProductEditForm ( { product, serverAction } : { product?: Producto, serverAction: any } ) {
+
+	if (product == undefined) {
+		// ...
+		product = placeholderProduct;
+	}
+
 	const initialState = { message: '', errors: {} };
 	const [state, dispatch] = useFormState(serverAction, initialState);
 	console.log(product.rating);
@@ -14,6 +23,8 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 	return (
 		<form action={dispatch} id="productEditor" className="flex flex-col border border-black py-4 px-8 my-8 rounded">
 			<h1 className="text-lg font-bold">Datos de producto:</h1>
+			
+			<input type="hidden" name="id" value={product.id} />
 			
 			<input type="text" name="name" className="grow input input-bordered my-2" defaultValue={product.name} autoFocus />
 			<textarea id="productDescription" name="description" className="my-2 textarea textarea-bordered"

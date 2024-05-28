@@ -8,7 +8,7 @@ export default async function AdminProductEditor({ params }: { params: { id: str
 	const product: Product = await getProductById(params.id);
 	return (
 		<main className="flex justify-center">
-			<ProductEditForm product={product} serverAction={editProduct}/>
+			<ProductEditForm product={product} serverAction={editProduct} />
 		</main>
 	);
  }
