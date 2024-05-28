@@ -138,19 +138,21 @@ export async function editProduct(prevState: State, fd: FormData) {
 		// // e.g. UPDATE tienda.catalogo SET modified_at = NOW() WHERE id = 33595;
 		// await client.end();
 		
-		// revalidatePath('/admin/productos');
-		// redirect('/admin/productos');
-		// return { message: 'Successfully edited product with ID ' + id };
+		// /* return { message: 'Successfully edited product with ID ' + id }; */
 	// } catch (error) {
 		// console.error('Failed to edit product with ID ' + id + ':', error);
-		// return { message: 'Failed to edit product with ID ' + id, error: error};
+		// /* return { message: 'Failed to edit product with ID ' + id, error: error}; */
 	// }
+	
+	// revalidatePath('/admin/productos');
+	// redirect('/admin/productos');
 }
 
 // call with
 // const imageBlob = formData.get("image");
 // const uploadedURL: string = uploadToCloudinary(imageBlob);
 async function uploadToCloudinary(imageBlob: File) {
+	// does this have to be called every time or once per run?
 	cloudinary.config({
 		cloud_name: process.env.CLOUDINARY_NAME,
 		api_key: process.env.CLOUDINARY_KEY,
