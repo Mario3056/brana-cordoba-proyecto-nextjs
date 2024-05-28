@@ -40,7 +40,7 @@ export default async function Table({
                                 <tr key={product.id}>
                                     <td className="px-6 py-4">
                                         <div className="container w-16">
-                                            <Image src={product.image} height={64} width={64} className="rounded-lg h-16 w-16" />
+                                            <Image src={product.image} height={64} width={64} alt={product.description} className="rounded-lg h-16 w-16" />
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">

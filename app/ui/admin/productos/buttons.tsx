@@ -3,11 +3,11 @@
 import Link from 'next/link';
 import { deleteProduct } from "@/app/lib/actions";
 
-function disableAfterOneClick(event) {
-	if (event.target.classList.contains("disabled")) {
+function disableAfterOneClick(event: any) {
+	if ( event.currentTarget.classList.contains("disabled")) {
 		event.preventDefault();
 	} else {
-		event.target.classList.add("disabled");
+		event.currentTarget.classList.add("disabled");
 	}
 }
 
@@ -19,7 +19,7 @@ export function CreateProductButton() {
 
 }
 
-export function EditProductButton({id}) {
+export function EditProductButton({ id }: { id: string }) {
 	return <Link href={`/admin/producto/editar/${id}`} onClick={disableAfterOneClick}
 			className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg">
 			Editar
@@ -30,7 +30,10 @@ export function DeleteProductButton({ id }: { id: string }) {
 	const deleteProductWithId = deleteProduct.bind(null, id);
 	return (
 	<form action={deleteProductWithId}>
-		<button className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg" onClick={(e) => e.currentTarget.setAttribute("disabled", true)}>
+		<button
+			className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
+			onClick={(e) => e.currentTarget.setAttribute("disabled", "true")}>
+			
 			Eliminar
 		</button>
 	</form>

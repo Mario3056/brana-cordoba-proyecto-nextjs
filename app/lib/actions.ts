@@ -9,6 +9,8 @@ import pg from 'pg'
 const { Client } = pg;
 import type { AdminUser, Product } from '@/app/lib/types';
 
+type State = any; // ...?
+
 export async function deleteProduct(id: string) {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
@@ -26,10 +28,21 @@ export async function deleteProduct(id: string) {
 	}
 }
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/avif", "image/webp"];
+function extractFormData(fd: FormData) {
+	return {
+		id: fd.get('id'),
+		name: fd.get('name'),
+		description: fd.get('description'),
+		category: fd.get('category'),
+		rating: fd.get('rating'),
+		price: fd.get('price'),
+		created_at: fd.get('created_at'),
+		modified_at: fd.get('modified_at'),
+		image: fd.get('image')
+	}
+}
 
-const ProductSchema = z.object({
+const CreateProductSchema = z.object({
 	id: z.string(),
 	
 	name: z.string({
@@ -51,11 +64,17 @@ const ProductSchema = z.object({
 		.gt(0, { message: 'Please enter an amount greater than $0.' })
 		.transform((price) => price*100),
 		
+	created_at: z.string(), // string?
+	modified_at: z.string(), // string?
+		
 	image: z.any()
 		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
 		.refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
 				"Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
 });
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/avif", "image/webp"];
 
 const EditProductSchema = z.object({
 	id: z.string(),	
@@ -78,6 +97,9 @@ const EditProductSchema = z.object({
 		.gt(0, { message: 'Please enter an amount greater than $0.' })
 		.transform((price) => price*100),
 		
+	created_at: z.string(), // string?
+	modified_at: z.string(), // string?
+		
 	image: z.object({size: z.literal(0), name: z.literal('undefined'), type: z.literal('application/octet-stream'), lastModified: z.number()}).or(z.any()
 		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
 		.refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
@@ -85,19 +107,8 @@ const EditProductSchema = z.object({
 		)
 });
 
-function extractFormData(fd: FormData) {
-	return {
-		id: fd.get('id'),
-		name: fd.get('name'),
-		description: fd.get('description'),
-		category: fd.get('category'),
-		rating: fd.get('rating'),
-		price: fd.get('price'),
-		image: fd.get('image')
-	}
-}
-
-const FormProductSchema = ProductSchema.omit({id: true, created_at: true, modified_at: true});
+const SchemaForCreation = CreateProductSchema.omit({id: true, created_at: true, modified_at: true});
+const SchemaForEdition = EditProductSchema.omit({id: true, created_at: true, modified_at: true});
 
 export async function createProduct(prevState: State, fd: FormData) {
 	console.log("~~~~~~~~~~~~~~");
@@ -106,7 +117,7 @@ export async function createProduct(prevState: State, fd: FormData) {
 	console.log(fd.get("image"));
 	console.log("~~~~~~~~~~~~~~");
 	
-	const fields = FormProductSchema.safeParse(extractFormData(fd));
+	const fields = SchemaForCreation.safeParse(extractFormData(fd));
 	console.log(fields);
 	
 	if (!fields.success) {
@@ -148,7 +159,7 @@ export async function editProduct(product: Product, prevState: State, fd: FormDa
 	console.log(fd.get('id')); // testing the hidden field in the form
 	console.log("~~~~~~~~~~~~~~");
 	
-	const fields = EditProductSchema.safeParse(extractFormData(fd));
+	const fields = SchemaForEdition.safeParse(extractFormData(fd));
 	console.log(fields);
 	
 	if (!fields.success) {
@@ -229,7 +240,7 @@ async function uploadToCloudinary(imageBlob: File) {
 	
 	const x = await cloudinary.uploader.upload(dataUri, {
 		// https://cloudinary.com/documentation/image_upload_api_reference
-		public_id: publicId,
+		public_id: publicId.toString(),
 		folder: "products",
 		unique_filename: true,
 		resource_type: "image",

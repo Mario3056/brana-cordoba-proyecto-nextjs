@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 import { placeholderProduct } from '@/app/lib/types.d';
 
 // TODO: definir formato de ProductEditForm -> definir skeleton
-export default function ProductEditForm ( { product, serverAction } : { product?: Producto, serverAction: any } ) {
+export default function ProductEditForm ( { product, serverAction } : { product?: Product, serverAction: any } ) {
 
 	if (product == undefined) {
 		// ...
@@ -25,6 +25,8 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			<h1 className="text-lg font-bold">Datos de producto:</h1>
 			
 			<input type="hidden" name="id" value={product.id} />
+			<input type="hidden" name="created_at" value={product.created_at} />
+			<input type="hidden" name="modified_at" value={product.modified_at} />
 			
 			<input type="text" name="name" className="grow input input-bordered my-2" defaultValue={product.name} autoFocus />
 			<textarea id="productDescription" name="description" className="my-2 textarea textarea-bordered"
