@@ -6,9 +6,11 @@ import { editProduct } from '@/app/lib/actions';
 
 export default async function AdminProductEditor({ params }: { params: { id: string } }) {
 	const product: Product = await getProductById(params.id);
+	const editProductAction = editProduct.bind(null, product)
+	
 	return (
 		<main className="flex justify-center">
-			<ProductEditForm product={product} serverAction={editProduct} />
+			<ProductEditForm product={product} serverAction={editProductAction} />
 		</main>
 	);
  }

@@ -48,7 +48,8 @@ const ProductSchema = z.object({
 	
 	price: z.coerce
 		.number()
-		.gt(0, { message: 'Please enter an amount greater than $0.' }),
+		.gt(0, { message: 'Please enter an amount greater than $0.' })
+		.transform((price) => price*100),
 		
 	image: z.any()
 		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
@@ -56,10 +57,37 @@ const ProductSchema = z.object({
 				"Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
 });
 
-
+const EditProductSchema = z.object({
+	id: z.string(),	
+	name: z.string({
+		invalid_type_error: 'Please enter a name.',
+	}).min(1),
+	description: z.string({
+		invalid_type_error: 'Please enter a description.',
+	}).min(1),
+	category: z.string({
+		invalid_type_error: 'Please enter a category.',
+	}).min(1),
+	
+	rating: z.coerce.number({
+		invalid_type_error: "The product's rating must be a real number.",
+	}),
+	
+	price: z.coerce
+		.number()
+		.gt(0, { message: 'Please enter an amount greater than $0.' })
+		.transform((price) => price*100),
+		
+	image: z.object({size: z.literal(0), name: z.literal('undefined'), type: z.literal('application/octet-stream'), lastModified: z.number()}).or(z.any()
+		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
+		.refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+				"Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
+		)
+});
 
 function extractFormData(fd: FormData) {
 	return {
+		id: fd.get('id'),
 		name: fd.get('name'),
 		description: fd.get('description'),
 		category: fd.get('category'),
@@ -112,17 +140,15 @@ export async function createProduct(prevState: State, fd: FormData) {
 	redirect('/admin/productos');
 }
 
-export async function editProduct(prevState: State, fd: FormData) {
-	// how to ensure the image received is new? Compare hashes?
-	// If the image isn't changed, there's no need to send it back
-	
+export async function editProduct(product: Product, prevState: State, fd: FormData) {
 	console.log("~~~~~~~~~~~~~~");
 	console.log("edit");
 	console.log(fd);
-	console.log(fd.get('id'));
+	console.log(fd.get('image'));
+	console.log(fd.get('id')); // testing the hidden field in the form
 	console.log("~~~~~~~~~~~~~~");
 	
-	const fields = FormProductSchema.safeParse(extractFormData(fd));
+	const fields = EditProductSchema.safeParse(extractFormData(fd));
 	console.log(fields);
 	
 	if (!fields.success) {
@@ -135,8 +161,17 @@ export async function editProduct(prevState: State, fd: FormData) {
 		};
 	}
 	
-	console.log(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '/products/1.jpeg' WHERE id = ${fd.get('id')}`);
+	let uploadedURL: string;
+	if (fields.data.image.size == 0) {
+		// keep the original image
+		uploadedURL = product.image;
+	} else {
+		const uploadData = await uploadToCloudinary(fields.data.image);
+		uploadedURL = await uploadData;
+		console.log(uploadedURL);
+	}
 	
+	console.log(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = ${uploadedURL}, modified_at = NOW() WHERE id = ${fd.get('id')}`);
 	
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
@@ -144,16 +179,16 @@ export async function editProduct(prevState: State, fd: FormData) {
 		
 		// remember to update the modified_at timestamp to NOW()
 		// e.g. UPDATE tienda.catalogo SET modified_at = NOW() WHERE id = 33595;
-		const editInfo = await client.query(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '/products/1.jpeg', modified_at = NOW() WHERE id = ${fd.get('id')}`);
+		const editInfo = await client.query(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '${uploadedURL}', modified_at = NOW() WHERE id = ${fd.get('id')}`);
 		// console.log(editInfo) // [DEBUG]
 		// assert(editInfo.rowCount == 1)
 		
 		await client.end();
 		
-		/* return { message: 'Successfully edited product with ID ' + id }; */
+		/* return { message: 'Successfully edited product with ID ' + fd.get('id') }; */
 	} catch (error) {
-		console.error('Failed to edit product with ID ' + id + ':', error);
-		/* return { message: 'Failed to edit product with ID ' + id, error: error}; */
+		console.error('Failed to edit product with ID ' + fd.get('id') + ':', error);
+		/* return { message: 'Failed to edit product with ID ' + fd.get('id'), error: error}; */
 	}
 	
 	revalidatePath('/admin/productos');
