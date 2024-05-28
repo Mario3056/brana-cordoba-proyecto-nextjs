@@ -1,15 +1,26 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./ui/navbar";
-import Footer from "./ui/footer";
+import Footer from "@/app/ui/footer";
+
+import Navbar from "@/app/ui/navbar";
+import AdminNavbar from "@/app/ui/admin/navbar";
+import { auth } from "@/auth"
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout( { children }: Readonly<{children: React.ReactNode;}>) {
+export default async function RootLayout( { children }: Readonly<{children: React.ReactNode;}>) {
+	const auth_data = await auth();
+	
 	return (
 		<html lang="en" className="min-h-screen">
 			<body className={"min-h-screen flex flex-col justify-between " + inter.className}>
-				<Navbar />
+				
+				{ 
+					(auth_data != null && auth_data != undefined)
+						? <AdminNavbar />
+						: <Navbar />
+				}
+				
 				{children}
 				<Footer/>
 			</body>

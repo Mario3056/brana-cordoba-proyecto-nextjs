@@ -1,7 +1,7 @@
 import { CreateProductButton, EditProductButton, DeleteProductButton } from "@/app/ui/admin/productos/buttons";
 import { getProductsByPage, getFilteredProductsByPage } from "@/app/lib/queries_local";
 import Link from 'next/link';
-
+import Image from 'next/image';
 
 export default async function Table({
     query,
@@ -40,7 +40,7 @@ export default async function Table({
                                 <tr key={product.id}>
                                     <td className="px-6 py-4">
                                         <div className="container w-16">
-                                            <img src={product.image} className="rounded-lg h-16 w-16" />
+                                            <Image src={product.image} height={64} width={64} className="rounded-lg h-16 w-16" />
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">

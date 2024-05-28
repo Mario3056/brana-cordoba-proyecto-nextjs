@@ -44,7 +44,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			{ /* image selector */ }
 			<div className="input input-bordered my-2 flex justify-center items-center">
 				<p className="font-bold"> Seleccionar imagen</p>
-				<Image src={product.image} width={64} height={64} />
+				<Image src={product.image} width={64} height={64} alt={product.description} />
 				<input type="file" name="image" accept="image/png, image/jpeg, image/avif, image/webp" />
 			</div>
 			

@@ -1,9 +1,9 @@
-'use client';
+ 'use client';
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import CartButton from "./cart/cartButton";
+import SignOutButton from '@/app/ui/admin/signOutButton';
 
 export default function Navbar() {
     const pathName = usePathname();
@@ -24,19 +24,15 @@ export default function Navbar() {
             <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
 			
                 <div className="text-gray-500 font-semibold">
-                    <Link  href="/catalogo" 
-                        className={pathName === "/catalogo" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
-                            Catálogo
-                    </Link>
-                    <Link href="/admin/login" 
-                        className={pathName === "/admin/login" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
-                            Login
+                    <Link  href="/admin/productos" 
+                        className={pathName === "/admin/productos" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
+                            Listado de productos
                     </Link>
                 </div>
                 
             </nav>
 			
-            <CartButton />
-        </header>
+			<SignOutButton />
+         </header>
     );
 }
