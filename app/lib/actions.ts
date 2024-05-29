@@ -4,12 +4,10 @@ import { z } from 'zod';
 import {v2 as cloudinary} from 'cloudinary';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import type { AdminUser, Product, ProductFormState } from '@/app/lib/types.d';
 
 import pg from 'pg'
 const { Client } = pg;
-import type { AdminUser, Product } from '@/app/lib/types';
-
-type State = any; // ...?
 
 export async function deleteProduct(id: string) {
 	try {
@@ -42,18 +40,24 @@ function extractFormData(fd: FormData) {
 	}
 }
 
+const validFile = (file) => {
+	return file?.size != 0 &&
+		   file?.name != 'undefined' &&
+		   file?.type != 'application/octet-stream';
+}
+
 const CreateProductSchema = z.object({
 	id: z.string(),
 	
 	name: z.string({
 		invalid_type_error: 'Please enter a name.',
-	}).min(1),
+	}).min(1, "Name must have at least 1 letter"),
 	description: z.string({
 		invalid_type_error: 'Please enter a description.',
-	}).min(1),
+	}).min(1, "Description must have at least 1 letter"),
 	category: z.string({
 		invalid_type_error: 'Please enter a category.',
-	}).min(1),
+	}).min(1, "Category must have at least 1 letter"),
 	
 	rating: z.coerce.number({
 		invalid_type_error: "The product's rating must be a real number.",
@@ -68,9 +72,9 @@ const CreateProductSchema = z.object({
 	modified_at: z.string(), // string?
 		
 	image: z.any()
+		.refine((file) => validFile(file), "Provide an image for the product. Valid formats are .jpg, .jpeg, .png, .avif, and .webp")
 		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
-		.refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-				"Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
+		// .refine((file) => !validFile(file) || ACCEPTED_IMAGE_TYPES.includes(file?.type), "Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
 });
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
@@ -80,7 +84,7 @@ const EditProductSchema = z.object({
 	id: z.string(),	
 	name: z.string({
 		invalid_type_error: 'Please enter a name.',
-	}).min(1),
+	}).min(1, { message: (v) => "Name must have at least 1 character" }),
 	description: z.string({
 		invalid_type_error: 'Please enter a description.',
 	}).min(1),
@@ -100,7 +104,7 @@ const EditProductSchema = z.object({
 	created_at: z.string(), // string?
 	modified_at: z.string(), // string?
 		
-	image: z.object({size: z.literal(0), name: z.literal('undefined'), type: z.literal('application/octet-stream'), lastModified: z.number()}).or(z.any()
+	image: z.object({size: z.literal(0), name: z.literal('undefined'), type: z.literal('application/octet-stream'), lastModified: z.number()}).or(z.object()
 		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
 		.refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
 				"Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
@@ -110,7 +114,7 @@ const EditProductSchema = z.object({
 const SchemaForCreation = CreateProductSchema.omit({id: true, created_at: true, modified_at: true});
 const SchemaForEdition = EditProductSchema.omit({id: true, created_at: true, modified_at: true});
 
-export async function createProduct(prevState: State, fd: FormData) {
+export async function createProduct(prevState: ProductFormState, fd: FormData) {
 	console.log("~~~~~~~~~~~~~~");
 	console.log("create: ");
 	console.log(fd);
@@ -151,7 +155,7 @@ export async function createProduct(prevState: State, fd: FormData) {
 	redirect('/admin/productos');
 }
 
-export async function editProduct(product: Product, prevState: State, fd: FormData) {
+export async function editProduct(product: Product, prevState: ProductFormState, fd: FormData) {
 	console.log("~~~~~~~~~~~~~~");
 	console.log("edit");
 	console.log(fd);

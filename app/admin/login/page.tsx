@@ -6,7 +6,7 @@ import { authenticate } from '@/app/lib/authenticate';
 import { EmailSymbol, ShowPasswordSymbol } from '@/app/ui/icons';
 
 export default function AdminLogin() {
-	const initialState = {errors: [], message: ""};
+	const initialState = { error: undefined, message: undefined };
 	const [formState, checkAuth] = useFormState(authenticate, initialState);
 
 	return (
@@ -14,7 +14,8 @@ export default function AdminLogin() {
 			<div className="mx-auto max-w-lg">
 				<h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Bienvenido!</h1>
 				
-				<form action={checkAuth} id="adminLogin" className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+				<form action={checkAuth} id="adminLogin" aria-describedby="form-error"
+							className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
 					<p className="text-center text-lg font-medium">Ingresa tus credenciales</p>
 
 					<div>
@@ -58,7 +59,7 @@ export default function AdminLogin() {
 					<LoginButton/>
 				</form>
 				
-				<div aria-live="polite" aria-atomic="true">
+				<div id="form-error" aria-live="polite" aria-atomic="true">
 					{ formState.error && 
 						<div id="errorMessage" className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
 							<p className="font-bold text-red-500 text-center">{formState.error}</p>

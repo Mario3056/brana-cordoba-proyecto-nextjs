@@ -22,6 +22,7 @@ export type ProductFormState = {
 		description?: string[],
 		category?: string[],
 		price?: string[],
+		image?: string[],
 		// ...?	
 	};
 	
