@@ -28,14 +28,17 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			<input type="hidden" name="created_at" value={product.created_at} />
 			<input type="hidden" name="modified_at" value={product.modified_at} />
 			
-			<input type="text" name="name" className="grow input input-bordered my-2" defaultValue={product.name} autoFocus />
+			<input type="text" name="name" className="grow input input-bordered my-2" placeholder="Nombre del producto" defaultValue={product.name} autoFocus />
+			
 			<textarea id="productDescription" name="description" className="my-2 textarea textarea-bordered"
-					  defaultValue={product.description} />
-			<input type="text" name="category" className="grow input input-bordered my-2" defaultValue={product.category} />
+					  placeholder="Descripción del producto" defaultValue={product.description} />
+					  
+			<input type="text" name="category" className="grow input input-bordered my-2"
+					  placeholder="Categoria del producto" defaultValue={product.category} />
+					  
 			<label className="input input-bordered flex items-center gap-2 my-2">
 				<p className="font-bold">$</p>
-				<input type="number" id="productPrice" name="price" step="0.01" defaultValue={product.price / 100}
-					   className=""/>
+				<input type="number" id="productPrice" name="price" step="0.01" defaultValue={product.price / 100} placeholder="Precio" />
 			</label>
 			
 			<div className="border border-grey rounded p-4 flex flex-row my-2">

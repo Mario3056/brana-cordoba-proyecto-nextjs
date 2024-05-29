@@ -14,7 +14,6 @@ export default async function RootLayout( { children }: Readonly<{children: Reac
 	return (
 		<html lang="en" className="min-h-screen">
 			<body className={"min-h-screen flex flex-col justify-between " + inter.className}>
-				
 				{ 
 					(auth_data != null && auth_data != undefined)
 						? <AdminNavbar />
@@ -22,6 +21,7 @@ export default async function RootLayout( { children }: Readonly<{children: Reac
 				}
 				
 				{children}
+
 				<Footer/>
 			</body>
 		</html>

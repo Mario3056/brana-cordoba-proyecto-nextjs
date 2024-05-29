@@ -16,6 +16,22 @@ export type Product = {
 	modified_at: string;
 }
 
+export type ProductFormState = {
+	error?: {
+		name?: string[],
+		description?: string[],
+		category?: string[],
+		price?: string[],
+		// ...?	
+	};
+	
+	message?: string;
+}
+
+export type LoginFormState = {
+	error?: string; // for security reasons, do not point out anything more than "try again"
+}
+
 export const placeholderProduct: Product = {
 	id: 'placeholder-id',
 	name: 'placeholder product',
@@ -29,13 +45,13 @@ export const placeholderProduct: Product = {
 };
 
 export const emptyProduct: Product = {
-	id: '',
-	name: '',
-	description: '',
-	category: '',
+	id: undefined,
+	name: undefined,
+	description: undefined,
+	category: undefined,
 	rating: 0.0,
-	price: 0.0,
+	price: undefined,
 	image: '',
-	created_at: '',
-	modified_at: ''
+	created_at: undefined,
+	modified_at: undefined
 }
