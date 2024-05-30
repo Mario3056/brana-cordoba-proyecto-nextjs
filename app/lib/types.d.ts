@@ -17,7 +17,7 @@ export type Product = {
 }
 
 export type ProductFormState = {
-	error?: {
+	errors?: {
 		name?: string[],
 		description?: string[],
 		category?: string[],
@@ -26,11 +26,7 @@ export type ProductFormState = {
 		// ...?	
 	};
 	
-	message?: string;
-}
-
-export type LoginFormState = {
-	error?: string; // for security reasons, do not point out anything more than "try again"
+	message?: string | null;
 }
 
 export const placeholderProduct: Product = {

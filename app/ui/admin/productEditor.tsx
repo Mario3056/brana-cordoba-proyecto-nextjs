@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 import { usePathname } from 'next/navigation';
 import { placeholderProduct } from '@/app/lib/types.d';
+import type { ProductFormState } from '@/app/lib/types.d';
 
 // TODO: definir formato de ProductEditForm -> definir skeleton
 export default function ProductEditForm ( { product, serverAction } : { product?: Product, serverAction: any } ) {
@@ -16,7 +17,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 		product = placeholderProduct;
 	}
 
-	const initialState = { message: '', errors: undefined };
+	const initialState: ProductFormState = { message: '', errors: undefined };
 	const [state, dispatch] = useFormState(serverAction, initialState);
 	
 	return (

@@ -2,11 +2,10 @@
 
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/authenticate';
-
 import { EmailSymbol, ShowPasswordSymbol } from '@/app/ui/icons';
 
 export default function AdminLogin() {
-	const initialState = { error: undefined, message: undefined };
+	const initialState = { message: "", error: undefined };
 	const [formState, checkAuth] = useFormState(authenticate, initialState);
 
 	return (

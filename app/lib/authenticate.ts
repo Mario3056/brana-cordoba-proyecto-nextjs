@@ -3,10 +3,8 @@
 import { signOut, signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
-import { LoginFormState } from '@/app/lib/types.d';
- 
 export async function authenticate(
-	prevState: LoginFormState,
+	prevState: any, // fix this type later
 	formData: FormData,
 ) {
 	try {
