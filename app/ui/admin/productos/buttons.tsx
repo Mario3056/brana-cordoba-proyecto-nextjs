@@ -32,7 +32,7 @@ export function RestoreDeletedProductButton({ pathname, id }: { pathname: string
 	// TODO: confirm dialog
 	// TODO: remove from the list once the product is restored?
 	return (
-		<form action={deleteProductWithId}>
+		<form action={fullRestore}>
 			<button
 				className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
 				onClick={(e) => e.currentTarget.setAttribute("disabled", "true")}>

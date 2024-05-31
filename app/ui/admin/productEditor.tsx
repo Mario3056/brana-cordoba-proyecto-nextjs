@@ -102,7 +102,10 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 					   onChange={(e) => {
 								{/* when a new image is uploaded, show a preview below */}
 								setShowPreview(true);
-								document.querySelector("#new-image-preview").src = URL.createObjectURL(e.target.files[0])
+								const preview: HTMLImageElement | null = document.querySelector("img#new-image-preview");
+								if (preview != null && e.target.files != null && e.target.files.length >= 0) {
+									preview.src = URL.createObjectURL(e.target.files[0])
+								}
 							}
 						}
 					   />
