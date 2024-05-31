@@ -3,6 +3,7 @@
 import StarPicker from '@/app/ui/starPicker';
 import { Product, emptyProduct } from '@/app/lib/types';
 import { useFormState } from 'react-dom';
+import { useState } from 'react';
 import Image from 'next/image';
 
 import { usePathname } from 'next/navigation';
@@ -11,6 +12,8 @@ import type { ProductFormState } from '@/app/lib/types.d';
 
 // TODO: definir formato de ProductEditForm -> definir skeleton
 export default function ProductEditForm ( { product, serverAction } : { product?: Product, serverAction: any } ) {
+	const [showZoom, setShowZoom] = useState(false);
+	const [showPreview, setShowPreview] = useState(false);
 
 	if (product == undefined) {
 		// ...
@@ -88,11 +91,21 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			</div>
 			
 			{ /* image selector */ }
-			<div className="input input-bordered my-2 flex justify-center items-center">
+			<div className="input input-bordered my-2 flex  flex-col justify-center items-center">
 				<p className="font-bold"> Seleccionar imagen</p>
-				<Image src={product.image} width={64} height={64} alt={product.description} />
+				
+				{/* <Image src={product.image} width={64} height={64} alt={product.description} id="zoom-preview"
+						onMouseOver={() => setShowZoom(true)} onMouseOut={() => setShowZoom(false)} /> */ }
+						
 				<input type="file" name="image" aria-describedby="image-error"
-					   accept="image/png, image/jpeg, image/avif, image/webp" />
+					   accept="image/png, image/jpeg, image/avif, image/webp"
+					   onChange={(e) => {
+								{/* when a new image is uploaded, show a preview below */}
+								setShowPreview(true);
+								document.querySelector("#new-image-preview").src = URL.createObjectURL(e.target.files[0])
+							}
+						}
+					   />
 			</div>
 			<div id="image-error" className="" aria-live="polite" aria-atomic="true">
 				{state.errors?.image &&
@@ -103,6 +116,24 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 					))
 				}
 			</div>
+			
+			{ /* --------------------- */ }
+			
+			<div id="image-preview-card" className="card border-b-2 p-4 bg-red-400 border-black mt-2">
+				<Image src={product.image} width={256} height={256} alt={product.description} hidden={showPreview}/>
+				<Image id="new-image-preview" src={""} width={256} height={256} alt={product.description} hidden={!showPreview}/>
+			</div>
+			
+			{/* first attempt: showZoom + onMouseOver event on the image with #zoom-preview id */}
+			{ showZoom && 
+				<div id="image-zoom" className="card border-b-2 p-4 bg-red-400 border-black" style={{
+					position: 'absolute',					
+				}}>
+					<Image src={product.image} width={256} height={256} alt={product.description} />
+				</div>
+			}
+			
+			{ /* --------------------- */ }
 			
 			<button className="btn btn-info sm:btn-sm md:btn-md">Submit</button>
 		</form>
