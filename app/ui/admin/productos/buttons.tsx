@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { deleteProduct } from "@/app/lib/actions";
+import { deleteProduct, restoreProduct } from "@/app/lib/actions";
 
 function disableAfterOneClick(event: any) {
 	if ( event.currentTarget.classList.contains("disabled")) {
@@ -26,8 +26,29 @@ export function EditProductButton({ id }: { id: string }) {
 		</ Link>
 }
 
+export function RestoreDeletedProductButton({ pathname, id }: { pathname: string, id: string }) {
+	const fullRestore = restoreProduct.bind(null, pathname).bind(null, id);
+	
+	// TODO: confirm dialog
+	// TODO: remove from the list once the product is restored?
+	return (
+		<form action={deleteProductWithId}>
+			<button
+				className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
+				onClick={(e) => e.currentTarget.setAttribute("disabled", "true")}>
+				
+				Restaurar producto				
+			</button>
+		</form>
+	);
+}
+
 export function DeleteProductButton({ id }: { id: string }) {
 	const deleteProductWithId = deleteProduct.bind(null, id);
+	
+	// TODO: confirm dialog
+	// TODO: "undo delete" dialog (maybe with react-toastify)
+	
 	return (
 		<form action={deleteProductWithId}>
 			<button

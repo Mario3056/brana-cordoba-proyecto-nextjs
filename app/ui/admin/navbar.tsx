@@ -26,6 +26,13 @@ export default function Navbar() {
                             Listado de productos
                     </Link>
                 </div>
+				
+				<div className="text-gray-500 font-semibold">
+                    <Link  href="/admin/productos_eliminados" 
+                        className={pathName === "/admin/productos_eliminados" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
+                            Historial de productos eliminados
+                    </Link>
+                </div>
                 
             </nav>
 			

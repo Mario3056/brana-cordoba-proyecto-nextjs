@@ -120,8 +120,8 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			{ /* --------------------- */ }
 			
 			<div id="image-preview-card" className="card border-b-2 p-4 bg-red-400 border-black mt-2">
-				<Image src={product.image} width={256} height={256} alt={product.description} hidden={showPreview}/>
-				<Image id="new-image-preview" src={""} width={256} height={256} alt={product.description} hidden={!showPreview}/>
+				<Image src={product.image} width={256} height={256} alt="Vista previa de la imagen para el producto" hidden={showPreview}/>
+				<Image id="new-image-preview" src={""} width={256} height={256} alt="Vista previa de la imagen para el producto" hidden={!showPreview}/>
 			</div>
 			
 			{/* first attempt: showZoom + onMouseOver event on the image with #zoom-preview id */}
@@ -129,7 +129,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 				<div id="image-zoom" className="card border-b-2 p-4 bg-red-400 border-black" style={{
 					position: 'absolute',					
 				}}>
-					<Image src={product.image} width={256} height={256} alt={product.description} />
+					<Image src={product.image} width={256} height={256} alt="Vista previa de la imagen para el producto" />
 				</div>
 			}
 			

@@ -13,6 +13,7 @@ async function createDB(client) {
 	console.log("Creating product serial...");
 	await client.query('CREATE SEQUENCE IF NOT EXISTS tienda.serial_id START WITH 33575;');
 	console.log("--------------------------------");
+	console.log("\n");
 }
 
 async function createAdministrators(client) {
@@ -35,11 +36,12 @@ async function createAdministrators(client) {
 	await client.query(`INSERT INTO tienda.administradores (email, password) VALUES ('${adminEmail}', '${hashedPassword}') ON CONFLICT (email) DO NOTHING;`);
 	console.log("Admin account created");
 	console.log("--------------------------------");
+	console.log("\n");
 }
 
 async function createProducts(client) {
 	console.log("--------------------------------");
-	console.log("Creating products table");
+	console.log("Creating products table...");
 	await client.query(`CREATE TABLE IF NOT EXISTS tienda.catalogo (
 		id integer NOT NULL DEFAULT nextval('tienda.serial_id'),
 		name text DEFAULT 'Producto'::text,
@@ -52,9 +54,9 @@ async function createProducts(client) {
 		modified_at timestamp with time zone DEFAULT NOW(),
 		CONSTRAINT catalogo_pk PRIMARY KEY (id)
 	);`);
-	console.log("Creating products table");
+	console.log("Created products table");
 	console.log("--------------------------------");
-	console.log("Inserting placeholder products");
+	console.log("Inserting placeholder products...");
 	await Promise.all(
 		productos.map(p => 
 			client.query(`INSERT INTO tienda.catalogo
@@ -66,6 +68,36 @@ async function createProducts(client) {
 	);	
 	console.log("Placeholder products inserted");
 	console.log("--------------------------------");
+	console.log("\n");
+}
+
+async function createDeletedProductsTable(client) {
+	console.log("--------------------------------");
+	console.log("Creating deleted products table...");
+	client.query("CREATE TABLE IF NOT EXISTS tienda.deleted_products () INHERITS (tienda.catalogo)");
+	console.log("Created deleted products table");
+	
+	console.log("--------------------------------");
+	
+	console.log("Creating stored procedures...");
+	await client.query(`CREATE OR REPLACE PROCEDURE tienda.DeleteProduct(_id integer)
+		LANGUAGE plpgsql as $$
+		BEGIN
+			WITH moved_rows AS (
+				DELETE FROM tienda.catalogo WHERE tienda.catalogo.id = _id RETURNING *
+			) INSERT INTO tienda.deleted_products SELECT * FROM moved_rows;
+		END; $$`);
+
+	await client.query(`CREATE OR REPLACE PROCEDURE tienda.RestoreProduct(_id integer)
+		LANGUAGE plpgsql as $$
+		BEGIN
+			WITH moved_rows AS (
+				DELETE FROM tienda.deleted_products WHERE tienda.deleted_products.id = _id RETURNING *
+			) INSERT INTO tienda.catalogo SELECT * FROM moved_rows;
+		END; $$`);
+	console.log("Created stored procedures");
+	console.log("--------------------------------");
+	console.log("\n");
 }
 
 const main = async () => {
@@ -75,6 +107,7 @@ const main = async () => {
 	await createDB(client);
 	await createAdministrators(client);
 	await createProducts(client);
+	await createDeletedProductsTable(client);
 	
 	await client.end(() => {console.log("Closing connection...");});
 }

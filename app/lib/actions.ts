@@ -1,5 +1,7 @@
 'use server';
 
+// TODO: write an actions.ts for vercel's database calls and rename this file to actions_local.ts
+
 import { z } from 'zod';
 import {v2 as cloudinary} from 'cloudinary';
 import { revalidatePath } from 'next/cache';
@@ -13,16 +15,34 @@ export async function deleteProduct(id: string) {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
 		await client.connect()
-		const deletionInfo = await client.query(`DELETE FROM tienda.catalogo WHERE id = ${id}`);
-		await client.end();
-		
+		// const deletionInfo = await client.query(`DELETE FROM tienda.catalogo WHERE id = ${id}`);
 		// assert(deletionInfo.rowcount == 1);
+		
+		await client.query(`CALL tienda.DeleteProduct(${id})`);
+		await client.end();
 		
 		revalidatePath('/admin/productos');
 		return { message: 'Successfully deleted product with ID ' + id };
 	} catch (error) {
 		console.error('Failed to delete product with ID ' + id + ':', error);
 		return { message: 'Failed to delete product with ID ' + id, error: error};
+	}
+}
+
+// this needs another parameter for the current pathname, since this will be called from two different places
+// bind this to the pathname where it will be used *before* setting it as a form action
+export async function restoreProduct(pathname: string, id: string) {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect()
+		const deletionInfo = await client.query(`CALL tienda.RestoreProduct(${id})`);
+		await client.end();
+		
+		revalidatePath(pathname);
+		return { message: 'Successfully restored product with ID ' + id };
+	} catch (error) {
+		console.error('Failed to restore product with ID ' + id + ':', error);
+		return { message: 'Failed to restore product with ID ' + id, error: error};
 	}
 }
 
