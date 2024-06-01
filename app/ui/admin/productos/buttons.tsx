@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { deleteProduct, restoreProduct } from "@/app/lib/actions";
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 function disableAfterOneClick(event: any) {
 	if ( event.currentTarget.classList.contains("disabled")) {
@@ -26,7 +27,8 @@ export function EditProductButton({ id }: { id: string }) {
 		</ Link>
 }
 
-export function RestoreDeletedProductButton({ pathname, id }: { pathname: string, id: string }) {
+export function RestoreDeletedProductButton({ id }: { id: string }) {
+	const pathname = usePathname();
 	const fullRestore = restoreProduct.bind(null, pathname).bind(null, id);
 	
 	// TODO: confirm dialog

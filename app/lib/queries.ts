@@ -4,6 +4,16 @@ import type { AdminUser, Product } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
 
+export async function getDeletedProducts(): Promise<Product[]> {
+	try {
+		const deletedProducts = await sql`SELECT * FROM tienda.deleted_products ORDER BY created_at ASC`;		
+		return deletedProducts.rows as Product[];
+	} catch (error) {
+		console.error('Failed to fetch deleted products:', error);
+		throw new Error('Failed to fetch deleted products');
+	}
+}
+
 export async function getProductsByPage(pageNumber: number): Promise<Product[]> {
 	noStore();
 	

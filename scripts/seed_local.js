@@ -74,7 +74,7 @@ async function createProducts(client) {
 async function createDeletedProductsTable(client) {
 	console.log("--------------------------------");
 	console.log("Creating deleted products table...");
-	client.query("CREATE TABLE IF NOT EXISTS tienda.deleted_products () INHERITS (tienda.catalogo)");
+	client.query("CREATE TABLE IF NOT EXISTS tienda.deleted_products (LIKE tienda.catalogo)");
 	console.log("Created deleted products table");
 	
 	console.log("--------------------------------");

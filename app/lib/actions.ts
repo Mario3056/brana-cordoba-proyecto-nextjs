@@ -35,7 +35,7 @@ export async function restoreProduct(pathname: string, id: string) {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
 		await client.connect()
-		const deletionInfo = await client.query(`CALL tienda.RestoreProduct(${id})`);
+		await client.query(`CALL tienda.RestoreProduct(${id})`);
 		await client.end();
 		
 		revalidatePath(pathname);

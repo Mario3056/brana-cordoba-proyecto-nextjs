@@ -18,6 +18,20 @@ import type { AdminUser, Product } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
 
+export async function getDeletedProducts(): Promise<Product[]> {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect()
+		const deletedProducts = await client.query("SELECT * FROM tienda.deleted_products ORDER BY created_at ASC");
+		await client.end();
+		
+		return deletedProducts.rows as Product[];
+	} catch (error) {
+		console.error('Failed to fetch deleted products:', error);
+		throw new Error('Failed to fetch deleted products');
+	}
+}
+
 export async function getProductsByPage(pageNumber: number): Promise<Product[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
 	
