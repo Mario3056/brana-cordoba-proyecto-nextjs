@@ -14,6 +14,7 @@ interface Actions {
   addToCart: (Item: Product) => void;
   removeFromCart: (Item: CartProduct) => void;
   updateQuantity: (Item: CartProduct, quantity: number) => void;
+  clearCart: () => void;
 }
 
 // Initialize a default state
@@ -96,6 +97,13 @@ export const useCartStore = create(
               state.totalPrice - (oldQuantity - quantity) * product.price,
           }));
         }
+      },
+      clearCart: () => {
+        set(() => ({
+          cart: INITIAL_STATE.cart,
+          totalItems: INITIAL_STATE.totalItems,
+          totalPrice: INITIAL_STATE.totalPrice,
+        }));
       },
     }),
     {
