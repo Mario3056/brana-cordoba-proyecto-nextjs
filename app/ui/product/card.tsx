@@ -5,7 +5,6 @@ import { useCartStore } from '@/app/lib/cart/useCartStore';
 import type { Product } from '@/app/lib/types';
 import Image from 'next/image';
 import { useState } from 'react';
-import { FaCheck } from 'react-icons/fa';
 
 export default function Card({ product }: { product: Product }) {
     const addToCarrito = useCartStore(state => state.addToCart);
@@ -26,7 +25,7 @@ export default function Card({ product }: { product: Product }) {
 
     return (
         <section className="text-gray-600 body-font overflow-hidden">
-            <div className="container px-5 py-24 mx-auto">
+            <div className="container px-5 pt-20 pb-12 mx-auto">
                 <div className="lg:w-4/5 mx-auto flex flex-wrap">
 
                     <Image alt={product.description} width={600} height={300}
@@ -55,7 +54,7 @@ export default function Card({ product }: { product: Product }) {
                                 onClick={handleClick}
                                 disabled={buttonState !== 'initial'} // Disable the button during transition and clicked states
                             >
-                                {buttonState === 'clicked' ? <FaCheck /> : 'Agregar al carrito'}
+                                {buttonState === 'clicked' ? '✔' : 'Agregar al carrito'}
                             </button>
                         </div>
                     </div>
