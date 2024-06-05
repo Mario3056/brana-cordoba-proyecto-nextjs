@@ -7,6 +7,13 @@ export interface CartProduct {
   quantity: number;
 }
 
+export type PaymentInformation = {
+	id string;
+	amount number;
+	status string;
+	timestamp number;
+}
+
 export type AdminUser = {
   id: string;
   email: string;

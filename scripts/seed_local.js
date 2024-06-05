@@ -74,7 +74,7 @@ async function createProducts(client) {
 async function createDeletedProductsTable(client) {
 	console.log("--------------------------------");
 	console.log("Creating deleted products table...");
-	client.query("CREATE TABLE IF NOT EXISTS tienda.deleted_products (LIKE tienda.catalogo)");
+	await client.query("CREATE TABLE IF NOT EXISTS tienda.deleted_products (LIKE tienda.catalogo)");
 	console.log("Created deleted products table");
 	
 	console.log("--------------------------------");
@@ -100,6 +100,21 @@ async function createDeletedProductsTable(client) {
 	console.log("\n");
 }
 
+async function createPaymentRecordsTable(client) {
+	console.log("--------------------------------");
+	console.log("Creating payment records table...");
+	await client.query(`CREATE TABLE IF NOT EXISTS tienda.mercadopago_records (
+		id serial,
+		paymentId text,
+		amount integer,
+		status text,
+		timestamp timestamp
+	)`);
+	console.log("Created payment records table");
+	console.log("--------------------------------");	
+}
+
+
 const main = async () => {
 	const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
 	await client.connect()
@@ -108,6 +123,7 @@ const main = async () => {
 	await createAdministrators(client);
 	await createProducts(client);
 	await createDeletedProductsTable(client);
+	await createPaymentRecordsTable(client);
 	
 	await client.end(() => {console.log("Closing connection...");});
 }

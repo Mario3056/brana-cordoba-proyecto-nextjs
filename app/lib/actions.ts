@@ -7,9 +7,28 @@ import {v2 as cloudinary} from 'cloudinary';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import type { AdminUser, Product, ProductFormState } from '@/app/lib/types.d';
+import type { PaymentInformation } from '@/app/lib/types.d';
 
 import pg from 'pg'
 const { Client } = pg;
+
+export async function storePayment(paymentInfo: PaymentInformation) {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect()
+		
+		const paymentUploadInfo = await client.query(`INSERT INTO tienda.mercadopago_records (paymentId, amount, status, timestamp) VALUES (
+			'${paymentInfo.id}',
+			${paymentInfo.amount * 100},
+			'${paymentInfo.status}',
+			to_timestamp(${paymentInfo.timestamp} / 1000.0)
+		)`);
+		await client.end();
+	} catch (error) {
+		console.error('Failed to store payment information:', error);
+		throw new Error('Failed to store payment information');
+	}
+}
 
 export async function deleteProduct(id: string) {
 	try {
