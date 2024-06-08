@@ -20,13 +20,13 @@ export default function StarPicker({ rating } : { rating?: number}) {
 				inputs.push(<input type="radio" key={i}
 								   name="rating"
 								   value={values[i]}
-								   className="bg-orange-500 mask mask-star-2 mask-half-1"
+								   className="bg-orange-500 mask mask-star-2 mask-half-1 focus:bg-yellow-400"
 								   defaultChecked={checked} /> );
 			} else {
 				inputs.push(<input type="radio" key={i}
 								   name="rating"
 								   value={values[i]}
-								   className="bg-orange-500 mask mask-star-2 mask-half-2"
+								   className="bg-orange-500 mask mask-star-2 mask-half-2 focus:bg-yellow-400"
 								   defaultChecked={checked} />);
 			}
 		}

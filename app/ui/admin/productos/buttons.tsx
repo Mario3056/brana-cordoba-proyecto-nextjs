@@ -13,9 +13,11 @@ function disableAfterOneClick(event: any) {
 }
 
 export function CreateProductButton() {
-	return <Link href={`/admin/producto/crear`}
-			className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm">
-			Agregar producto
+	return <Link href={`/admin/producto/crear`} tabindex={0}
+			className={`inline-block px-4 py-2 text-white duration-150 font-medium
+					   bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700
+					   md:text-sm focus:border focus:border-4 focus:border-yellow-400`}>
+				Agregar Producto
 		</ Link>
 
 }
