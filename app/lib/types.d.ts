@@ -8,10 +8,10 @@ export interface CartProduct {
 }
 
 export type PaymentInformation = {
-	id string;
-	amount number;
-	status string;
-	timestamp number;
+	id: string;
+	amount: number;
+	status: string;
+	timestamp: number;
 }
 
 export type AdminUser = {

@@ -44,7 +44,7 @@ export default async function Table({
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        {product.name}
+                                        <Link className="text-blue-400 font-bold underline" href={`/admin/producto/${product.id}`}> {product.name} </Link>
                                     </td>
 
                                     <td className="px-6 py-4 whitespace-nowrap">{product.category}</td>
