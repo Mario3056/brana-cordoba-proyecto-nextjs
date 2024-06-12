@@ -29,10 +29,7 @@ export default async function Producto({
 
                     </div>
                     <Suspense fallback={<CommentsSkeleton/>}>
-                        <ShowComments related_product_id={product.id} currentPage={currentPage} />
-                        <div className="mb-5 mt-5 flex w-full justify-center">
-                            <Pagination totalPages={totalPages} />
-                        </div>
+                        <ShowComments related_product_id={product.id} currentPage={currentPage} totalPages={totalPages}/>
                     </Suspense>
                 </div>
             </section>
