@@ -213,10 +213,16 @@ export async function getCommentsByPage(
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
 		await client.connect();
 
+		// [DEBUG] Test for skeletons - remove before production
+		console.log('Fetching comments...');
+    	await new Promise((resolve) => setTimeout(resolve, 1500));
+
 		const page = await client.query(`SELECT * FROM tienda.comments
 				WHERE related_product_id = ${product_id}
 				OFFSET ${pageOffset} LIMIT ${COMMENTS_PER_PAGE}`
 		);
+
+		console.log('Comments fetch completed after 3 seconds.'); // [DEBUG]
 
 		await client.end()
 		return page.rows as ProductComment[];

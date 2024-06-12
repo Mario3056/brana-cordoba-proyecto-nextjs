@@ -4,6 +4,8 @@ import { ProductComment } from '@/app/lib/types';
 import AddNewCommentForm from '@/app/ui/product/comments/addNewForm';
 import ShowComments from '@/app/ui/product/comments/showComments';
 import Pagination from '@/app/ui/catalogo/pagination';
+import { Suspense } from 'react';
+import CommentsSkeleton from '@/app/ui/product/comments/commentsSkeleton';
 
 export default async function Producto({
     params,
@@ -26,10 +28,12 @@ export default async function Producto({
                         <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900">Comentarios</h1>
 
                     </div>
-                    <ShowComments related_product_id={product.id} currentPage={currentPage} />
-                    <div className="mb-5 mt-5 flex w-full justify-center">
-                        <Pagination totalPages={totalPages} />
-                    </div>
+                    <Suspense fallback={<CommentsSkeleton/>}>
+                        <ShowComments related_product_id={product.id} currentPage={currentPage} />
+                        <div className="mb-5 mt-5 flex w-full justify-center">
+                            <Pagination totalPages={totalPages} />
+                        </div>
+                    </Suspense>
                 </div>
             </section>
 
