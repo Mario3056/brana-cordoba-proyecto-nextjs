@@ -37,7 +37,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			<div id="name-error" aria-live="polite" aria-atomic="true">
 				{state.errors?.name &&
 					state.errors.name.map((error: string) => (
-						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2 mt-1" key={error}>
+						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2" key={error}>
 							{error}
 						</p>
 					))
@@ -50,7 +50,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			<div id="description-error" aria-live="polite" aria-atomic="true">
 				{state.errors?.description &&
 					state.errors.description.map((error: string) => (
-						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2 mt-1" key={error}>
+						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2" key={error}>
 							{error}
 						</p>
 					))
@@ -63,7 +63,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			<div id="category-error" aria-live="polite" aria-atomic="true">
 				{state.errors?.category &&
 					state.errors.category.map((error: string) => (
-						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2 mt-1" key={error}>
+						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2" key={error}>
 							{error}
 						</p>
 					))
@@ -78,7 +78,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			<div id="price-error" aria-live="polite" aria-atomic="true">
 				{state.errors?.price &&
 					state.errors.price.map((error: string) => (
-						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2 mt-1" key={error}>
+						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2" key={error}>
 							{error}
 						</p>
 					))
@@ -113,7 +113,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			<div id="image-error" className="" aria-live="polite" aria-atomic="true">
 				{state.errors?.image &&
 					state.errors.image.map((error: string) => (
-						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2 mt-1" key={error}>
+						<p className="mt-2 text-sm text-red-500 border-b-2 border-black mb-2" key={error}>
 							{error}
 						</p>
 					))

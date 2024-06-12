@@ -17,7 +17,7 @@ export default function CommentCard({comment}: {comment: ProductComment}) {
                     </div>
                     <StarRating rating={comment.rating} />
                     <div className="flex-grow mt-2">
-                        <p className="leading-relaxed text-base">{comment.comment}</p>
+                        <p className="leading-relaxed text-base">{comment.content}</p>
                     </div>
                 </div>
             </div>

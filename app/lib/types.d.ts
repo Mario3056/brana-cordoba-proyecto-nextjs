@@ -82,5 +82,5 @@ interface PostCompraMessageType {
 export type ProductComment = {
   name: string;
   rating: number;
-  comment: string;
+  content: string;
 }

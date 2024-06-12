@@ -114,6 +114,19 @@ async function createPaymentRecordsTable(client) {
 	console.log("--------------------------------");	
 }
 
+async function createComments(client) {
+	console.log("--------------------------------");
+	console.log("Creating comments table");
+	await client.query(`CREATE TABLE IF NOT EXISTS tienda.comments (
+		id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+		related_product_id integer NOT NULL,
+		name text DEFAULT 'Anonymous'::text,
+		rating real DEFAULT 0,
+		content text DEFAULT ''::text
+	);`);
+	console.log("Comments table created");
+	console.log("--------------------------------");
+}
 
 const main = async () => {
 	const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
@@ -124,6 +137,7 @@ const main = async () => {
 	await createProducts(client);
 	await createDeletedProductsTable(client);
 	await createPaymentRecordsTable(client);
+	await createComments(client);
 	
 	await client.end(() => {console.log("Closing connection...");});
 }

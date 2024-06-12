@@ -11,7 +11,8 @@ export default async function Cards({
 
     const products = (query == '')
 		? await getProductsByPage(currentPage)
-		: await getFilteredProductsByPage(currentPage, query);
+		: await getFilteredProductsByPage(currentPage, query)
+    ;
     
     return (
         <div className="container px-5 py-16 mx-auto">

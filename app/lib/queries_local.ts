@@ -14,9 +14,10 @@ DEALLOCATE  searchquery;
 
 import pg from 'pg'
 const { Client } = pg;
-import type { AdminUser, Product } from '@/app/lib/types';
+import type { AdminUser, Product, ProductComment } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
+export const COMMENTS_PER_PAGE = 6;
 
 export async function getDeletedProducts(): Promise<Product[]> {
 	try {
@@ -197,5 +198,50 @@ export async function getUser(email: string): Promise<AdminUser> {
 	} catch (error) {
 		console.error('Failed to fetch random products:', error);
 		throw new Error('Failed to fetch random products');
+	}
+}
+
+export async function getCommentsByPage(
+	product_id: string,
+	pageNumber: number
+): Promise<ProductComment[]> {
+	if (pageNumber < 1) { return [] }; // throw an error instead?
+	
+	const pageOffset = (pageNumber - 1) * COMMENTS_PER_PAGE;
+
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect();
+
+		const page = await client.query(`SELECT * FROM tienda.comments
+				WHERE related_product_id = ${product_id}
+				OFFSET ${pageOffset} LIMIT ${COMMENTS_PER_PAGE}`
+		);
+
+		await client.end()
+		return page.rows as ProductComment[];
+		
+	} catch (error) {
+		console.error('Failed to fetch page of comments:', error);
+		throw new Error('Failed to fetch page of comments');
+	}
+}
+
+export async function getCommentsPages(product_id: string) {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+
+		const count = await client.query(`SELECT COUNT(*) 
+			FROM tienda.comments
+			WHERE related_product_id = ${product_id}`
+		);
+
+		const totalPages = Math.ceil(Number(count.rows[0].count) / COMMENTS_PER_PAGE);
+		await client.end();
+		return totalPages;
+	} catch (error) {
+		console.error('Database Error:', error);
+		throw new Error('Failed to get total number of pages of comments.');
 	}
 }
