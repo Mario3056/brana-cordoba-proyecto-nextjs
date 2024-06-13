@@ -1,18 +1,15 @@
-import { getDeletedProducts } from '@/app/lib/queries_local';
-import { RestoreDeletedProductButton } from '@/app/ui/admin/productos/buttons';
+import Table from '@/app/ui/admin/productos/deletedProductsTable';
 
-export default async function ProductosEliminados({ searchParams }: { searchParams?: { page?: number, query?: string } }) {
+import { getDeletedProducts } from '@/app/lib/queries_local';
+
+export default async function ProductosEliminados() {
 	const deletedProducts = await getDeletedProducts();
-	
+		
 	return (
-		<section className="text-gray-600 body-font mx-4 grid grid-cols-4 justify-center ">
-			{ (deletedProducts.length > 0) &&
-			   deletedProducts.map((p) =>
-					<div key={p.id} className=" border border-black p-2 my-2 w-fit flex flex-row">
-						<p>{p.name}</p>
-						<RestoreDeletedProductButton id={p.id} />
-					</div>)
-			}
-		</section>
+		<div className="mx-auto">
+			<h1 className="text-center font-bold text-lg underline"> Productos Eliminados </h1>
+			{ (deletedProducts.length == 0) && <p>Cuando elimine un producto, aparecerá aqui si es necesario restaurarlo (o puede ser eliminado definitivamente)</p> }			
+			{ (deletedProducts.length > 0) && <Table products={deletedProducts} /> }					
+		</div>
 	);
  }
