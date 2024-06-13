@@ -1,5 +1,9 @@
 import { CreateProductButton, EditProductButton, DeleteProductButton } from "@/app/ui/admin/productos/buttons";
 import { getProductsByPage, getFilteredProductsByPage } from "@/app/lib/queries_local";
+
+import DeleteModal from './deleteModal';
+import CloseModal from './closeModal';
+
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -15,7 +19,7 @@ export default async function Table({
 		: await getFilteredProductsByPage(currentPage, query);
 
     return (
-        <div className="max-w-fit mx-auto px-4 md:px-8">
+        <div className="max-w-fit mx-auto px-4 md:px-8">		
             <div className="flex justify-end mt-7 mb-0">
                 <div className="mb:mx-auto">
 					<CreateProductButton />
@@ -37,7 +41,7 @@ export default async function Table({
                     <tbody className="text-gray-600 divide-y">
                         {
                             products.map((product) => (
-                                <tr key={product.id}>
+								<tr key={product.id}>
                                     <td className="px-6 py-4">
                                         <div className="container w-16">
                                             <Image src={product.image} height={64} width={64} alt={product.description} className="rounded-lg h-16 w-16" />
@@ -52,8 +56,15 @@ export default async function Table({
                                     <td className="px-6 py-4 whitespace-nowrap">{"$" + product.price / 100}</td>
                                     <td className="text-right px-6 whitespace-nowrap">
 										<EditProductButton id={product.id} />
-										<DeleteProductButton id={product.id} />
+										<DeleteModal product={product} />
                                     </td>
+									<td> <dialog id={"delete_modal"+product.id} className="modal">
+										<div className="modal-box flex flex-col content-center">
+											<p className="mb-4">Seguro que desea eliminar el producto <span className="font-bold underline"> {product.name} </span>? </p>
+											<DeleteProductButton modal_id={"delete_modal"+product.id} />
+											<CloseModal modal_id={"delete_modal"+product.id} />
+										</div>
+									</dialog> </td>
                                 </tr>
                             ))
                         }
