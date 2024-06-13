@@ -3,11 +3,11 @@
 -- When the session ends, the prepared statement is forgotten,
 -- so it must be recreated before being used again. 
 PREPARE searchquery (text) AS
- 	SELECT * FROM tienda.catalogo
- 		WHERE name ILIKE '%' || $1 || '%' OR
- 		      description ILIKE '%' || $1 || '%' OR
- 		      category ILIKE '%' || $1 || '%'
- 		ORDER BY created_at ASC;
+	  SELECT * FROM tienda.catalogo
+			WHERE name ILIKE '%' || $1 || '%' OR
+				  description ILIKE '%' || $1 || '%' OR
+				  category ILIKE '%' || $1 || '%'
+			ORDER BY created_at ASC;
 EXECUTE searchquery ('pro');
 DEALLOCATE  searchquery;
 */
@@ -21,11 +21,11 @@ export const COMMENTS_PER_PAGE = 6;
 
 export async function getDeletedProducts(): Promise<Product[]> {
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect()
 		const deletedProducts = await client.query("SELECT * FROM tienda.deleted_products ORDER BY created_at ASC");
 		await client.end();
-		
+
 		return deletedProducts.rows as Product[];
 	} catch (error) {
 		console.error('Failed to fetch deleted products:', error);
@@ -35,29 +35,29 @@ export async function getDeletedProducts(): Promise<Product[]> {
 
 export async function getProductsByPage(pageNumber: number): Promise<Product[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
-	
+
 	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
 
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect()
 
 
 		// [DEBUG] Test for skeletons - remove before production
-   	 	console.log('Fetching products by page...');
-    	await new Promise((resolve) => setTimeout(resolve, 1500));
+		console.log('Fetching products by page...');
+		await new Promise((resolve) => setTimeout(resolve, 1500));
 
 		const page = await client.query(`SELECT * FROM tienda.catalogo
 				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
 		);
-		
+
 		console.log('Data fetch completed after 3 seconds.'); // [DEBUG]
 		// console.log(page.rows); // [DEBUG]
 
 		await client.end()
 		return page.rows as Product[];
-		
+
 	} catch (error) {
 		console.error('Failed to fetch page of products:', error);
 		throw new Error('Failed to fetch page of products');
@@ -66,7 +66,7 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 
 export async function getRandomProducts(n: number): Promise<Product[]> {
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect();
 		const p = await client.query(`SELECT * FROM tienda.catalogo ORDER BY random() LIMIT ${n};`);
 		await client.end();
@@ -87,15 +87,15 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 	query = escapeAll(query);
 
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
-		
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+
 		console.log(`SELECT * FROM tienda.catalogo
 				WHERE name ILIKE '%${query}%' OR
 					  description ILIKE '%${query}%' OR
 					  category ILIKE '%${query}%'
 				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
-		
+
 		await client.connect();
 		const page = await client.query(`SELECT * FROM tienda.catalogo
 				WHERE name ILIKE '%${query}%' OR
@@ -105,7 +105,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
 		await client.end();
 		return page.rows as Product[];
-		
+
 	} catch (error) {
 		console.error('Failed to fetch page of filtered products:', error);
 		throw new Error('Failed to fetch page of filtered products');
@@ -117,7 +117,7 @@ export async function getProductsByCategory(category: string, pageNumber: number
 	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
 
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect();
 		const page = await client.query(`SELECT * FROM tienda.catalogo
 				WHERE category LIKE ${category}
@@ -125,7 +125,7 @@ export async function getProductsByCategory(category: string, pageNumber: number
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`);
 		await client.end();
 		return page.rows as Product[];
-		
+
 	} catch (error) {
 		console.error('Failed to fetch page of category ' + category + ':', error);
 		throw new Error('Failed to fetch page of category ' + category);
@@ -134,7 +134,7 @@ export async function getProductsByCategory(category: string, pageNumber: number
 
 export async function API_getAllProducts(): Promise<Product[]> {
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect()
 		const p = await client.query(`SELECT * FROM tienda.catalogo`);
 		await client.end();
@@ -147,12 +147,12 @@ export async function API_getAllProducts(): Promise<Product[]> {
 
 export async function getProductById(id: string): Promise<Product> {
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect()
 
 		// [DEBUG] Test for skeletons - remove before production
 		console.log('Fetching product by id...');
-    	await new Promise((resolve) => setTimeout(resolve, 1500));
+		await new Promise((resolve) => setTimeout(resolve, 1500));
 
 		const product = await client.query(`SELECT * FROM tienda.catalogo WHERE id = ${id}`);
 
@@ -190,7 +190,7 @@ export async function fetchProductsPages(query: string) {
 
 export async function getUser(email: string): Promise<AdminUser> {
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect();
 		const user = await client.query(`SELECT * FROM tienda.administradores WHERE email = ${email}`);
 		await client.end();
@@ -206,16 +206,16 @@ export async function getCommentsByPage(
 	pageNumber: number
 ): Promise<ProductComment[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
-	
+
 	const pageOffset = (pageNumber - 1) * COMMENTS_PER_PAGE;
 
 	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect();
 
 		// [DEBUG] Test for skeletons - remove before production
 		console.log('Fetching comments...');
-    	await new Promise((resolve) => setTimeout(resolve, 1500));
+		await new Promise((resolve) => setTimeout(resolve, 1500));
 
 		const page = await client.query(`SELECT * FROM tienda.comments
 				WHERE related_product_id = ${product_id}
@@ -226,7 +226,7 @@ export async function getCommentsByPage(
 
 		await client.end()
 		return page.rows as ProductComment[];
-		
+
 	} catch (error) {
 		console.error('Failed to fetch page of comments:', error);
 		throw new Error('Failed to fetch page of comments');
@@ -246,6 +246,37 @@ export async function getCommentsPages(product_id: string) {
 		const totalPages = Math.ceil(Number(count.rows[0].count) / COMMENTS_PER_PAGE);
 		await client.end();
 		return totalPages;
+	} catch (error) {
+		console.error('Database Error:', error);
+		throw new Error('Failed to get total number of pages of comments.');
+	}
+}
+
+/**
+ * 
+ * @param product_id - id of the product
+ * @returns - average rating considering both rating from comments and the internal rating of the product
+ */
+export async function getAvgRating(product_id: string) {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+
+		const result = await client.query(`SELECT ROUND(AVG(rating)::numeric, 1) as avg
+			FROM (
+				SELECT rating
+				FROM tienda.catalogo
+				WHERE id = ${product_id}
+				UNION
+				SELECT rating
+				FROM tienda.comments
+				WHERE related_product_id = ${product_id}
+			)`
+		);
+		const avg = Number(result.rows[0].avg);
+
+		await client.end();
+		return avg;
 	} catch (error) {
 		console.error('Database Error:', error);
 		throw new Error('Failed to get total number of pages of comments.');
