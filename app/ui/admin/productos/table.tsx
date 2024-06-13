@@ -56,12 +56,12 @@ export default async function Table({
                                     <td className="px-6 py-4 whitespace-nowrap">{"$" + product.price / 100}</td>
                                     <td className="text-right px-6 whitespace-nowrap">
 										<EditProductButton id={product.id} />
-										<DeleteModal product={product} />
+										<DeleteModal modal_id={"delete_modal"+product.id} />
                                     </td>
 									<td> <dialog id={"delete_modal"+product.id} className="modal">
 										<div className="modal-box flex flex-col content-center">
 											<p className="mb-4">Seguro que desea eliminar el producto <span className="font-bold underline"> {product.name} </span>? </p>
-											<DeleteProductButton modal_id={"delete_modal"+product.id} />
+											<DeleteProductButton id={product.id} />
 											<CloseModal modal_id={"delete_modal"+product.id} />
 										</div>
 									</dialog> </td>
