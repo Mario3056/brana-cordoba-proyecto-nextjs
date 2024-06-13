@@ -1,11 +1,9 @@
-import { getCommentsPages, getProductById } from '@/app/lib/queries_local'
 import Card from '@/app/ui/product/card';
-import { ProductComment } from '@/app/lib/types';
 import AddNewCommentForm from '@/app/ui/product/comments/addNewForm';
 import ShowComments from '@/app/ui/product/comments/showComments';
-import Pagination from '@/app/ui/catalogo/pagination';
 import { Suspense } from 'react';
 import CommentsSkeleton from '@/app/ui/product/comments/commentsSkeleton';
+import ProductSkeleton from '@/app/ui/product/productSeketon';
 
 export default async function Producto({
     params,
@@ -14,22 +12,22 @@ export default async function Producto({
     params: { id: string },
     searchParams: { page?: number }
 }) {
-    const product = await getProductById(params.id);
     const currentPage = Number(searchParams?.page) || 1;
-    const totalPages = await getCommentsPages(params.id);
 
     return (
         <>
-            <Card product={product} />
+            <Suspense fallback={<ProductSkeleton />}>
+                <Card product_id={params.id} />
+            </Suspense>
 
             <section className="text-gray-600 body-font">
                 <div className="container pt-5 pb-15 py-5 mx-auto">
-                    <div className="flex flex-col text-center w-full mb-20">
-                        <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900">Comentarios</h1>
+                    <Suspense fallback={<CommentsSkeleton />}>
+                        <div className="flex flex-col text-center w-full mb-20">
+                            <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900">Comentarios</h1>
 
-                    </div>
-                    <Suspense fallback={<CommentsSkeleton/>}>
-                        <ShowComments related_product_id={product.id} currentPage={currentPage} totalPages={totalPages}/>
+                        </div>
+                        <ShowComments related_product_id={params.id} currentPage={currentPage} />
                     </Suspense>
                 </div>
             </section>
@@ -40,7 +38,7 @@ export default async function Producto({
                         <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Agregar comentario</h1>
                         <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Nos encantaría conocer tu opinión. Por favor, comparte tus comentarios y opiniones sobre el producto.</p>
                     </div>
-                    <AddNewCommentForm product_id={product.id} />
+                    <AddNewCommentForm product_id={params.id} />
                 </div>
             </section>
         </>

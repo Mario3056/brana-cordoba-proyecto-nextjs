@@ -2,17 +2,17 @@ import { getCommentsByPage } from "@/app/lib/queries_local"
 import CommentCard from "@/app/ui/product/comments/commentCard";
 import { useState } from "react";
 import Pagination from "@/app/ui/catalogo/pagination";
+import { getCommentsPages } from "@/app/lib/queries_local"
 
 export default async function ShowComments({
     related_product_id,
     currentPage,
-    totalPages
 }: {
     related_product_id: string,
     currentPage: number,
-    totalPages: number
 }) {
     const comments = await getCommentsByPage(related_product_id, currentPage);
+    const totalPages = await getCommentsPages(related_product_id);
 
     return (
         <>
