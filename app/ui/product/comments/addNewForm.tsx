@@ -1,9 +1,24 @@
 'use client';
+
 import { createComment, State } from "@/app/lib/actions";
 import StarPicker from "@/app/ui/starPicker";
-import { comment } from "postcss";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
+
+function Submit() {
+    const { pending } = useFormStatus();
+    return (
+        <div className="p-2 w-full">
+        <button 
+            type="submit" 
+            className={pending ? 'flex mx-auto bg-gray-300 border-0 py-2 px-8 rounded text-lg cursor-not-allowed opacity-50' : 'flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg'}
+            disabled={pending}
+        >
+            {pending ? 'Agregando...' : 'Agregar'}
+        </button>
+    </div>
+    );
+  }
 
 export default function AddNewCommentForm({ product_id }: { product_id: string }) {
     const initialState = { errors: {}, message: null };
@@ -90,9 +105,7 @@ export default function AddNewCommentForm({ product_id }: { product_id: string }
                             </div>
                         </div>
                     </div>
-                    <div className="p-2 w-full">
-                        <button type="submit" className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Agregar</button>
-                    </div>
+                    <Submit/>
                 </div>
             </form>
         </>
