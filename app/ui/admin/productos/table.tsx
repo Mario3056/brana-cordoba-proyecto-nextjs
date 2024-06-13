@@ -1,8 +1,11 @@
-import { CreateProductButton, EditProductButton, DeleteProductButton } from "@/app/ui/admin/productos/buttons";
 import { getProductsByPage, getFilteredProductsByPage } from "@/app/lib/queries_local";
 
-import DeleteModal from './deleteModal';
-import CloseModal from './closeModal';
+import { CreateProductButton,
+		 EditProductButton,
+		 DeleteProductButton,
+		 TriggerDeleteConfirmModal,
+		 CloseModalButton
+} from "@/app/ui/admin/productos/buttons";
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -56,13 +59,13 @@ export default async function Table({
                                     <td className="px-6 py-4 whitespace-nowrap">{"$" + product.price / 100}</td>
                                     <td className="text-right px-6 whitespace-nowrap">
 										<EditProductButton id={product.id} />
-										<DeleteModal modal_id={"delete_modal"+product.id} />
+										<TriggerDeleteConfirmModal modal_id={"delete_modal"+product.id} />
                                     </td>
 									<td> <dialog id={"delete_modal"+product.id} className="modal">
 										<div className="modal-box flex flex-col content-center">
 											<p className="mb-4">Seguro que desea eliminar el producto <span className="font-bold underline"> {product.name} </span>? </p>
 											<DeleteProductButton id={product.id} />
-											<CloseModal modal_id={"delete_modal"+product.id} />
+											<CloseModalButton modal_id={"delete_modal"+product.id} />
 										</div>
 									</dialog> </td>
                                 </tr>

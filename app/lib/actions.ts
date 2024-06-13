@@ -65,6 +65,22 @@ export async function restoreProduct(pathname: string, id: string) {
 	}
 }
 
+export async function definitivelyDeleteProduct(id: string) {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect()
+		const deletionInfo = await client.query(`DELETE FROM tienda.deleted_products WHERE id = ${id}`);
+		
+		await client.end();
+		
+		revalidatePath("/admin/productos_eliminados");
+		return { message: 'Successfully deleted product with ID ' + id };
+	} catch (error) {
+		console.error('Failed to delete product with ID ' + id + ':', error);
+		return { message: 'Failed to delete product with ID ' + id, error: error};
+	}
+}
+
 function extractFormData(fd: FormData) {
 	return {
 		id: fd.get('id'),

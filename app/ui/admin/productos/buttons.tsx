@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteProduct, restoreProduct } from "@/app/lib/actions";
+import { deleteProduct, restoreProduct, definitivelyDeleteProduct } from "@/app/lib/actions";
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -33,13 +33,10 @@ export function RestoreDeletedProductButton({ id }: { id: string }) {
 	const pathname = usePathname();
 	const fullRestore = restoreProduct.bind(null, pathname).bind(null, id);
 	
-	// TODO: confirm dialog
-	// TODO: remove from the list once the product is restored?
 	return (
 		<form action={fullRestore}>
-			<button
-				className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
-				onClick={(e) => e.currentTarget.setAttribute("disabled", "true")}>
+			<button onClick={disableAfterOneClick}
+				className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg">
 				
 				Restaurar producto				
 			</button>
@@ -49,18 +46,42 @@ export function RestoreDeletedProductButton({ id }: { id: string }) {
 
 export function DeleteProductButton({ id }: { id: string }) {
 	const deleteProductWithId = deleteProduct.bind(null, id);
-	
-	// TODO: confirm dialog
-	// TODO: "undo delete" dialog (maybe with react-toastify)
-	
+
 	return (
 		<form action={deleteProductWithId}>
-			<button
-				className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
-				onClick={(e) => e.currentTarget.setAttribute("disabled", "true")}>
+			<button onClick={disableAfterOneClick}
+				className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg">
 				
 				Eliminar
 			</button>
 		</form>
 	);
+}
+
+export function CloseModalButton({modal_id}) {
+	return <button onClick={(e) => document.getElementById(modal_id).close()}
+				className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+				X
+			</button>;
+}
+
+export function TriggerDeleteConfirmModal({modal_id}) {
+	return <button onClick={(event) => { document.getElementById(modal_id).showModal(); }}
+					className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg">
+				Eliminar
+			</button>;
+}
+
+export function DefinitivelyDeleteButton({ id }: { id: string }) {
+	const definitivelyDeleteWithId = definitivelyDeleteProduct.bind(null, id);
+	
+	return (
+		<form action={definitivelyDeleteWithId}>
+			<button onClick={disableAfterOneClick}
+				className="py-2 leading-none px-3 font-medium text-red-800 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg">				
+				Eliminar <br/> definitivamente
+			</button>
+		</form>
+	);
+	
 }

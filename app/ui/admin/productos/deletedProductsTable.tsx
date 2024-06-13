@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { RestoreDeletedProductButton } from '@/app/ui/admin/productos/buttons';
+import { RestoreDeletedProductButton, DefinitivelyDeleteButton } from '@/app/ui/admin/productos/buttons';
 
 export default async function Table({products}) {
     return (
@@ -36,6 +36,7 @@ export default async function Table({products}) {
                                     <td className="px-6 py-4 whitespace-nowrap">{"$" + product.price / 100}</td>
                                     <td className="text-right px-6 whitespace-nowrap">
                                         <RestoreDeletedProductButton id={product.id} />
+										<DefinitivelyDeleteButton id={product.id} />
                                     </td>
                                 </tr>
                             ))
