@@ -1,6 +1,8 @@
 import ProductEditForm from '@/app/ui/admin/productEditor';
-import { getProductById } from '@/app/lib/queries_local'
 import { Product } from '@/app/lib/types';
+
+// import { getProductById } from '@/app/lib/queries'
+import { getProductById } from '@/app/lib/queries_local'
 
 // import { editProduct } from '@/app/lib/actions';
 import { editProduct } from '@/app/lib/actions_local';
