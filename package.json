@@ -11,8 +11,8 @@
     "seed_local": "node ./scripts/seed_local.js",
     "seed": "node -r dotenv/config ./scripts/seed.js",
 
-    "remoteDB": "py switchEnv.py remote",
-    "localDB": "py switchEnv.py local"
+    "switchToRemoteDBCalls": "py switchEnv.py remote",
+    "switchToLocalDBCalls": "py switchEnv.py local"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.3",
