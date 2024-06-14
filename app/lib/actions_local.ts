@@ -1,5 +1,3 @@
-// TODO: check whether server actions need noStore()
-
 'use server';
 
 import { z } from 'zod';
@@ -10,18 +8,21 @@ import { redirect } from 'next/navigation';
 import type { AdminUser, Product, ProductFormState } from '@/app/lib/types.d';
 import type { PaymentInformation } from '@/app/lib/types.d';
 
-import { sql } from '@vercel/postgres';
-import { unstable_noStore as noStore } from 'next/cache';
+import pg from 'pg'
+const { Client } = pg;
 
 export async function storePayment(paymentInfo: PaymentInformation) {
-	// noStore();
 	try {
-		const paymentUploadInfo = await sql`INSERT INTO tienda.mercadopago_records (paymentId, amount, status, timestamp) VALUES (
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect()
+
+		const paymentUploadInfo = await client.query(`INSERT INTO tienda.mercadopago_records (paymentId, amount, status, timestamp) VALUES (
 			'${paymentInfo.id}',
 			${paymentInfo.amount * 100},
 			'${paymentInfo.status}',
 			to_timestamp(${paymentInfo.timestamp} / 1000.0)
-		)`;
+		)`);
+		await client.end();
 	} catch (error) {
 		console.error('Failed to store payment information:', error);
 		throw new Error('Failed to store payment information');
@@ -30,7 +31,14 @@ export async function storePayment(paymentInfo: PaymentInformation) {
 
 export async function deleteProduct(id: string) {
 	try {
-		await sql`CALL tienda.DeleteProduct(${id})`;
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect()
+		// const deletionInfo = await client.query(`DELETE FROM tienda.catalogo WHERE id = ${id}`);
+		// assert(deletionInfo.rowcount == 1);
+
+		await client.query(`CALL tienda.DeleteProduct(${id})`);
+		await client.end();
+
 		revalidatePath('/admin/productos');
 		return { message: 'Successfully deleted product with ID ' + id };
 	} catch (error) {
@@ -43,7 +51,11 @@ export async function deleteProduct(id: string) {
 // bind this to the pathname where it will be used *before* setting it as a form action
 export async function restoreProduct(pathname: string, id: string) {
 	try {
-		await sql`CALL tienda.RestoreProduct(${id})`;
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect()
+		await client.query(`CALL tienda.RestoreProduct(${id})`);
+		await client.end();
+
 		revalidatePath(pathname);
 		return { message: 'Successfully restored product with ID ' + id };
 	} catch (error) {
@@ -54,7 +66,12 @@ export async function restoreProduct(pathname: string, id: string) {
 
 export async function definitivelyDeleteProduct(id: string) {
 	try {
-		const deletionInfo = await sql`DELETE FROM tienda.deleted_products WHERE id = ${id}`;
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432});
+		await client.connect()
+		const deletionInfo = await client.query(`DELETE FROM tienda.deleted_products WHERE id = ${id}`);
+		
+		await client.end();
+		
 		revalidatePath("/admin/productos_eliminados");
 		return { message: 'Successfully deleted product with ID ' + id };
 	} catch (error) {
@@ -177,7 +194,11 @@ export async function createProduct(productFormState: ProductFormState, fd: Form
 	console.log(`INSERT INTO tienda.catalogo (name, description, category, rating, price, image) VALUES ('${fields.data.name}', '${fields.data.description}', '${fields.data.category}', ${fields.data.rating}, ${fields.data.price}, '${uploadedURL}')`);
 
 	try {
-		const createInfo = await sql`INSERT INTO tienda.catalogo (name, description, category, rating, price, image) VALUES ('${fields.data.name}', '${fields.data.description}', '${fields.data.category}', ${fields.data.rating}, ${fields.data.price}, '${uploadedURL}')`;
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+		const createInfo = await client.query(`INSERT INTO tienda.catalogo (name, description, category, rating, price, image) VALUES ('${fields.data.name}', '${fields.data.description}', '${fields.data.category}', ${fields.data.rating}, ${fields.data.price}, '${uploadedURL}')`);
+		await client.end();
+
 		// return { message: 'Successfully created product'};
 	} catch (error) {
 		console.error('Failed to create product: ', error);
@@ -231,7 +252,11 @@ export async function createComment(prevState: State, formData: FormData) {
 	}
 
 	try {
-		await sql`INSERT INTO tienda.comments (related_product_id, name, rating, content) VALUES (${validatedFields.data.related_product_id}, '${validatedFields.data.name}', ${validatedFields.data.rating}, '${validatedFields.data.content}')`;
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+		await client.query(`INSERT INTO tienda.comments (related_product_id, name, rating, content) VALUES (${validatedFields.data.related_product_id}, '${validatedFields.data.name}', ${validatedFields.data.rating}, '${validatedFields.data.content}')`);
+		await client.end();
+
 		revalidatePath('/producto/' + validatedFields.data.related_product_id);
 		
 		return { 
@@ -245,6 +270,13 @@ export async function createComment(prevState: State, formData: FormData) {
 }
 
 export async function editProduct(product: Product, productFormState: ProductFormState, fd: FormData) {
+	console.log("~~~~~~~~~~~~~~");
+	console.log("edit");
+	console.log(fd);
+	console.log(fd.get('image'));
+	console.log(fd.get('id')); // testing the hidden field in the form
+	console.log("~~~~~~~~~~~~~~");
+
 	const fields = SchemaForEdition.safeParse(extractFormData(fd));
 	console.log(fields);
 
@@ -271,11 +303,16 @@ export async function editProduct(product: Product, productFormState: ProductFor
 	console.log(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = ${uploadedURL}, modified_at = NOW() WHERE id = ${fd.get('id')}`);
 
 	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+
 		// remember to update the modified_at timestamp to NOW()
 		// e.g. UPDATE tienda.catalogo SET modified_at = NOW() WHERE id = 33595;
-		const editInfo = await sql`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '${uploadedURL}', modified_at = NOW() WHERE id = ${fd.get('id')}`;
+		const editInfo = await client.query(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '${uploadedURL}', modified_at = NOW() WHERE id = ${fd.get('id')}`);
 		// console.log(editInfo) // [DEBUG]
 		// assert(editInfo.rowCount == 1)
+
+		await client.end();
 
 		/* return { message: 'Successfully edited product with ID ' + fd.get('id') }; */
 	} catch (error) {
@@ -301,7 +338,7 @@ async function uploadToCloudinary(imageBlob: File) {
 		secure: true,
 	});
 
-	// console.log(imageBlob);
+	console.log(imageBlob);
 	// File {
 	//    size: 1238357,
 	//    type: 'image/jpeg',
@@ -312,7 +349,7 @@ async function uploadToCloudinary(imageBlob: File) {
 	const publicId = Date.now();
 	const cloudExtension = ".jpg";
 	const imageName = publicId + "." + imageBlob.type.split("/")[1];
-	// console.log("<DEBUG> [uploadToCloudinary]", imageName);
+	console.log(imageName);
 
 	// https://gist.github.com/colbyfayock/f0778baf2684d49fdaace5ee37e70138
 	const arrayBuffer = await imageBlob.arrayBuffer();

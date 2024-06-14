@@ -1,4 +1,5 @@
 import Card from '@/app/ui/admin/producto/card';
+
 import { getProductById } from '@/app/lib/queries_local'
 // import { getProductById } from '@/app/lib/queries'
 

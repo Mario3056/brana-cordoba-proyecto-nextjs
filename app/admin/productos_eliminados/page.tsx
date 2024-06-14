@@ -1,6 +1,7 @@
 import Table from '@/app/ui/admin/productos/deletedProductsTable';
 
 import { getDeletedProducts } from '@/app/lib/queries_local';
+// import { getDeletedProducts } from '@/app/lib/queries';
 
 export default async function ProductosEliminados() {
 	const deletedProducts = await getDeletedProducts();

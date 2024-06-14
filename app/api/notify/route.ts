@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 import { MercadoPagoConfig, Payment } from "mercadopago";
 import type { PaymentInformation } from '@/app/lib/types.d';
 
-import { storePayment } from '@/app/lib/actions';
+// import { storePayment } from '@/app/lib/actions';
+import { storePayment } from '@/app/lib/actions_local';
 
 // Credencial de produccion del usuario de prueba (Vendedor)
 const client = new MercadoPagoConfig({

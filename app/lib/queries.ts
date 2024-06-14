@@ -1,10 +1,12 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { AdminUser, Product } from '@/app/lib/types';
+import type { AdminUser, Productm, ProductComment } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
+export const COMMENTS_PER_PAGE = 6;
 
 export async function getDeletedProducts(): Promise<Product[]> {
+	noStore();
 	try {
 		const deletedProducts = await sql`SELECT * FROM tienda.deleted_products ORDER BY created_at ASC`;		
 		return deletedProducts.rows as Product[];
@@ -136,5 +138,75 @@ export async function getUser(email: string): Promise<AdminUser> {
 	} catch (error) {
 		console.error('[DEBUG] Failed to fetch page of products:', error);
 		throw new Error('[DEBUG] Failed to fetch page of products');
+	}
+}
+
+export async function getCommentsByPage(
+	product_id: string,
+	pageNumber: number
+): Promise<ProductComment[]> {
+	noStore();
+	
+	if (pageNumber < 1) { return [] }; // throw an error instead?
+	const pageOffset = (pageNumber - 1) * COMMENTS_PER_PAGE;
+	
+	try {
+		// [DEBUG] Test for skeletons - remove before production
+		console.log('Fetching comments...');
+		await new Promise((resolve) => setTimeout(resolve, 1500));
+
+		const page = await sql`SELECT * FROM tienda.comments
+				WHERE related_product_id = ${product_id}
+				OFFSET ${pageOffset} LIMIT ${COMMENTS_PER_PAGE}`;
+
+		console.log('Comments fetch completed after 1.5 seconds.'); // [DEBUG]
+
+		return page.rows as ProductComment[];
+
+	} catch (error) {
+		console.error('Failed to fetch page of comments:', error);
+		throw new Error('Failed to fetch page of comments');
+	}
+}
+
+export async function getCommentsPages(product_id: string) {
+	noStore()
+	try {
+		const count = await sql`SELECT COUNT(*) 
+			FROM tienda.comments
+			WHERE related_product_id = ${product_id}`;
+
+		const totalPages = Math.ceil(Number(count.rows[0].count) / COMMENTS_PER_PAGE);
+		return totalPages;
+	} catch (error) {
+		console.error('Database Error:', error);
+		throw new Error('Failed to get total number of pages of comments.');
+	}
+}
+
+/**
+ * 
+ * @param product_id - id of the product
+ * @returns - average rating considering both rating from comments and the internal rating of the product
+ */
+export async function getAvgRating(product_id: string) {
+	noStore();
+	try {
+		const result = await sql`SELECT ROUND(AVG(rating)::numeric, 1) as avg
+			FROM (
+				SELECT rating
+				FROM tienda.catalogo
+				WHERE id = ${product_id}
+				UNION
+				SELECT rating
+				FROM tienda.comments
+				WHERE related_product_id = ${product_id}
+			) AS combined_ratings`;
+		const avg = Number(result.rows[0].avg);
+
+		return avg;
+	} catch (error) {
+		console.error('Database Error:', error);
+		throw new Error('Failed to get average rating of comments for the product');
 	}
 }

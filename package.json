@@ -9,7 +9,10 @@
     "lint": "next lint",
     "local_seed": "node ./scripts/seed_local.js",
     "seed_local": "node ./scripts/seed_local.js",
-    "seed": "node -r dotenv/config ./scripts/seed.js"
+    "seed": "node -r dotenv/config ./scripts/seed.js",
+
+    "remoteDB": "py switchEnv.py remote",
+    "localDB": "py switchEnv.py local"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.3",

@@ -1,17 +1,3 @@
-/*
--- Prepared statements only last for the duration of the current database session.
--- When the session ends, the prepared statement is forgotten,
--- so it must be recreated before being used again. 
-PREPARE searchquery (text) AS
-	  SELECT * FROM tienda.catalogo
-			WHERE name ILIKE '%' || $1 || '%' OR
-				  description ILIKE '%' || $1 || '%' OR
-				  category ILIKE '%' || $1 || '%'
-			ORDER BY created_at ASC;
-EXECUTE searchquery ('pro');
-DEALLOCATE  searchquery;
-*/
-
 import pg from 'pg'
 const { Client } = pg;
 import type { AdminUser, Product, ProductComment } from '@/app/lib/types';
@@ -52,7 +38,7 @@ export async function getProductsByPage(pageNumber: number): Promise<Product[]> 
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
 		);
 
-		console.log('Data fetch completed after 3 seconds.'); // [DEBUG]
+		console.log('Data fetch completed after 1.5 seconds.'); // [DEBUG]
 		// console.log(page.rows); // [DEBUG]
 
 		await client.end()
@@ -271,7 +257,7 @@ export async function getAvgRating(product_id: string) {
 				SELECT rating
 				FROM tienda.comments
 				WHERE related_product_id = ${product_id}
-			)`
+			) AS combined_ratings`
 		);
 		const avg = Number(result.rows[0].avg);
 
@@ -279,6 +265,6 @@ export async function getAvgRating(product_id: string) {
 		return avg;
 	} catch (error) {
 		console.error('Database Error:', error);
-		throw new Error('Failed to get total number of pages of comments.');
+		throw new Error('Failed to get average rating of comments for the product');
 	}
 }

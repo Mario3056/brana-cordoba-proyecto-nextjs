@@ -1,6 +1,8 @@
 'use client';
 
-import { deleteProduct, restoreProduct, definitivelyDeleteProduct } from "@/app/lib/actions";
+// import { deleteProduct, restoreProduct, definitivelyDeleteProduct } from "@/app/lib/actions";
+import { deleteProduct, restoreProduct, definitivelyDeleteProduct } from "@/app/lib/actions_local";
+
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
