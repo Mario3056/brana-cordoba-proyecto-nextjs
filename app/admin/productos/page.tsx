@@ -1,7 +1,9 @@
 import Table from '@/app/ui/admin/productos/table';
-import { fetchProductsPages } from '@/app/lib/queries_local';
 import SearchBar from '@/app/ui/catalogo/searchBar';
 import Pagination from '@/app/ui/catalogo/pagination';
+
+import { fetchProductsPages } from '@/app/lib/queries_local';
+// import { fetchProductsPages } from '@/app/lib/queries';
 
  export default async function Productos({ searchParams }: { searchParams?: { page?: number, query?: string } }) {
 	const query = searchParams?.query || '';
