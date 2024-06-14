@@ -1,27 +1,12 @@
-'use client';
-
 import StarRating from '@/app/ui/starRating';
-import { useCartStore } from '@/app/lib/cart/useCartStore';
-import type { Product } from '@/app/lib/types';
 import Image from 'next/image';
-import { useState } from 'react';
+import { AddToCartButton } from '@/app/ui/product/buttons';
+import { getProductById } from '@/app/lib/queries_local';
+import { getAvgRating } from '@/app/lib/queries_local';
 
-export default function Card({ product }: { product: Product }) {
-    const addToCarrito = useCartStore(state => state.addToCart);
-    const [buttonState, setButtonState] = useState('initial'); // initial, transitioning, or clicked
-
-    const handleClick = () => {
-        if (buttonState === 'initial') {
-            addToCarrito(product);
-            setButtonState('transitioning');
-            setTimeout(() => {
-                setButtonState('clicked');
-                setTimeout(() => {
-                    setButtonState('initial');
-                }, 2000); // 2 seconds for the 'clicked' state
-            }, 300); // 300ms for the transition
-        }
-    };
+export default async function Card({ product_id }: { product_id: string }) {
+    const product = await getProductById(product_id);
+    const  avgRating = await getAvgRating(product_id);
 
     return (
         <section className="text-gray-600 body-font overflow-hidden">
@@ -37,8 +22,8 @@ export default function Card({ product }: { product: Product }) {
                         <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{product.name}</h1>
                         <div className="flex mb-4">
                             <span className="flex items-center">
-                                <StarRating rating={product.rating} />
-                                <span className="text-gray-600 ml-3">Puntuación</span>
+                                <StarRating rating={avgRating} />
+                                <span className="text-gray-600 ml-3">Puntuación promedio</span>
                             </span>
                         </div>
                         <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
@@ -46,16 +31,7 @@ export default function Card({ product }: { product: Product }) {
                         </div>
                         <div className="flex">
                             <span className="title-font font-medium text-2xl text-gray-900">{"$" + (product.price / 100)}</span>
-                            <button
-                                className={`flex ml-auto text-white border-0 py-2 px-6 focus:outline-none rounded transition-all duration-300 ${buttonState === 'initial' ? 'bg-indigo-500 hover:bg-indigo-600' :
-                                        buttonState === 'transitioning' ? 'bg-green-500' :
-                                            buttonState === 'clicked' ? 'bg-green-500' : ''
-                                    } ${buttonState === 'initial' ? 'scale-100' : 'scale-105'}`}
-                                onClick={handleClick}
-                                disabled={buttonState !== 'initial'} // Disable the button during transition and clicked states
-                            >
-                                {buttonState === 'clicked' ? '✔' : 'Agregar al carrito'}
-                            </button>
+                            <AddToCartButton product={product} />
                         </div>
                     </div>
                 </div>
@@ -63,4 +39,3 @@ export default function Card({ product }: { product: Product }) {
         </section>
     )
 }
-

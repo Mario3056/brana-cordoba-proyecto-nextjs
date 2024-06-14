@@ -17,10 +17,10 @@ export default async function Catalogo({ searchParams }: { searchParams?: { page
 			<SearchBar />
 			<Suspense key={query + currentPage} fallback={<CardsSkeleton />}>
 				<Cards query={query} currentPage={currentPage} />
+				<div className="mb-5 mt-5 flex w-full justify-center">
+        			<Pagination totalPages={totalPages} />
+      			</div>
 			</Suspense>
-			<div className="mb-5 mt-5 flex w-full justify-center">
-        		<Pagination totalPages={totalPages} />
-      		</div>
 		</section>
 	);
 }

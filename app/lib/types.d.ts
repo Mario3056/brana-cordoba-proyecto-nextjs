@@ -78,3 +78,9 @@ interface PostCompraStatusType {
 interface PostCompraMessageType {
 	type: "approved" | "failure" | null;
 }
+
+export type ProductComment = {
+  name: string;
+  rating: number;
+  content: string;
+}
