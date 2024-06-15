@@ -10,6 +10,7 @@ import useFromStore from "@/app/lib/cart/hooks/useFromStore";
 export default function PostCompra() {
     const searchParams = useSearchParams();
     const status = searchParams.get("status");
+    const clearCart = useCartStore((state) => state.clearCart);
 	
 	// console.log(searchParams);
 
@@ -19,7 +20,7 @@ export default function PostCompra() {
 
     if (status === "approved") {
 		// Take the cart data and show it on PostNotification before clearing it?
-        useFromStore(useCartStore, state => state.clearCart);
+        clearCart();
         postCompraStatus = {
             type: "approved",
         };
