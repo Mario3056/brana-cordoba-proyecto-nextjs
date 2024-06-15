@@ -58,9 +58,9 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 	
 	try {
 		const page = await sql`SELECT * FROM tienda.catalogo
-				WHERE name ILIKE ${`%${query}%`} OR
-					  description ILIKE ${`%${query}%`} OR
-					  category ILIKE ${`%${query}%`}
+				WHERE name ILIKE ${'%' + query + '%'} OR
+					  description ILIKE ${'%' + query + '%'} OR
+					  category ILIKE ${'%' + query + '%'}
 				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`;
 				
@@ -129,9 +129,9 @@ export async function fetchProductsPages(query: string) {
 		const count = await sql`SELECT COUNT(*) 
 			FROM tienda.catalogo
 			WHERE 
-				name ILIKE '%${query}%' OR
-				description ILIKE '%${query}%' OR
-				category ILIKE '%${query}%'`;
+				name ILIKE ${'%' + query + '%'} OR
+				description ILIKE ${'%' + query + '%'} OR
+				category ILIKE ${'%' + query + '%'}`;
 
 		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
 		return totalPages;
