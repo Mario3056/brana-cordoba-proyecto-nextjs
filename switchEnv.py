@@ -64,7 +64,6 @@ def switchFile(filename):
 		for line in f:
 
 			lineMatch = re.match(importRe, line)
-			
 			if (lineMatch):
 				lineIsCommented = lineMatch.group('isCommented') != ''
 				debugPrint("lineMatch.group('isCommented') == [[", lineMatch.group('isCommented'), "]]")
@@ -96,6 +95,9 @@ def switchFile(filename):
 							f.write(line[3:])
 						else:
 							f.write(line)
+				else:
+					# it's an import that's not about actions or queries
+					f.write(line)
 			else:
 				# write all other lines to file
 				f.write(line)
