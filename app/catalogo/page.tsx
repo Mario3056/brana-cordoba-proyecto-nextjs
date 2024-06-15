@@ -1,5 +1,5 @@
-// import { fetchProductsPages } from '@/app/lib/queries';
-import { fetchProductsPages } from '@/app/lib/queries_local';
+import { fetchProductsPages } from '@/app/lib/queries';
+// import { fetchProductsPages } from '@/app/lib/queries_local';
 
 import { Suspense } from "react";
 import SearchBar from '@/app/ui/catalogo/searchBar';
