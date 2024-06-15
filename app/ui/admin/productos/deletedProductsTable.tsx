@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { RestoreDeletedProductButton, DefinitivelyDeleteButton } from '@/app/ui/admin/productos/buttons';
+import type { Product } from '@/app/lib/types.d';
 
-export default async function Table({products}) {
+export default async function Table({products}: {products: Product[]}) {
     return (
         <div className="max-w-fit mx-auto">
             <div className="mt-5 shadow-sm border rounded-lg overflow-x-auto">

@@ -15,7 +15,7 @@ function disableAfterOneClick(event: any) {
 }
 
 export function CreateProductButton() {
-	return <Link href={`/admin/producto/crear`} tabindex={0}
+	return <Link href={`/admin/producto/crear`} tabIndex={0}
 			className={`inline-block px-4 py-2 text-white duration-150 font-medium
 					   bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700
 					   md:text-sm focus:border focus:border-4 focus:border-yellow-400`}>
@@ -60,15 +60,21 @@ export function DeleteProductButton({ id }: { id: string }) {
 	);
 }
 
-export function CloseModalButton({modal_id}) {
-	return <button onClick={(e) => document.getElementById(modal_id).close()}
+export function CloseModalButton({modal_id}: {modal_id: string}) {
+	return <button onClick={(event) => {
+									const modal: HTMLDialogElement | null = document.getElementById(modal_id) as HTMLDialogElement;
+									if (modal != null) modal.close();
+								}}
 				className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
 				X
 			</button>;
 }
 
-export function TriggerDeleteConfirmModal({modal_id}) {
-	return <button onClick={(event) => { document.getElementById(modal_id).showModal(); }}
+export function TriggerDeleteConfirmModal({modal_id}: {modal_id: string}) {
+	return <button onClick={(event) => {
+								const modal: HTMLDialogElement | null = document.getElementById(modal_id) as HTMLDialogElement;
+								if (modal != null) modal.showModal();
+							}}
 					className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg">
 				Eliminar
 			</button>;
