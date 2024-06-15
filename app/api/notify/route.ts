@@ -14,8 +14,9 @@ export async function POST(req: NextRequest) {
 	try {
 		const body = await req
 			.json()
-			.then((data) => data);
-		
+			.then((data) => data)
+		;
+
 		// console.log("Request data:");
 		// console.log(body);
 		// console.log("\n");
@@ -24,10 +25,14 @@ export async function POST(req: NextRequest) {
 			const payment = await new Payment(client).get({ id: body.data.id });
 			console.log("Response data:");
 			console.log(payment);
-			console.log("\n");	
+			console.log("\n");
+			
+			if (!payment.id || !payment.transaction_amount || !payment.status) {
+				throw new Error('Invalid payment data');
+			}
 
-			const pagoRealizado = {
-				id: payment.id,
+			const pagoRealizado: PaymentInformation = {
+				id: String(payment.id),
 				amount: payment.transaction_amount,
 				status: payment.status,
 				timestamp: Date.now()
