@@ -101,6 +101,17 @@ export async function API_getAllProducts(): Promise<Product[]> {
 	}
 }
 
+export async function API_getAllCommentsForProduct(id: string): Promise<ProductComment[]> {
+	noStore();
+	try {
+		const p = await sql`SELECT * FROM tienda.comments WHERE related_product_id = ${id}`;
+		return p.rows as ProductComment[];
+	} catch (error) {
+		console.error('[API] Failed to fetch all comments for product ' + id + ':', error);
+		throw new Error('[API] Failed to fetch all comments for product ' + id + ':');
+	}
+}
+
 export async function getProductById(id: string): Promise<Product> {
 	noStore();
 	try {
