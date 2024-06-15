@@ -45,6 +45,20 @@ export type ProductFormState = {
 	message?: string | null;
 }
 
+export type ProductEditFormState = {
+	errors?: {
+    id?: string[],
+		name?: string[],
+		description?: string[],
+		category?: string[],
+		price?: string[],
+		image?: string[],
+		// ...?	
+	};
+	
+	message?: string | null;
+}
+
 export const placeholderProduct: Product = {
   id: "placeholder-id",
   name: "placeholder product",

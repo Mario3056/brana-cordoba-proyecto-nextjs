@@ -7,7 +7,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import type { AdminUser, Product, ProductFormState } from '@/app/lib/types.d';
+import type { AdminUser, Product, ProductEditFormState, ProductFormState } from '@/app/lib/types.d';
 import type { PaymentInformation } from '@/app/lib/types.d';
 
 import { sql } from '@vercel/postgres';
@@ -149,7 +149,7 @@ const EditProductSchema = z.object({
 });
 
 const SchemaForCreation = CreateProductSchema.omit({ id: true, created_at: true, modified_at: true });
-const SchemaForEdition = EditProductSchema.omit({ id: true, created_at: true, modified_at: true });
+const SchemaForEdition = EditProductSchema.omit({ created_at: true, modified_at: true });
 
 export async function createProduct(productFormState: ProductFormState, fd: FormData) {
 	console.log("~~~~~~~~~~~~~~");
@@ -244,7 +244,7 @@ export async function createComment(prevState: State, formData: FormData) {
 	}
 }
 
-export async function editProduct(product: Product, productFormState: ProductFormState, fd: FormData) {
+export async function editProduct(product: Product, productEditFormState: ProductEditFormState, fd: FormData) {
 	const fields = SchemaForEdition.safeParse(extractFormData(fd));
 	console.log(fields);
 
@@ -268,18 +268,18 @@ export async function editProduct(product: Product, productFormState: ProductFor
 		console.log(uploadedURL);
 	}
 
-	console.log(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = ${uploadedURL}, modified_at = NOW() WHERE id = ${fd.get('id')}`);
+	console.log(`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = ${uploadedURL}, modified_at = NOW() WHERE id = ${fields.data.id}`);
 
 	try {
 		// remember to update the modified_at timestamp to NOW()
 		// e.g. UPDATE tienda.catalogo SET modified_at = NOW() WHERE id = 33595;
-		const editInfo = await sql`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '${uploadedURL}', modified_at = NOW() WHERE id = ${fd.get('id')}`;
+		const editInfo = await sql`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '${uploadedURL}', modified_at = NOW() WHERE id = ${fields.data.id}`;
 		// console.log(editInfo) // [DEBUG]
 		// assert(editInfo.rowCount == 1)
 
 		/* return { message: 'Successfully edited product with ID ' + fd.get('id') }; */
 	} catch (error) {
-		console.error('Failed to edit product with ID ' + fd.get('id') + ':', error);
+		console.error('Failed to edit product with ID ' + fields.data.id + ':', error);
 		/* return { message: 'Failed to edit product with ID ' + fd.get('id'), error: error}; */
 	}
 
