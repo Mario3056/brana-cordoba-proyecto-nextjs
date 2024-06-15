@@ -1,8 +1,8 @@
-# Tablas postgres:
-------------------
+-- Postgres tables, stored procedures
 
 CREATE SCHEMA IF NOT EXISTS tienda;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE SEQUENCE IF NOT EXISTS tienda.serial_id START WITH 33575;
 
 CREATE TABLE IF NOT EXISTS tienda.administradores (
 	id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -10,32 +10,52 @@ CREATE TABLE IF NOT EXISTS tienda.administradores (
 	password TEXT NOT NULL
 );
 
-CREATE SEQUENCE IF NOT EXISTS tienda.serial_id START WITH 33575;
 CREATE TABLE IF NOT EXISTS tienda.catalogo (
 	id integer NOT NULL DEFAULT nextval('tienda.serial_id'),
 	name text DEFAULT 'Producto'::text,
 	description text DEFAULT 'Una descripcion elocuente y util para el usuario'::text,
 	category text DEFAULT 'Misc.'::text,
-	price integer DEFAULT 0, -- en centavos
-	rating real DEFAULT 0, -- idealmente, solo insertar en rango [0.0, 5.0]
+	price integer DEFAULT 0,
+	rating real DEFAULT 0,
 	image text DEFAULT '/products/placeholder.png'::text,
 	created_at timestamp with time zone DEFAULT NOW(),
-	modified_at timestamp with time zone DEFAULT NOW(), -- modificado si el admin lo edita
+	modified_at timestamp with time zone DEFAULT NOW(),
 	CONSTRAINT catalogo_pk PRIMARY KEY (id)
 );
 
-------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS tienda.deleted_products (LIKE tienda.catalogo)
 
-# Para llenar la DB:
-* conseguir un token para la API de mercadolibre
-* hacer un par de busquedas
+CREATE TABLE IF NOT EXISTS tienda.mercadopago_records (
+	id serial,
+	paymentId text,
+	amount integer,
+	status text,
+	timestamp timestamp
+)
 
-https://developers.mercadolibre.com.ar/en_us/items-and-searches
-/sites/$SITE_ID/search?category=$CATEGORY_ID   Get items listed in a category.
-/sites/$SITE_ID/search?q=Motorola%20G6         Get items from a search query.
+CREATE TABLE IF NOT EXISTS tienda.comments (
+	id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+	related_product_id integer NOT NULL,
+	name text DEFAULT 'Anonymous'::text,
+	rating real DEFAULT 0,
+	content text DEFAULT ''::text
+);
 
-https://developers.mercadolibre.com.ar/en_us/list-products
-Request: curl -X GET -H 'Authorization: Bearer $ACCESS_TOKEN' https://api.mercadolibre.com/items/$ITEM_ID
-Example: curl -X GET -H 'Authorization: Bearer $ACCESS_TOKEN' https://api.mercadolibre.com/items/MLA1136716168
 
-Item description endpoint: curl -X GET -H 'Authorization: Bearer $ACCESS_TOKEN' https://api.mercadolibre.com/items/$ITEM_ID/description
+
+-- Stored procedures
+CREATE OR REPLACE PROCEDURE tienda.DeleteProduct(_id integer)
+	LANGUAGE plpgsql as $$
+	BEGIN
+		WITH moved_rows AS (
+			DELETE FROM tienda.catalogo WHERE tienda.catalogo.id = _id RETURNING *
+		) INSERT INTO tienda.deleted_products SELECT * FROM moved_rows;
+	END; $$
+
+CREATE OR REPLACE PROCEDURE tienda.RestoreProduct(_id integer)
+	LANGUAGE plpgsql as $$
+	BEGIN
+		WITH moved_rows AS (
+			DELETE FROM tienda.deleted_products WHERE tienda.deleted_products.id = _id RETURNING *
+		) INSERT INTO tienda.catalogo SELECT * FROM moved_rows;
+	END; $$

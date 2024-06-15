@@ -135,7 +135,7 @@ const main = async () => {
 	await createProducts(client);
 	await createDeletedProductsTable(client);
 	await createPaymentRecordsTable(client);
-	await createComments();
+	await createComments(client);
 	
 	await client.end(() => {console.log("Closing connection...");});
 }
