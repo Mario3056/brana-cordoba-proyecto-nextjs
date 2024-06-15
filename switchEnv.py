@@ -44,7 +44,7 @@ def findPaths(directory, dirChain, regex):
 
 paths = []
 srcdir = "app"
-findPaths(srcdir, srcdir, r"[a-zA-Z\\\[\]\.]*.ts(x?)")
+findPaths(srcdir, srcdir, r"[a-zA-Z\\\[\]\._ ]*.ts(x?)")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
