@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { AdminUser, Productm, ProductComment } from '@/app/lib/types';
+import type { AdminUser, Product, ProductComment } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
 export const COMMENTS_PER_PAGE = 6;
