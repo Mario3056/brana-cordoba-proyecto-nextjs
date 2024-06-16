@@ -1,6 +1,3 @@
-# Powershell: ls -r | ForEach-Object { echo $_.Name }
-# Bash: find app/ -iname "*.ts*"
-
 # First attempt:
 # find app/ -iname "*.ts*" | xargs -I {} sed -in 's/\(.*import.*\)/\/\/ \1/g' {}
 # but it becomes more difficult to detect whether there are commented lines or not, and then run different substitution rules
@@ -14,9 +11,9 @@ import in_place
 
 if ( (len(sys.argv) != 2) or ( (sys.argv[1] != "local") and (sys.argv[1] != "remote")) ):
 	print(f"Usage: {sys.argv[0]} [local | remote]")
-	print(f"{sys.argv[0]} local: comments out queries.ts imports and uncomments queries_local.ts imports")
-	print(f"{sys.argv[0]} remote: comments out queries_local.ts imports and uncomments queries.ts imports")
-	print(f"Run {sys.argv[0]} remote before running git push")
+	print(f"./switchEnv.py local: comments out queries/actions.ts imports and uncomments queries/actions_local.ts imports")
+	print(f"./switchEnv.py remote: comments out queries/actions_local.ts imports and uncomments queries/actions.ts imports")
+	print(f"Run ./switchEnv.py remote before running git push")
 	sys.exit(-1)
 
 goingToRemote = (sys.argv[1] == "remote")
@@ -112,4 +109,4 @@ if __name__ == '__main__':
 	# git pre-push hooks?
 	# https://github.com/git/git/blob/87c86dd14abe8db7d00b0df5661ef8cf147a72a3/templates/hooks--pre-push.sample
 	# or put <<< alias push="npm run remoteDB; git push;" >>> on your .bashrc
-	print(f"Remember to run {sys.argv[1]} remote before running git push")
+	print(f"Remember to run ./switchEnv.py remote before running git push")
