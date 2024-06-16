@@ -12,9 +12,9 @@ export default function Footer() {
             </nav>
             <nav>
                 <div className="grid grid-flow-col gap-4">
-                    <Link href="/"> <TwitterLogo /> </Link>
-					<Link href="/"> <YoutubeLogo /> </Link>
-					<Link href="/"> <FacebookLogo /> </Link>
+                    <Link aria-label="Twitter" href="/"> <TwitterLogo /> </Link>
+					<Link aria-label="Youtube" href="/"> <YoutubeLogo /> </Link>
+					<Link aria-label="Facebook" href="/"> <FacebookLogo /> </Link>
                 </div>
             </nav>
             <aside>

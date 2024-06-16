@@ -11,7 +11,7 @@ export default function CartButton() {
 
 	return <>
 		<Link href="/carrito" tabIndex={-1} aria-label="Ir al carrito de compras" >
-			<div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+			<div tabIndex={0} role="button" aria-label="Carrito de compras" className="btn btn-ghost btn-circle">
 				<div tabIndex={-1} className="indicator">
 					<CartSymbol />
 					<span className={totalItems === 0 ? "hidden" : "badge badge-sm indicator-item"}>{totalItems}</span>

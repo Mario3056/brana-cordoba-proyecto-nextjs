@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function Card( {product}: {product: Product}) {
     return (
         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-			<Link href={"/producto/" + product.id} className="group block overflow-hidden">
+			<Link href={"/producto/" + product.id} aria-label={"Ver producto " + product.name} className="group block overflow-hidden">
                 <Image
                     src={product.image}
                     alt={product.description}

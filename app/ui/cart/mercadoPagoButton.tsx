@@ -66,7 +66,7 @@ export default function MercadoPagoButton() {
   } else if (buttonState === "link_ready") {
     buttonElement = (
       <>
-        <Link
+        <Link aria-label="Iniciar proceso de compra"
           className={`w-auto inline-block rounded bg-gray-700 px-5 py-3
                                                   text-sm text-gray-100 transition hover:bg-gray-600`}
           href={url!}
