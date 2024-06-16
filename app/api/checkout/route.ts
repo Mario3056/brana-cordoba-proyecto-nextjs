@@ -7,7 +7,7 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.NEXT_PUBLIC_MERCADO_PAGO_TOKEN!,
 });
 
-const URL = "http://localhost:3000";
+const URL = "https://" + (process.env.VERCEL_URL ?? "localhost:3000");
 
 export async function POST(req: NextRequest) {
   try {
