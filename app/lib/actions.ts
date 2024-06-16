@@ -231,24 +231,17 @@ export async function createComment(prevState: State, formData: FormData) {
 	}
 
 	try {
-		await sql`INSERT INTO tienda.comments (related_product_id, name, rating, content) VALUES (${validatedFields.data.related_product_id}, '${validatedFields.data.name}', ${validatedFields.data.rating}, '${validatedFields.data.content}')`;	
-	} catch (error) {
-		return{
-			message: 'Failed data base insert.',
-		};
-	}	
-
-	try {
+		await sql`INSERT INTO tienda.comments (related_product_id, name, rating, content) VALUES (${validatedFields.data.related_product_id}, '${validatedFields.data.name}', ${validatedFields.data.rating}, '${validatedFields.data.content}')`;
 		revalidatePath('/producto/' + validatedFields.data.related_product_id);
+		
+		return { 
+			message: 'Successfully created comment'
+		};
 	} catch (error) {
 		return{
-			message: 'Failed when revalidating path.',
+			message: 'Failed to create comment',
 		};
 	}
-
-	return { 
-		message: 'Successfully created comment'
-	};
 }
 
 export async function editProduct(product: Product, productEditFormState: ProductEditFormState, fd: FormData) {
