@@ -17,9 +17,9 @@ export async function storePayment(paymentInfo: PaymentInformation) {
 	// noStore();
 	try {
 		const paymentUploadInfo = await sql`INSERT INTO tienda.mercadopago_records (paymentId, amount, status, timestamp) VALUES (
-			'${paymentInfo.id}',
+			${paymentInfo.id},
 			${paymentInfo.amount * 100},
-			'${paymentInfo.status}',
+			${paymentInfo.status},
 			to_timestamp(${paymentInfo.timestamp} / 1000.0)
 		)`;
 	} catch (error) {
@@ -177,7 +177,7 @@ export async function createProduct(productFormState: ProductFormState, fd: Form
 	console.log(`INSERT INTO tienda.catalogo (name, description, category, rating, price, image) VALUES ('${fields.data.name}', '${fields.data.description}', '${fields.data.category}', ${fields.data.rating}, ${fields.data.price}, '${uploadedURL}')`);
 
 	try {
-		const createInfo = await sql`INSERT INTO tienda.catalogo (name, description, category, rating, price, image) VALUES ('${fields.data.name}', '${fields.data.description}', '${fields.data.category}', ${fields.data.rating}, ${fields.data.price}, '${uploadedURL}')`;
+		const createInfo = await sql`INSERT INTO tienda.catalogo (name, description, category, rating, price, image) VALUES (${fields.data.name}, ${fields.data.description}, ${fields.data.category}, ${fields.data.rating}, ${fields.data.price}, ${uploadedURL})`;
 		// return { message: 'Successfully created product'};
 	} catch (error) {
 		console.error('Failed to create product: ', error);
@@ -231,7 +231,7 @@ export async function createComment(prevState: State, formData: FormData) {
 	}
 
 	try {
-		await sql`INSERT INTO tienda.comments (related_product_id, name, rating, content) VALUES (${validatedFields.data.related_product_id}, '${validatedFields.data.name}', ${validatedFields.data.rating}, '${validatedFields.data.content}')`;
+		await sql`INSERT INTO tienda.comments (related_product_id, name, rating, content) VALUES (${validatedFields.data.related_product_id}, ${validatedFields.data.name}, ${validatedFields.data.rating}, ${validatedFields.data.content})`;
 		revalidatePath('/producto/' + validatedFields.data.related_product_id);
 		
 		return { 
@@ -273,7 +273,7 @@ export async function editProduct(product: Product, productEditFormState: Produc
 	try {
 		// remember to update the modified_at timestamp to NOW()
 		// e.g. UPDATE tienda.catalogo SET modified_at = NOW() WHERE id = 33595;
-		const editInfo = await sql`UPDATE tienda.catalogo SET name = '${fields.data.name}', description = '${fields.data.description}', category = '${fields.data.category}', rating = ${fields.data.rating}, price = ${fields.data.price}, image = '${uploadedURL}', modified_at = NOW() WHERE id = ${fields.data.id}`;
+		const editInfo = await sql`UPDATE tienda.catalogo SET name = ${fields.data.name}, description = ${fields.data.description}, category = ${fields.data.category}, rating = ${fields.data.rating}, price = ${fields.data.price}, image = ${uploadedURL}, modified_at = NOW() WHERE id = ${fields.data.id}`;
 		// console.log(editInfo) // [DEBUG]
 		// assert(editInfo.rowCount == 1)
 
