@@ -52,7 +52,7 @@ export default async function Table({
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <Link aria-label={"Ver datos del producto " + p.name} className="text-blue-400 font-bold underline" href={`/admin/producto/${product.id}`}> {product.name} </Link>
+                                        <Link aria-label={"Ver datos del producto " + product.name} className="text-blue-400 font-bold underline" href={`/admin/producto/${product.id}`}> {product.name} </Link>
                                     </td>
 
                                     <td className="px-6 py-4 whitespace-nowrap">{product.category}</td>
