@@ -1,5 +1,5 @@
 import StarRating from '@/app/ui/starRating';
-import { ProductComment } from "@/app/lib/types";
+import { ProductComment } from "@/app/lib/types.d";
 
 export default function CommentCard({comment}: {comment: ProductComment}) {
     return (

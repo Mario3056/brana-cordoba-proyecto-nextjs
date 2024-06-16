@@ -6,10 +6,12 @@ export default function StarRating({ rating } : { rating?: number}) {
 		if (r <= values[0]) { return values[0]; }
 		if (r >= values[values.length-1]) { return values[values.length-1]; }
 		for (let i = 0; i < values.length-1; i++) {
-			if (values[i] < r && r < values[i+1]) {
+			if (values[i] < r && r <= values[i+1]) {
 				return values[i+1];
 			}
 		}
+		
+		return 2.5; // should be unreachable
 	}
 	
 	const makeRandomString = () => {
@@ -59,6 +61,8 @@ export default function StarRating({ rating } : { rating?: number}) {
 
 		return inputs;
 	}
+	
+	// console.log(`Given ${rating}, closest is ${closestValueToRating( (rating == undefined) ? 0.0 : rating )}`);
 
 	return (
 		<div className="rating rating-half"> {/* className="rating rating-lg rating-half p-2" */}

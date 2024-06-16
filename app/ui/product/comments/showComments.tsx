@@ -14,6 +14,7 @@ export default async function ShowComments({
 }) {
     const comments = await getCommentsByPage(related_product_id, currentPage);
     const totalPages = await getCommentsPages(related_product_id);
+	// console.log(comments);
 
     return (
         <>
@@ -30,7 +31,7 @@ export default async function ShowComments({
                     </section>
                 ) : (
                     <>
-                        <div className="flex flex-wrap -m-4">
+						<div className="flex flex-wrap -m-4">
                             {comments.map((comment, index) => (
                                 <CommentCard key={'comment-' + index} comment={comment} />
                             ))}
