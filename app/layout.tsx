@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/app/ui/footer";
@@ -14,7 +13,6 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
 	title: 'LibreMercado - Tienda en Linea',
 	description: 'Tienda en Linea - Proyecto de cursada IAW 2024',
-	metadataBase: new URL('https://' + process.env.VERCEL_URL),
 };
 
 export default async function RootLayout( { children }: Readonly<{children: React.ReactNode;}>) {
@@ -22,9 +20,10 @@ export default async function RootLayout( { children }: Readonly<{children: Reac
 	
 	return (
 		<html lang="en" className="min-h-screen">
-			<Head>
+			<head>
 				<title>LibreMercado - Tienda en Linea</title>
-			</Head>
+				<meta property="og:title" content="LibreMercado - Tienda en Linea" key="title" />
+			</head>
 			
 			<body className={"min-h-screen flex flex-col justify-between " + inter.className}>
 				{ 
