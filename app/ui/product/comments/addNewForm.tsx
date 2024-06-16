@@ -47,7 +47,7 @@ export default function AddNewCommentForm({ product_id }: { product_id: string }
     }
 
     const handleSubmit = async (formData: FormData) => {
-        dispatch(formData);
+        await dispatch(formData);
 
         handleReset();
     }

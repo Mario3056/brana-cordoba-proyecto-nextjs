@@ -230,10 +230,8 @@ export async function createComment(prevState: State, formData: FormData) {
 		};
 	}
 
-	const client = await sql.connect();
-
 	try {
-		await client.sql`INSERT INTO tienda.comments (related_product_id, name, rating, content) VALUES (${validatedFields.data.related_product_id}, '${validatedFields.data.name}', ${validatedFields.data.rating}, '${validatedFields.data.content}')`;
+		await sql`INSERT INTO tienda.comments (related_product_id, name, rating, content) VALUES (${validatedFields.data.related_product_id}, '${validatedFields.data.name}', ${validatedFields.data.rating}, '${validatedFields.data.content}')`;
 		revalidatePath('/producto/' + validatedFields.data.related_product_id);
 		
 		return { 
