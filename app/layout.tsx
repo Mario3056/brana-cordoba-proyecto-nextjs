@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/app/ui/footer";
@@ -21,6 +22,10 @@ export default async function RootLayout( { children }: Readonly<{children: Reac
 	
 	return (
 		<html lang="en" className="min-h-screen">
+			<Head>
+				<title>LibreMercado - Tienda en Linea</title>
+			</Head>
+			
 			<body className={"min-h-screen flex flex-col justify-between " + inter.className}>
 				{ 
 					(auth_data != null && auth_data != undefined)
