@@ -239,7 +239,7 @@ export async function createComment(prevState: State, formData: FormData) {
 		};
 	} catch (error) {
 		return{
-			message: 'Failed to create comment',
+			message: 'Failed to create comment. Error: ' + error,
 		};
 	}
 }
