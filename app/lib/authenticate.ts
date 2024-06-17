@@ -16,7 +16,8 @@ export async function authenticate(
 	try {
 		await signIn('credentials', formData);
 		return { message: "Inicio de sesión exitoso" };
-	} catch (error) {
+
+	} catch (error: any) {
 		throw error;
 
 		if (error instanceof AuthError) {
