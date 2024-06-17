@@ -1,3 +1,6 @@
+import { Metadata } from 'next';
+export const metadata: Metadata = { title: 'Crear producto - LibreMercado' };
+
 import ProductEditForm from '@/app/ui/admin/productEditor';
 import { Product, emptyProduct, placeholderProduct } from '@/app/lib/types.d';
 

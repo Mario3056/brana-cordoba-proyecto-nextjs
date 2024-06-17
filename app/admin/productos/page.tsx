@@ -5,6 +5,9 @@ import Pagination from '@/app/ui/catalogo/pagination';
 // import { fetchProductsPages } from '@/app/lib/queries_local';
 import { fetchProductsPages } from '@/app/lib/queries';
 
+import { Metadata } from 'next';
+export const metadata: Metadata = { title: 'Productos - LibreMercado' };
+
  export default async function Productos({ searchParams }: { searchParams?: { page?: number, query?: string } }) {
 	const query = searchParams?.query || '';
 	const currentPage = Number(searchParams?.page) || 1;

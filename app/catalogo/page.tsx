@@ -3,9 +3,12 @@ import { fetchProductsPages } from '@/app/lib/queries';
 
 import { Suspense } from "react";
 import SearchBar from '@/app/ui/catalogo/searchBar';
-import Pagination from '../ui/catalogo/pagination';
-import Cards from '../ui/catalogo/cards';
-import CardsSkeleton from '../ui/catalogo/cardsSkeleton';
+import Pagination from '@/app/ui/catalogo/pagination';
+import Cards from '@/app/ui/catalogo/cards';
+import CardsSkeleton from '@/app/ui/catalogo/cardsSkeleton';
+
+import { Metadata } from 'next';
+export const metadata: Metadata = { title: 'Catalogo de productos - LibreMercado' };
 
 export default async function Catalogo({ searchParams }: { searchParams?: { page?: number, query?: string } }) {
 

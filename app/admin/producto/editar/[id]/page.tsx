@@ -7,6 +7,9 @@ import { getProductById } from '@/app/lib/queries'
 import { editProduct } from '@/app/lib/actions';
 // import { editProduct } from '@/app/lib/actions_local';
 
+import { Metadata } from 'next';
+export const metadata: Metadata = { title: 'Editar producto - LibreMercado' };
+
 export default async function AdminProductEditor({ params }: { params: { id: string } }) {
 	const product: Product = await getProductById(params.id);
 	const editProductAction = editProduct.bind(null, product)

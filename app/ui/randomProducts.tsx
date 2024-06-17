@@ -7,9 +7,9 @@ import Link from 'next/link';
 export default async function RandomProducts() {
 	const frontpageProducts = await getRandomProducts(4);
 
-	return (
+	return ( <>
+		<h2 className="text-lg font-bold text-center"> Algunos de nuestros productos </h2>
 		<ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-			{/* Random products showcase */}
 			{
 				frontpageProducts.map( p =>
 					<li key={p.id}>
@@ -23,5 +23,5 @@ export default async function RandomProducts() {
 					</li> )
 			}
 		</ul>
-	);
+	</>	);
 }

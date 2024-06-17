@@ -3,6 +3,9 @@ import { getDeletedProducts } from '@/app/lib/queries'
 
 import Table from '@/app/ui/admin/productos/deletedProductsTable';
 
+import { Metadata } from 'next';
+export const metadata: Metadata = { title: 'Productos eliminados - LibreMercado' };
+
 export default async function ProductosEliminados() {
 	const deletedProducts = await getDeletedProducts();
 		
