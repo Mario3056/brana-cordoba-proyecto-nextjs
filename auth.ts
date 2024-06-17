@@ -12,7 +12,6 @@ export const { auth, signIn, signOut } = NextAuth({
 	providers: [
 		Credentials({
 			async authorize(credentials) {
-
 				// nextJS introduces hidden form parameters that makes zod's validation fail.
 				// Remove them to let safeParse succeed
 				const newCredentials = Object.create(null);
