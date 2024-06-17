@@ -20,11 +20,6 @@ export default async function RootLayout( { children }: Readonly<{children: Reac
 	
 	return (
 		<html lang="en" className="min-h-screen">
-			<head>
-				<title>LibreMercado - Tienda en Linea</title>
-				<meta property="og:title" content="LibreMercado - Tienda en Linea" key="title" />
-			</head>
-			
 			<body className={"min-h-screen flex flex-col justify-between " + inter.className}>
 				{ 
 					(auth_data != null && auth_data != undefined)

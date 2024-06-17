@@ -17,7 +17,7 @@ export const authConfig = {
 
 				// Let the user through to the page they want
 				if (isLoggedIn) {
-					console.log("Admin visiting:", nextUrl.pathname);
+					// console.log("Admin visiting:", nextUrl.pathname);
 					return true;
 				}
 
