@@ -16,13 +16,13 @@ export default function Card( {product}: {product: Product}) {
                     className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
                 />
 
-                <div className="relative bg-white pt-3">
-                    <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                <div className="relative bg-base-100 pt-3 ">
+                    <h3 className="text-xs text-gray-700 dark:text-slate-400 group-hover:underline group-hover:underline-offset-4">
                         {product.name}
                     </h3>
 
                     <p className="mt-2">
-                        <span className="tracking-wider text-gray-900"> {"$" + (product.price / 100)} </span>
+                        <span className="tracking-wider text-gray-900 dark:text-white"> {"$" + (product.price / 100)} </span>
                     </p>
 					
 					<span> <StarRating rating={product.rating}/> </span>
