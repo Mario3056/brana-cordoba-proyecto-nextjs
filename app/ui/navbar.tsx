@@ -12,7 +12,7 @@ export default function Navbar() {
     return (
         <header className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
             <Link href="/" aria-label="Ir a la pagina principal"
-				  className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+				  className="flex title-font font-medium items-center text-gray-900 dark:text-white mb-4 md:mb-0">
                 <div className="text-indigo-500">
 			        <CompanyLogo />
 		        </div>
@@ -21,7 +21,7 @@ export default function Navbar() {
 			
             <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
 			
-                <div className="text-gray-500 font-semibold">
+                <div className="text-gray-500 dark:text-gray-300 font-semibold">
                     <Link href="/catalogo" aria-label="Ir al catálogo de productos"
                         className={pathName === "/catalogo" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
                             Catálogo
