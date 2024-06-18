@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import StarRating from '@/app/ui/starRating';
 import Image from 'next/image';
 import { AddToCartButton } from '@/app/ui/product/buttons';
@@ -11,6 +12,8 @@ export default async function Card({ product_id }: { product_id: string }) {
 
     return (
         <section className="text-gray-600 body-font overflow-hidden">
+			<Head> <title> {product.name} </title> </Head>
+		
             <div className="container px-5 pt-20 pb-12 mx-auto">
                 <div className="lg:w-4/5 mx-auto flex flex-wrap">
 
