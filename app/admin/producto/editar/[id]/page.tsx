@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import ProductEditForm from '@/app/ui/admin/productEditor';
 import { Product } from '@/app/lib/types';
 import TitleEffect from '@/app/ui/setTitle';

@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import StarRating from '@/app/ui/starRating';
 import Image from 'next/image';
 import { AddToCartButton } from '@/app/ui/product/buttons';
