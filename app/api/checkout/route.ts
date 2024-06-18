@@ -7,7 +7,14 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.NEXT_PUBLIC_MERCADO_PAGO_TOKEN!,
 });
 
-const URL = "https://" + (process.env.VERCEL_URL ?? "localhost:3000");
+let URL: string;
+if (process.env.VERCEL_ENV == "production") {
+	URL = "https://" + process.env.VERCEL_PROJECT_PRODUCTION_URL;
+} else if (process.env.VERCEL_ENV == "preview" || process.env.VERCEL_ENV == "development") {
+	URL = "https://" + process.env.VERCEL_URL;
+} else {
+	URL = "https://localhost:3000";
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,9 +35,9 @@ export async function POST(req: NextRequest) {
         items: itemsList,
         auto_return: "approved",
         back_urls: {
-          success: URL + "/api/postcompra",
-          failure: URL + "/api/postcompra",
-          pending: URL + "/api/postcompra",
+          success: URL + "/postcompra",
+          failure: URL + "/postcompra",
+          pending: URL + "/postcompra",
         },
       },
     });
