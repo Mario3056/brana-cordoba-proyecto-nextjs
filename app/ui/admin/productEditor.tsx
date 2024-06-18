@@ -23,7 +23,7 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 	const initialState: ProductFormState = { message: '', errors: undefined };
 	const [state, dispatch] = useFormState(serverAction, initialState);
 	
-	return (
+	return (<>
 		<form action={dispatch} id="productEditor" className="flex flex-col border border-black py-4 px-8 my-8 rounded">
 			<h1 className="text-lg font-bold">Datos de producto:</h1>
 			
@@ -140,5 +140,5 @@ export default function ProductEditForm ( { product, serverAction } : { product?
 			
 			<button className="btn btn-info sm:btn-sm md:btn-md">Submit</button>
 		</form>
-	);
+	</>);
 }

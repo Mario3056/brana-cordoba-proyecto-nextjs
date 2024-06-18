@@ -1,9 +1,11 @@
 "use client";
 
 import { CartProduct, Product } from "../lib/types.d";
-import Producto from "../ui/cart/producto";
-import { useCartStore } from "../lib/cart/useCartStore";
-import MercadoPagoButton from "../ui/cart/mercadoPagoButton";
+import Producto from "@/app/ui/cart/producto";
+import { useCartStore } from "@/app/lib/cart/useCartStore";
+import MercadoPagoButton from "@/app/ui/cart/mercadoPagoButton";
+
+import TitleEffect from '@/app/ui/setTitle';
 
 export default function Carrito() {
   const currentCarritoPrice = useCartStore((state) => state.totalPrice);
@@ -11,6 +13,8 @@ export default function Carrito() {
 
   return (
     <section>
+	  <TitleEffect title="Carrito de productos - LibreMercado" />
+	  
       {(carrito.length === 0) ? (
         <div className="grid h-screen place-content-center bg-white px-4">
           <div className="text-center">

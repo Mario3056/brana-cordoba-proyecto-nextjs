@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import ProductEditForm from '@/app/ui/admin/productEditor';
 import { Product } from '@/app/lib/types';
+import TitleEffect from '@/app/ui/setTitle';
 
 import { getProductById } from '@/app/lib/queries'
 // import { getProductById } from '@/app/lib/queries_local'
@@ -17,7 +18,7 @@ export default async function AdminProductEditor({ params }: { params: { id: str
 	
 	return (
 		<main className="flex justify-center">
-			<Head> <title> {product.name} </title> </Head>
+			<TitleEffect title={product.name} />
 			<ProductEditForm product={product} serverAction={editProductAction} />
 		</main>
 	);

@@ -6,9 +6,13 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import TitleEffect from '@/app/ui/setTitle';
+
 export default function Card({ product }: { product: Product }) {
     return (
         <section className="text-gray-600 body-font overflow-hidden">
+			<TitleEffect title={product.name} />
+			
             <div className="container px-5 pt-20 pb-12 mx-auto">
                 <div className="lg:w-4/5 mx-auto flex flex-wrap">
 

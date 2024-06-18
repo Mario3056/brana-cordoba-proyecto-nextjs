@@ -3,6 +3,7 @@
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/authenticate';
 import { EmailSymbol, ShowPasswordSymbol } from '@/app/ui/icons';
+import TitleEffect from '@/app/ui/setTitle';
 
 export default function AdminLogin() {
 	const initialState = { message: "", error: undefined };
@@ -10,6 +11,8 @@ export default function AdminLogin() {
 
 	return (
 		<div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+			<TitleEffect title="Admin. - Inicio de sesión" />
+			
 			<div className="mx-auto max-w-lg">
 				<h1 className="text-center text-lg font-bold text-indigo-600 sm:text-2xl">Administración</h1>
 				<h2 className="text-center text-lg font-bold text-indigo-600 sm:text-xl">Inicio de sesión</h2>
