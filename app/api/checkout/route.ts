@@ -35,9 +35,9 @@ export async function POST(req: NextRequest) {
         items: itemsList,
         auto_return: "approved",
         back_urls: {
-          success: URL + "/postcompra",
-          failure: URL + "/postcompra",
-          pending: URL + "/postcompra",
+          success: URL + "/api/postcompra",
+          failure: URL + "/api/postcompra",
+          pending: URL + "/api/postcompra",
         },
       },
     });
