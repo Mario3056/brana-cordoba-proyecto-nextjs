@@ -4,20 +4,20 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useCartStore } from "@/app/lib/cart/useCartStore";
+import { useRouter } from "next/navigation";
 
 /**
  * States:
- * - needs_link: requiere generar link de mercado pago
- * - loading_link: generando link de mercado pago
- * - link_ready: link de mercado pago listo
+ * - initial_button: requiere generar link de mercado pago
+ * - loading_button: generando link de mercado pago
  */
 export default function MercadoPagoButton() {
-  const [url, setUrl] = useState<undefined | string>(undefined);
-  const [buttonState, setButtonState] = useState("needs_link");
+  const [buttonState, setButtonState] = useState("initial_button");
   const carrito = useCartStore((state) => state.cart);
+  const router = useRouter();
 
   useEffect(() => {
-    setButtonState("needs_link");
+    setButtonState("initial_button");
   }, [carrito]);
 
   const generateLink = async () => {
@@ -26,24 +26,23 @@ export default function MercadoPagoButton() {
         const { data: preference } = await axios.post("/api/checkout", {
           carrito,
         });
-        setUrl(preference.url);
-        setButtonState("link_ready");
+        router.push(preference.url);
       } catch (error) {
-        setButtonState("needs_link");
+        setButtonState("initial_button");
         console.log(error);
       }
-    } else{
-      setButtonState("needs_link");
+    } else {
+      setButtonState("initial_button");
     }
   };
 
   const handleButtonClick = async () => {
-    setButtonState("loading_link");
-    await generateLink(); 
+    setButtonState("loading_button");
+    await generateLink();
   };
 
   let buttonElement;
-  if (buttonState === "needs_link") {
+  if (buttonState === "initial_button") {
     buttonElement = (
       <button onClick={handleButtonClick}>
         <a
@@ -53,7 +52,7 @@ export default function MercadoPagoButton() {
         </a>
       </button>
     );
-  } else if (buttonState === "loading_link") {
+  } else if (buttonState === "loading_button") {
     buttonElement = (
       <button>
         <a
@@ -63,19 +62,7 @@ export default function MercadoPagoButton() {
         </a>
       </button>
     );
-  } else if (buttonState === "link_ready") {
-    buttonElement = (
-      <>
-        <Link aria-label="Iniciar proceso de compra"
-          className={`w-auto inline-block rounded bg-gray-700 px-5 py-3
-                                                  text-sm text-gray-100 transition hover:bg-gray-600`}
-          href={url!}
-        >
-          Checkout
-        </Link>
-      </>
-    );
-  }
+  } 
 
   return (
     <div className="flex justify-end">

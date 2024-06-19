@@ -1,6 +1,6 @@
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import { NextRequest } from "next/server";
-import { CartProduct, Product } from "@/app/lib/types";
+import { CartProduct } from "@/app/lib/types";
 
 // Credencial de produccion del usuario de prueba (Vendedor) 
 const client = new MercadoPagoConfig({
@@ -13,7 +13,7 @@ if (process.env.VERCEL_ENV == "production") {
 } else if (process.env.VERCEL_ENV == "preview" || process.env.VERCEL_ENV == "development") {
 	URL = "https://" + process.env.VERCEL_URL;
 } else {
-	URL = "https://localhost:3000";
+	URL = "http://localhost:3000";
 }
 
 export async function POST(req: NextRequest) {
