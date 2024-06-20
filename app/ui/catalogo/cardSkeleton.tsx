@@ -7,7 +7,7 @@ export default function CardSkeleton() {
 
                 <div className="skeleton h-[350px] w-full object-cover sm:h-[450px]"></div>
 
-                <div className="relative bg-white pt-3"> 
+                <div className="relative bg-white dark:bg-base-100 pt-3"> 
                     <div className="skeleton h-4 w-28"></div>
                     <div className="skeleton h-4 w-40 mt-3"></div>
                 </div>

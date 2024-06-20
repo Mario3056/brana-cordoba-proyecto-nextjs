@@ -20,7 +20,7 @@ export default async function ShowComments({
         <>
             {
                 (comments.length == 0) ? (
-                    <section className="text-gray-600 body-font">
+                    <section className="text-gray-600 dark:text-gray-500 body-font">
                         <div className="container px-5 mx-auto">
                             <div className="xl:w-1/2 lg:w-3/4 w-full mx-auto text-center">
                                 <p className="leading-relaxed text-lg">Por el momento no hay comentarios.</p>
