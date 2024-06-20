@@ -1,5 +1,5 @@
-import { getProductById } from '@/app/lib/queries';
-// import { getProductById } from '@/app/lib/queries_local';
+// import { getProductById } from '@/app/lib/queries';
+import { getProductById } from '@/app/lib/queries_local';
 
 import type { Product } from '@/app/lib/types.d';
 

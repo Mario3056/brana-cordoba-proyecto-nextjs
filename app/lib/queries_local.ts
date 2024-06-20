@@ -5,6 +5,32 @@ import type { AdminUser, Product, ProductComment } from '@/app/lib/types';
 export const ITEMS_PER_PAGE = 8;
 export const COMMENTS_PER_PAGE = 6;
 
+export async function resultSetTest(): any {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect()
+
+		const rs = await client.query(`select * from tienda.descuentos; select * from tienda.catalogo where id = 33575; select * from tienda.comments where related_product_id = 33593; select category from tienda.catalogo group by category;`);
+		console.log(rs);
+		
+		const discount1 = rs[0].rows[0];
+		console.log(discount1);
+		const hasDiscount1 = (discount1.value != null);
+		console.log(hasDiscount1);
+		
+		const discount2 = rs[0].rows[1];
+		console.log(discount2);
+		const hasDiscount2 = (discount2.value != null);
+		console.log(hasDiscount2);
+		
+		await client.end();
+		return rs;
+	} catch (error) {
+		console.error('Failed to store payment information:', error);
+		throw new Error('Failed to store payment information');
+	}
+}
+
 export async function getDeletedProducts(): Promise<Product[]> {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });

@@ -2,11 +2,11 @@ import ProductEditForm from '@/app/ui/admin/productEditor';
 import { Product } from '@/app/lib/types';
 import TitleEffect from '@/app/ui/setTitle';
 
-import { getProductById } from '@/app/lib/queries'
-// import { getProductById } from '@/app/lib/queries_local'
+// import { getProductById } from '@/app/lib/queries'
+import { getProductById } from '@/app/lib/queries_local'
 
-import { editProduct } from '@/app/lib/actions';
-// import { editProduct } from '@/app/lib/actions_local';
+// import { editProduct } from '@/app/lib/actions';
+import { editProduct } from '@/app/lib/actions_local';
 
 import { Metadata } from 'next';
 export const metadata: Metadata = { title: 'Editar producto - LibreMercado' };

@@ -1,5 +1,5 @@
-// import { getRandomProducts } from '@/app/lib/queries_local';
-import { getRandomProducts } from '@/app/lib/queries';
+import { getRandomProducts } from '@/app/lib/queries_local';
+// import { getRandomProducts } from '@/app/lib/queries';
 
 import Image from 'next/image';
 import Link from 'next/link';

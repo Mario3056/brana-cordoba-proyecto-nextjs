@@ -1,5 +1,5 @@
-import { API_getAllCommentsForProduct } from '@/app/lib/queries'
-// import { API_getAllCommentsForProduct } from '@/app/lib/queries_local'
+// import { API_getAllCommentsForProduct } from '@/app/lib/queries'
+import { API_getAllCommentsForProduct } from '@/app/lib/queries_local'
 
 type Params = {
 	id: string,

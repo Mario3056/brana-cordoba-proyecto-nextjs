@@ -3,8 +3,8 @@ import Image from 'next/image';
 import { AddToCartButton } from '@/app/ui/product/buttons';
 import TitleEffect from '@/app/ui/setTitle';
 
-// import { getProductById, getAvgRating } from '@/app/lib/queries_local';
-import { getProductById, getAvgRating } from '@/app/lib/queries';
+import { getProductById, getAvgRating } from '@/app/lib/queries_local';
+// import { getProductById, getAvgRating } from '@/app/lib/queries';
 
 export default async function Card({ product_id }: { product_id: string }) {
     const product = await getProductById(product_id);

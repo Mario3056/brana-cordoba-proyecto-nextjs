@@ -1,5 +1,5 @@
-import { getDeletedProducts } from '@/app/lib/queries'
-// import { getDeletedProducts } from '@/app/lib/queries_local'
+// import { getDeletedProducts } from '@/app/lib/queries'
+import { getDeletedProducts } from '@/app/lib/queries_local'
 
 import Table from '@/app/ui/admin/productos/deletedProductsTable';
 

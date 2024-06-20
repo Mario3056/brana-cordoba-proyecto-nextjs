@@ -2,8 +2,8 @@ import CommentCard from "@/app/ui/product/comments/commentCard";
 import { useState } from "react";
 import Pagination from "@/app/ui/catalogo/pagination";
 
-import { getCommentsPages, getCommentsByPage } from "@/app/lib/queries"
-// import { getCommentsPages, getCommentsByPage } from "@/app/lib/queries_local"
+// import { getCommentsPages, getCommentsByPage } from "@/app/lib/queries"
+import { getCommentsPages, getCommentsByPage } from "@/app/lib/queries_local"
 
 export default async function ShowComments({
     related_product_id,

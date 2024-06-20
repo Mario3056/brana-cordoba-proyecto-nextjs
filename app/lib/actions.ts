@@ -1,5 +1,3 @@
-// TODO: check whether server actions need noStore()
-
 'use server';
 
 import { z } from 'zod';
@@ -14,7 +12,6 @@ import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export async function storePayment(paymentInfo: PaymentInformation) {
-	// noStore();
 	try {
 		const paymentUploadInfo = await sql`INSERT INTO tienda.mercadopago_records (paymentId, amount, status, timestamp) VALUES (
 			${paymentInfo.id},
