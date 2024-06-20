@@ -16,13 +16,13 @@ export default function Carrito() {
 	  <TitleEffect title="Carrito de productos - LibreMercado" />
 	  
       {(carrito.length === 0) ? (
-        <div className="grid h-screen place-content-center bg-white px-4">
+        <div className="grid h-screen place-content-center bg-white dark:bg-base-100 px-4">
           <div className="text-center">
-            <h1 className="text-9xl font-black text-gray-200">Ups!</h1>
+            <h1 className="text-9xl font-black text-gray-200 dark:text-gray-500">Ups!</h1>
 
-            <p className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">Carrito vacío</p>
+            <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">Carrito vacío</p>
 
-            <p className="mt-4 text-gray-500">Visita nuestro catálogo para agregar productos a tu carrito.</p>
+            <p className="mt-4 text-gray-500 dark:text-gray-100">Visita nuestro catálogo para agregar productos a tu carrito.</p>
 
           </div>
         </div>
@@ -30,7 +30,7 @@ export default function Carrito() {
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
           <div className="mx-auto max-w-3xl">
             <header className="text-center">
-              <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-gray-200 sm:text-3xl">
                 Carrito
               </h1>
             </header>
@@ -46,8 +46,8 @@ export default function Carrito() {
 
               <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
                 <div className="w-screen max-w-lg space-y-4">
-                  <div className="space-y-0.5 text-sm text-gray-700 flex justify-between font-medium">
-                    <span>Total</span>
+                  <div className="space-y-0.5 text-base text-gray-700 dark:text-gray-400 flex justify-between font-medium">
+                    <span className="text-lg">Total</span>
                     <span>{"$" + currentCarritoPrice / 100}</span>
                   </div>
 
