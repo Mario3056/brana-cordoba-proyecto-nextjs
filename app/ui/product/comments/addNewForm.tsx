@@ -13,7 +13,7 @@ function Submit() {
         <div className="p-2 w-full">
         <button 
             type="submit" 
-            className={pending ? 'flex mx-auto bg-gray-300 border-0 py-2 px-8 rounded text-lg cursor-not-allowed opacity-50' : 'flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg'}
+            className={pending ? 'flex mx-auto bg-gray-300 border-0 py-2 px-8 rounded text-base cursor-not-allowed opacity-50' : 'flex mx-auto text-white dark:text-gray-300 bg-indigo-500 dark:bg-indigo-800 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 dark:hover:bg-indigo-700 rounded text-lg'}
             disabled={pending}
         >
             {pending ? 'Agregando...' : 'Agregar'}
@@ -59,20 +59,20 @@ export default function AddNewCommentForm({ product_id }: { product_id: string }
                 <div className="flex flex-wrap -m-2">
                     <div className="p-2 w-full">
                         <div className="relative">
-                            <label className="leading-7 text-sm text-gray-600">Nombre usuario</label>
+                            <label className="leading-7 text-sm text-gray-600 dark:text-gray-400">Nombre usuario</label>
                             <input
                                 type="text"
                                 id="name"
                                 name="name"
                                 value={localFormData.name}
                                 onChange={handleChange}
-                                className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                className="w-full bg-gray-100 dark:bg-gray-400 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white dark:focus:bg-gray-300 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                 aria-describedby="name-error"
                             />
                             <div id="status-error" aria-live="polite" aria-atomic="true">
                                 {state.errors?.name &&
                                     state.errors.name.map((error: string) => (
-                                        <p className="mt-2 text-sm text-red-500" key={error}>
+                                        <p className="mt-2 text-sm text-red-500 dark:text-red-400" key={error}>
                                             {error}
                                         </p>
                                     ))}
@@ -81,26 +81,26 @@ export default function AddNewCommentForm({ product_id }: { product_id: string }
                     </div>
                     <div className="p-2 w-full">
                         <div className="relative">
-                            <label className="leading-7 text-sm text-gray-600">Puntuación</label>
+                            <label className="leading-7 text-sm text-gray-600 dark:text-gray-400">Puntuación</label>
                             <br />
                             <StarPicker />
                         </div>
                     </div>
                     <div className="p-2 w-full">
                         <div className="relative">
-                            <label className="leading-7 text-sm text-gray-600">Comentario</label>
+                            <label className="leading-7 text-sm text-gray-600 dark:text-gray-400">Comentario</label>
                             <textarea 
                                 id="content" 
                                 name="content"
                                 value={localFormData.content}
                                 onChange={handleChange}
-                                className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                                className="w-full bg-gray-100 dark:bg-gray-400 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white dark:focus:bg-gray-300 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                                 aria-describedby="content-error"
                             ></textarea>
                             <div id="content-error" aria-live="polite" aria-atomic="true">
                                 {state.errors?.content &&
                                     state.errors.content.map((error: string) => (
-                                        <p className="mt-2 text-sm text-red-500" key={error}>
+                                        <p className="mt-2 text-sm text-red-500 dark:text-red-400" key={error}>
                                             {error}
                                         </p>
                                     ))}

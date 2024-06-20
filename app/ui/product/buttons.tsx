@@ -24,9 +24,9 @@ export function AddToCartButton({product}: {product: Product}) {
     return (
         <>
             <button
-                className={`flex ml-auto text-white border-0 py-2 px-6 focus:outline-none rounded transition-all duration-300 ${buttonState === 'initial' ? 'bg-indigo-500 hover:bg-indigo-600' :
-                    buttonState === 'transitioning' ? 'bg-green-500' :
-                        buttonState === 'clicked' ? 'bg-green-500' : ''
+                className={`flex ml-auto text-white dark:text-gray-300 border-0 py-2 px-6 focus:outline-none rounded transition-all duration-300 ${buttonState === 'initial' ? 'bg-indigo-500 dark:bg-indigo-800 hover:bg-indigo-600 dark:hover:bg-indigo-700 ' :
+                    buttonState === 'transitioning' ? 'bg-green-500 dark:bg-green-700' :
+                        buttonState === 'clicked' ? 'bg-green-500 dark:bg-green-700' : ''
                     } ${buttonState === 'initial' ? 'scale-100' : 'scale-105'}`}
                 onClick={handleClick}
                 disabled={buttonState !== 'initial'} // Disable the button during transition and clicked states

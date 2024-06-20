@@ -5,7 +5,7 @@ export default function CommentCard({comment}: {comment: ProductComment}) {
     return (
         <>
             <div className="p-4 md:w-1/3">
-                <div className="flex rounded-lg h-full bg-gray-100 p-8 flex-col">
+                <div className="flex rounded-lg h-full bg-gray-100 dark:bg-slate-600 p-8 flex-col">
                     <div className="flex items-center mb-3">
                         <div className="w-8 h-8 mr-3 inline-flex items-center justify-center rounded-full bg-indigo-500 text-white flex-shrink-0">
                             <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
@@ -13,11 +13,11 @@ export default function CommentCard({comment}: {comment: ProductComment}) {
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                         </div>
-                        <h2 className="text-gray-900 text-lg title-font font-medium">{comment.name}</h2>
+                        <h2 className="text-gray-900 dark:text-gray-200 text-lg title-font font-medium">{comment.name}</h2>
                     </div>
                     <StarRating rating={comment.rating} />
                     <div className="flex-grow mt-2">
-                        <p className="leading-relaxed text-base">{comment.content}</p>
+                        <p className="leading-relaxed text-base dark:text-gray-300">{comment.content}</p>
                     </div>
                 </div>
             </div>

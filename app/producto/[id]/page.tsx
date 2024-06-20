@@ -24,7 +24,7 @@ export default async function Producto({
                 <div className="container pt-5 pb-15 py-5 mx-auto">
                     <Suspense fallback={<CommentsSkeleton />}>
                         <div className="flex flex-col text-center w-full mb-20">
-                            <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900">Comentarios</h1>
+                            <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900 dark:text-gray-300">Comentarios</h1>
 
                         </div>
                         <ShowComments related_product_id={params.id} currentPage={currentPage} />
@@ -35,8 +35,8 @@ export default async function Producto({
             <section className="text-gray-600 body-font relative">
                 <div className="container px-5 py-24 mx-auto">
                     <div className="flex flex-col text-center w-full mb-12">
-                        <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Agregar comentario</h1>
-                        <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Nos encantaría conocer tu opinión. Por favor, comparte tus comentarios y opiniones sobre el producto.</p>
+                        <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900 dark:text-gray-300">Agregar comentario</h1>
+                        <p className="lg:w-2/3 mx-auto leading-relaxed text-base dark:text-gray-500">Nos encantaría conocer tu opinión. Por favor, comparte tus comentarios y opiniones sobre el producto.</p>
                     </div>
                     <AddNewCommentForm product_id={params.id} />
                 </div>
