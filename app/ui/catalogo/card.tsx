@@ -5,6 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Card( {product}: {product: Product}) {
+	const renderedPrice = (product.price / 100);
+	const hasDiscount = (product.discount != 0.0);
+	const renderDiscountText = !hasDiscount ? "" : Math.floor(product.discount*100) + "% OFF!";
+	const discountedPrice = !hasDiscount ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
+
     return (
         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
 			<Link href={"/producto/" + product.id} aria-label={"Ver producto " + product.name} className="group block overflow-hidden">
@@ -21,10 +26,15 @@ export default function Card( {product}: {product: Product}) {
                         {product.name}
                     </h3>
 
-                    <p className="mt-2">
-                        <span className="tracking-wider text-gray-900 dark:text-white"> {"$" + (product.price / 100)} </span>
+					<p className="mt-2">					
+						{ hasDiscount ? <> <span className="tracking-wider text-gray-300 dark:text-gray-900 line-through">{"$" + renderedPrice}</span>
+										   <span className="tracking-wider text-gray-900 dark:text-gray-300 pl-2">{"$" + discountedPrice}</span>
+										</>
+									  : <span className="tracking-wider text-gray-900 dark:text-white"> {"$" + renderedPrice} </span>
+						}
                     </p>
-					
+					<p>{renderDiscountText}</p>
+
 					<span> <StarRating rating={product.rating}/> </span>
                 </div>
             </Link>
