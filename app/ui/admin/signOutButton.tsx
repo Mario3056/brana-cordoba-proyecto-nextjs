@@ -17,7 +17,7 @@ export default function SignOutButton() {
 					Now, tabbing moves from the admin profile picture into the logout button rather than its container.
 					https://webkit.org/blog/12578/non-interactive-elements-with-the-inert-attribute/ */}
 				<ul tabIndex={-1} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-					<li><button className="focus:border focus:border-2 focus:border-blue-400 focus:font-extrabold" type='submit'>Logout</button></li>
+					<li><button className="focus:border-2 focus:border-blue-400 focus:font-extrabold" type='submit'>Logout</button></li>
 				</ul>
 			</div>
 		</form>

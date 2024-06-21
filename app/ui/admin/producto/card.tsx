@@ -21,19 +21,19 @@ export default function Card({ product }: { product: Product }) {
                         src={product.image} />
 
                     <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                        <h2 className="text-sm title-font text-gray-500 tracking-widest">{product.category}</h2>
-                        <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{product.name}</h1>
+                        <h2 className="text-sm title-font text-gray-500 dark:text-gray-400 tracking-widest">{product.category}</h2>
+                        <h1 className="text-gray-900 dark:text-gray-300 text-3xl title-font font-medium mb-1">{product.name}</h1>
                         <div className="flex mb-4">
                             <span className="flex items-center">
                                 <StarRating rating={product.rating} />
-                                <span className="text-gray-600 ml-3">Puntuación</span>
+                                <span className="text-gray-600 dark:text-gray-500 ml-3">Puntuación</span>
                             </span>
                         </div>
                         <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
-                            <p className="leading-relaxed">{product.description}</p>
+                            <p className="leading-relaxed dark:text-gray-400">{product.description}</p>
                         </div>
                         <div className="flex">
-                            <span className="title-font font-medium text-2xl text-gray-900">{"$" + (product.price / 100)}</span>
+                            <span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-200">{"$" + (product.price / 100)}</span>
                         </div>
                     </div>
                 </div>

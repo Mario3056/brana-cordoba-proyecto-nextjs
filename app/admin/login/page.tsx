@@ -14,8 +14,8 @@ export default function AdminLogin() {
 			<TitleEffect title="Admin. - Inicio de sesión" />
 			
 			<div className="mx-auto max-w-lg">
-				<h1 className="text-center text-lg font-bold text-indigo-600 sm:text-2xl">Administración</h1>
-				<h2 className="text-center text-lg font-bold text-indigo-600 sm:text-xl">Inicio de sesión</h2>
+				<h1 className="text-center text-lg font-bold text-indigo-600 dark:text-indigo-500 sm:text-2xl">Administración</h1>
+				<h2 className="text-center text-lg font-bold text-indigo-600 dark:text-indigo-500 sm:text-xl">Inicio de sesión</h2>
 				
 				<form action={checkAuth} id="adminLogin" aria-describedby="form-error"
 							className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">

@@ -27,13 +27,13 @@ export default function Card( {product}: {product: Product}) {
                     </h3>
 
 					<p className="mt-2">					
-						{ hasDiscount ? <> <span className="tracking-wider text-gray-300 dark:text-gray-900 line-through">{"$" + renderedPrice}</span>
+						{ hasDiscount ? <> <span className="tracking-wider text-gray-400 dark:text-gray-600 line-through">{"$" + renderedPrice}</span>
 										   <span className="tracking-wider text-gray-900 dark:text-gray-300 pl-2">{"$" + discountedPrice}</span>
 										</>
 									  : <span className="tracking-wider text-gray-900 dark:text-white"> {"$" + renderedPrice} </span>
 						}
                     </p>
-					<p>{renderDiscountText}</p>
+					<p className='text-indigo-600 dark:text-indigo-400'>{renderDiscountText}</p>
 
 					<span> <StarRating rating={product.rating}/> </span>
                 </div>

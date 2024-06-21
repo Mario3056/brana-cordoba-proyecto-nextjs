@@ -30,8 +30,8 @@ export default async function Table({
                 </div>
             </div>
             <div className="mt-5 shadow-sm border rounded-lg overflow-x-auto">
-                <table className="w-full table-auto text-sm text-left">
-                    <thead className="bg-gray-50 text-gray-600 font-medium border-b">
+                <table className="w-full table-auto text-sm text-left border-collaps">
+                    <thead className="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-200 font-medium border-b">
                         <tr>
                             <th className="py-3 px-6"></th>
                             <th className="py-3 px-6">Nombre</th>
@@ -42,7 +42,7 @@ export default async function Table({
 
                         </tr>
                     </thead>
-                    <tbody className="text-gray-600 divide-y">
+                    <tbody className="text-gray-600 dark:text-gray-300 divide-y">
                         {
                             products.map((product) => (
 								<tr key={product.id}>

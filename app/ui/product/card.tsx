@@ -43,8 +43,8 @@ export default async function Card({ product_id }: { product_id: string }) {
 									<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300">{"$" + renderedPrice}</span>
 								:
 									<div>
-										<span className="title-font font-medium text-2xl text-gray-300 dark:text-gray-900 pr-2 line-through">{"$" + renderedPrice}</span>
-										<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300 pl-2">{"$" + discountedPrice}</span>
+										<span className="title-font font-medium text-2xl text-gray-400 dark:text-gray-600 pr-2 line-through">{"$" + renderedPrice}</span>
+										<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-200 pl-2">{"$" + discountedPrice}</span>
 									</div>
 							}
 							

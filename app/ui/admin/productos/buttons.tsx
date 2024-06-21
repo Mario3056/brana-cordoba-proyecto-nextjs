@@ -18,7 +18,7 @@ export function CreateProductButton() {
 	return <Link href={`/admin/producto/crear`} tabIndex={0}
 			className={`inline-block px-4 py-2 text-white duration-150 font-medium
 					   bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700
-					   md:text-sm focus:border focus:border-4 focus:border-yellow-400`}>
+					   md:text-sm focus:border focus:border-yellow-400`}>
 				Agregar Producto
 		</ Link>
 
@@ -26,7 +26,7 @@ export function CreateProductButton() {
 
 export function EditProductButton({ id }: { id: string }) {
 	return <Link href={`/admin/producto/editar/${id}`} onClick={disableAfterOneClick}
-			className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg">
+			className="py-2 px-3 font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 duration-150 hover:bg-gray-50 dark:hover:bg-gray-200 rounded-lg">
 			Editar
 		</ Link>
 }
