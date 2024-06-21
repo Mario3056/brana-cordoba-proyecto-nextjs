@@ -11,9 +11,9 @@ export default async function Card({ product_id }: { product_id: string }) {
     const avgRating = await getAvgRating(product_id);
 	
 	const renderedPrice = (product.price / 100);
-	const hasDiscount = (product.discount != 0.0);
-	const renderDiscountText = !hasDiscount ? "" : Math.floor(product.discount*100) + "% OFF!";
-	const discountedPrice = !hasDiscount ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
+	const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
+	const renderDiscountText = (!hasDiscount) ? "" : Math.floor(product.discount*100) + "% OFF!";
+	const discountedPrice = (!hasDiscount) ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
 	
     return (
         <section className="text-gray-600 body-font overflow-hidden">
@@ -40,7 +40,7 @@ export default async function Card({ product_id }: { product_id: string }) {
 						
                         <div className="flex">
 							{ !hasDiscount ?
-									<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300">{"$" + (product.price / 100)}</span>
+									<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300">{"$" + renderedPrice}</span>
 								:
 									<div>
 										<span className="title-font font-medium text-2xl text-gray-300 dark:text-gray-900 pr-2 line-through">{"$" + renderedPrice}</span>

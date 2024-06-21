@@ -6,9 +6,9 @@ import Link from 'next/link';
 
 export default function Card( {product}: {product: Product}) {
 	const renderedPrice = (product.price / 100);
-	const hasDiscount = (product.discount != 0.0);
-	const renderDiscountText = !hasDiscount ? "" : Math.floor(product.discount*100) + "% OFF!";
-	const discountedPrice = !hasDiscount ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
+	const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
+	const renderDiscountText = (!hasDiscount) ? "" : Math.floor(product.discount*100) + "% OFF!";
+	const discountedPrice = (!hasDiscount) ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
 
     return (
         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
