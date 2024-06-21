@@ -9,7 +9,12 @@ import { getProductById, getAvgRating } from '@/app/lib/queries';
 export default async function Card({ product_id }: { product_id: string }) {
     const product = await getProductById(product_id);
     const avgRating = await getAvgRating(product_id);
-
+	
+	const hasDiscount = (product.discount == 0.0);
+	const renderDiscountText = Math.floor(product.discount*100) + "% OFF!";
+	const discountedPrice = ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
+	const renderedPrice = (product.price / 100);
+	
     return (
         <section className="text-gray-600 body-font overflow-hidden">
 			<TitleEffect title={product.name} />
@@ -32,10 +37,21 @@ export default async function Card({ product_id }: { product_id: string }) {
                         <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                             <p className="leading-relaxed dark:text-gray-400">{product.description}</p>
                         </div>
+						
                         <div className="flex">
-                            <span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300">{"$" + (product.price / 100)}</span>
+							{ (product.discount == 0.0) ?
+									<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300">{"$" + (product.price / 100)}</span>
+								:
+									<div>
+										<span className="title-font font-medium text-2xl text-gray-300 dark:text-gray-900 pr-2 line-through">{"$" + renderedPrice}</span>
+										<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300 pr-2">{"$" + discountedPrice}</span>
+									</div>
+							}
+							
                             <AddToCartButton product={product} />
                         </div>
+						
+						{ !hasDiscount && <p className="text-lg text-gray-900 dark:text-gray-300">{renderDiscountText}</p> }
                     </div>
                 </div>
             </div>
