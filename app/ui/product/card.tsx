@@ -4,11 +4,18 @@ import StarRating from '@/app/ui/starRating';
 import TitleEffect from '@/app/ui/setTitle';
 import Image from 'next/image';
 
+import { notFound } from 'next/navigation';
+
 // import { getProductById, getAvgRating } from '@/app/lib/queries_local';
 import { getProductById, getAvgRating } from '@/app/lib/queries';
 
 export default async function Card({ product_id }: { product_id: string }) {
     const product = await getProductById(product_id);
+	
+	if (!product) {
+		notFound();
+	}
+	
     const avgRating = await getAvgRating(product_id);
 	
 	const {

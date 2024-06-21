@@ -171,8 +171,8 @@ export async function getProductById(id: string): Promise<Product> {
 		const product = await client.query(`SELECT * FROM tienda.catalogo WHERE id = ${id}`);
 
 		console.log('Data fetch completed after 3 seconds.'); // [DEBUG]
-
 		await client.end();
+				
 		return product.rows[0] as Product;
 	} catch (error) {
 		console.error('Failed to fetch product:', error);

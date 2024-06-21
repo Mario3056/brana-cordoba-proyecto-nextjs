@@ -1,6 +1,6 @@
 export type SalesRecord = {
 	id: number;
-	paymentid: string;
+	paymentId: string;
 	amount: number;
 	status: string;
 	timestamp: string;
