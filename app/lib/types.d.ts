@@ -5,6 +5,7 @@ export interface CartProduct {
   price: number;
   image: string;
   quantity: number;
+  discount: number;
 }
 
 export type PaymentInformation = {

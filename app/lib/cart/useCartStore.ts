@@ -42,10 +42,13 @@ export const useCartStore = create(
               ? { ...item, quantity: (item.quantity as number) + 1 }
               : item
           );
+          const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
+	        const resultedPrice = (!hasDiscount) ? product.price : Math.trunc(product.price - (product.price * product.discount));
+
           set((state) => ({
             cart: updatedCart,
             totalItems: state.totalItems + 1,
-            totalPrice: state.totalPrice + product.price,
+            totalPrice: state.totalPrice + resultedPrice,
           }));
         } else {
           const transformProduct = (entryProduct: Product): CartProduct => {
@@ -56,16 +59,20 @@ export const useCartStore = create(
               price: entryProduct.price,
               image: entryProduct.image,
               quantity: 1,
+              discount: entryProduct.discount,
             };
           };
           const newItem = transformProduct(product);
 
           const updatedCart = [...cart, { ...newItem }];
 
+          const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
+	        const resultedPrice = (!hasDiscount) ? product.price : Math.trunc(product.price - (product.price * product.discount));
+
           set((state) => ({
             cart: updatedCart,
             totalItems: state.totalItems + 1,
-            totalPrice: state.totalPrice + product.price,
+            totalPrice: state.totalPrice + resultedPrice,
           }));
         }
       },
@@ -74,10 +81,13 @@ export const useCartStore = create(
         const cartItem = cart.find((item) => item.id === product.id);
 
         if (cartItem !== undefined) {
+          const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
+	        const resultedPrice = (!hasDiscount) ? product.price : Math.trunc(product.price - (product.price * product.discount));
+
           set((state) => ({
             cart: state.cart.filter((item) => item.id !== product.id),
             totalItems: state.totalItems - cartItem.quantity,
-            totalPrice: state.totalPrice - product.price * cartItem.quantity,
+            totalPrice: state.totalPrice - (resultedPrice * cartItem.quantity),
           }));
         }
       },
@@ -90,11 +100,14 @@ export const useCartStore = create(
           const updatedCart = cart.map((item) =>
             item.id === product.id ? { ...item, quantity: quantity } : item
           );
+          const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
+	        const resultedPrice = (!hasDiscount) ? product.price : Math.trunc(product.price - (product.price * product.discount));
+
           set((state) => ({
             cart: updatedCart,
             totalItems: state.totalItems - (oldQuantity - quantity),
             totalPrice:
-              state.totalPrice - (oldQuantity - quantity) * product.price,
+              state.totalPrice - ((oldQuantity - quantity) * resultedPrice),
           }));
         }
       },

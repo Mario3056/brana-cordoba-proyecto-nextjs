@@ -22,11 +22,14 @@ export async function POST(req: NextRequest) {
     const carrito: CartProduct[] = body.carrito;
 
     const itemsList = carrito.map(producto => {
+      const hasDiscount = (producto.discount != undefined) && (producto.discount != null) && (producto.discount != 0.0);
+	    const resultedPrice = (!hasDiscount) ? producto.price : Math.trunc(producto.price - (producto.price * producto.discount));
+
       return {
         id: producto.id,
         title: producto.name,
         quantity: producto.quantity,
-        unit_price: (producto.price/100),
+        unit_price: (resultedPrice/100),
       }
     })
 
