@@ -48,7 +48,8 @@ async function createProducts(client) {
 		description text DEFAULT 'Una descripcion elocuente y util para el usuario'::text,
 		category text DEFAULT 'Misc.'::text,
 		price integer DEFAULT 0,
-		rating real DEFAULT 0,
+		discount real default 0.0,
+		rating real DEFAULT 0.0,
 		image text DEFAULT '/products/placeholder.png'::text,
 		created_at timestamp with time zone DEFAULT NOW(),
 		modified_at timestamp with time zone DEFAULT NOW(),
@@ -60,9 +61,9 @@ async function createProducts(client) {
 	await Promise.all(
 		productos.map(p => 
 			client.query(`INSERT INTO tienda.catalogo
-				(name, description, category, price, rating, image) VALUES
+				(name, description, category, price, discount, rating, image) VALUES
 				('${p.name}', '${p.description}',
-					'${p.category}', '${p.price}', '${p.rating}',
+					'${p.category}', ${p.price}, ${p.discount}, '${p.rating}',
 					'${p.image}') ON CONFLICT (id) DO NOTHING;`)
 		)
 	);	

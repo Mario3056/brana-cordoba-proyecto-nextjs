@@ -26,6 +26,7 @@ export type Product = {
   description: string;
   category: string; // enum?
   rating: number;
+  discount: number;
   price: number;
   image: string;
   created_at: string;
@@ -66,6 +67,7 @@ export const placeholderProduct: Product = {
   category: "placeholder category",
   rating: 5.0,
   price: 819264,
+  discount: 0.0,
   image: "/products/placeholder.png",
   created_at: "placeholder",
   modified_at: "placeholder",
@@ -78,6 +80,7 @@ export const emptyProduct: Product = {
 	category: undefined,
 	rating: 0.0,
 	price: undefined,
+	discount: 0.0,
 	image: '',
 	created_at: undefined,
 	modified_at: undefined
