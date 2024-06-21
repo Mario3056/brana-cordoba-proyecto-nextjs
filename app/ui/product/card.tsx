@@ -1,7 +1,8 @@
-import StarRating from '@/app/ui/starRating';
-import Image from 'next/image';
 import { AddToCartButton } from '@/app/ui/product/buttons';
+import { renderPriceWithDiscount } from '@/app/lib/utils';
+import StarRating from '@/app/ui/starRating';
 import TitleEffect from '@/app/ui/setTitle';
+import Image from 'next/image';
 
 // import { getProductById, getAvgRating } from '@/app/lib/queries_local';
 import { getProductById, getAvgRating } from '@/app/lib/queries';
@@ -10,10 +11,12 @@ export default async function Card({ product_id }: { product_id: string }) {
     const product = await getProductById(product_id);
     const avgRating = await getAvgRating(product_id);
 	
-	const renderedPrice = (product.price / 100);
-	const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
-	const renderDiscountText = (!hasDiscount) ? "" : Math.floor(product.discount*100) + "% OFF!";
-	const discountedPrice = (!hasDiscount) ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
+	const {
+		renderedPrice,
+		hasDiscount,
+		renderedPriceAfterDiscount,
+		renderedDiscountText
+	} = renderPriceWithDiscount(product.price, product.discount);
 	
     return (
         <section className="text-gray-600 body-font overflow-hidden">
@@ -44,14 +47,14 @@ export default async function Card({ product_id }: { product_id: string }) {
 								:
 									<div>
 										<span className="title-font font-medium text-2xl text-gray-400 dark:text-gray-600 pr-2 line-through">{"$" + renderedPrice}</span>
-										<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-200 pl-2">{"$" + discountedPrice}</span>
+										<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-200 pl-2">{"$" + renderedPriceAfterDiscount}</span>
 									</div>
 							}
 							
                             <AddToCartButton product={product} />
                         </div>
 						
-						{ !hasDiscount && <p className="text-lg text-gray-900 dark:text-gray-300">{renderDiscountText}</p> }
+						{ !hasDiscount && <p className="text-lg text-gray-900 dark:text-gray-300">{renderedDiscountText}</p> }
                     </div>
                 </div>
             </div>

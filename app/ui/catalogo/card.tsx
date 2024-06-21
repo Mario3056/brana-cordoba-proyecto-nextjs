@@ -1,3 +1,4 @@
+import { renderPriceWithDiscount } from '@/app/lib/utils';
 import type { Product } from '@/app/lib/types';
 import StarRating from '@/app/ui/starRating';
 
@@ -5,10 +6,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Card( {product}: {product: Product}) {
-	const renderedPrice = (product.price / 100);
-	const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
-	const renderDiscountText = (!hasDiscount) ? "" : Math.floor(product.discount*100) + "% OFF!";
-	const discountedPrice = (!hasDiscount) ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
+	const {
+		renderedPrice,
+		hasDiscount,
+		renderedPriceAfterDiscount,
+		renderedDiscountText
+	} = renderPriceWithDiscount(product.price, product.discount);
 
     return (
         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -28,12 +31,12 @@ export default function Card( {product}: {product: Product}) {
 
 					<p className="mt-2">					
 						{ hasDiscount ? <> <span className="tracking-wider text-gray-400 dark:text-gray-600 line-through">{"$" + renderedPrice}</span>
-										   <span className="tracking-wider text-gray-900 dark:text-gray-300 pl-2">{"$" + discountedPrice}</span>
+										   <span className="tracking-wider text-gray-900 dark:text-gray-300 pl-2">{"$" + renderedPriceAfterDiscount}</span>
 										</>
 									  : <span className="tracking-wider text-gray-900 dark:text-white"> {"$" + renderedPrice} </span>
 						}
                     </p>
-					<p className='text-indigo-600 dark:text-indigo-400'>{renderDiscountText}</p>
+					<p className='text-indigo-600 dark:text-indigo-400'>{renderedDiscountText}</p>
 
 					<span> <StarRating rating={product.rating}/> </span>
                 </div>

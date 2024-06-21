@@ -1,3 +1,11 @@
+export type SalesRecord = {
+	id: number;
+	paymentid: string;
+	amount: number;
+	status: string;
+	timestamp: string;
+}
+
 export interface CartProduct {
   id: string;
   name: string;

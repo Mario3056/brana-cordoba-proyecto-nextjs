@@ -1,11 +1,11 @@
 import { fetchProductsPages } from '@/app/lib/queries';
 // import { fetchProductsPages } from '@/app/lib/queries_local';
 
-import { Suspense } from "react";
-import SearchBar from '@/app/ui/catalogo/searchBar';
-import Pagination from '@/app/ui/catalogo/pagination';
-import Cards from '@/app/ui/catalogo/cards';
 import CardsSkeleton from '@/app/ui/catalogo/cardsSkeleton';
+import Pagination from '@/app/ui/catalogo/pagination';
+import SearchBar from '@/app/ui/catalogo/searchBar';
+import Cards from '@/app/ui/catalogo/cards';
+import { Suspense } from "react";
 
 import { Metadata } from 'next';
 export const metadata: Metadata = { title: 'Catalogo de productos - LibreMercado' };

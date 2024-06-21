@@ -1,9 +1,24 @@
 import pg from 'pg'
 const { Client } = pg;
-import type { AdminUser, Product, ProductComment } from '@/app/lib/types';
+import type { SalesRecord, AdminUser, Product, ProductComment } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
 export const COMMENTS_PER_PAGE = 6;
+
+// later: getAllSalesPages(pageNumber: number)
+export async function getAllSales(): Promise<SalesRecord[]> {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect()
+		const salesRecords = await client.query("SELECT * FROM tienda.mercadopago_records ORDER BY timestamp ASC");
+		await client.end();
+
+		return salesRecords.rows as SalesRecord[];
+	} catch (error) {
+		console.error('Failed to fetch sales records:', error);
+		throw new Error('Failed to fetch sales records');
+	}
+}
 
 export async function getDeletedProducts(): Promise<Product[]> {
 	try {
