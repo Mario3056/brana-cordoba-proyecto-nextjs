@@ -10,10 +10,10 @@ export default async function Card({ product_id }: { product_id: string }) {
     const product = await getProductById(product_id);
     const avgRating = await getAvgRating(product_id);
 	
-	const hasDiscount = (product.discount == 0.0);
-	const renderDiscountText = Math.floor(product.discount*100) + "% OFF!";
-	const discountedPrice = ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
 	const renderedPrice = (product.price / 100);
+	const hasDiscount = (product.discount == 0.0);
+	const renderDiscountText = !hasDiscount ? "" : Math.floor(product.discount*100) + "% OFF!";
+	const discountedPrice = !hasDiscount ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
 	
     return (
         <section className="text-gray-600 body-font overflow-hidden">

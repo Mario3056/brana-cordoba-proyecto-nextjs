@@ -3,6 +3,6 @@
 import { useEffect } from 'react';
 
 export default function TitleEffect({title}: {title: string}) {
-	useEffect( () => {document.title = title; }, []);
+	useEffect( () => {document.title = title; }, [title]);
 	return <></>;
 }
