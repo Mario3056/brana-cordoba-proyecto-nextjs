@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
 			if (!payment.id || !payment.transaction_amount || !payment.status) {
 				throw new Error('Invalid payment data');
 			}
+			
+			console.log("[/api/notify] External reference:", payment.external_reference);
 
 			const pagoRealizado: PaymentInformation = {
 				id: String(payment.id),
