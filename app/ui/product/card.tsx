@@ -4,6 +4,10 @@ import StarRating from '@/app/ui/starRating';
 import TitleEffect from '@/app/ui/setTitle';
 import Image from 'next/image';
 
+function renderDescription(description) {
+	return description.split("\r\n").map((line, i) => <p key={i} className="leading-relaxed dark:text-gray-400">{line}</p>);
+}
+
 // import { getProductById, getAvgRating } from '@/app/lib/queries_local';
 import { getProductById, getAvgRating } from '@/app/lib/queries';
 
@@ -37,10 +41,7 @@ export default async function Card({ product_id }: { product_id: string }) {
                                 <span className="text-gray-600 dark:text-gray-500 ml-3">Puntuación promedio</span>
                             </span>
                         </div>
-                        <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
-                            <p className="leading-relaxed dark:text-gray-400">{product.description}</p>
-                        </div>
-						
+                        <div className="mb-5 mt-6 pb-5"> {renderDescription(product.description)} </div>						
                         <div className="flex">
 							{ !hasDiscount ?
 									<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300">{"$" + renderedPrice}</span>
@@ -54,7 +55,7 @@ export default async function Card({ product_id }: { product_id: string }) {
                             <AddToCartButton product={product} />
                         </div>
 						
-						{ !hasDiscount && <p className="text-lg text-gray-900 dark:text-gray-300">{renderedDiscountText}</p> }
+						{ hasDiscount && <p className="text-lg text-gray-900 dark:text-gray-300">{renderedDiscountText}</p> }
                     </div>
                 </div>
             </div>

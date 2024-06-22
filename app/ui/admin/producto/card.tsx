@@ -1,14 +1,25 @@
  'use client';
 
+import { renderPriceWithDiscount } from '@/app/lib/utils';
 import StarRating from '@/app/ui/starRating';
 import type { Product } from '@/app/lib/types';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
 import TitleEffect from '@/app/ui/setTitle';
 
+function renderDescription(description) {
+	return description.split("\r\n").map((line, i) => <p key={i} className="leading-relaxed dark:text-gray-400">{line}</p>);
+}
+
 export default function Card({ product }: { product: Product }) {
+	const {
+		renderedPrice,
+		hasDiscount,
+		renderedPriceAfterDiscount,
+		renderedDiscountText
+	} = renderPriceWithDiscount(product.price, product.discount);
+
     return (
         <section className="text-gray-600 body-font overflow-hidden">
 			<TitleEffect title={product.name} />
@@ -29,12 +40,20 @@ export default function Card({ product }: { product: Product }) {
                                 <span className="text-gray-600 dark:text-gray-500 ml-3">Puntuación</span>
                             </span>
                         </div>
-                        <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
-                            <p className="leading-relaxed dark:text-gray-400">{product.description}</p>
-                        </div>
+                        <div className="mb-5 mt-6 pb-5"> {renderDescription(product.description)} </div>
+						
                         <div className="flex">
-                            <span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-200">{"$" + (product.price / 100)}</span>
+							{ !hasDiscount ?
+									<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300">{"$" + renderedPrice}</span>
+								:
+									<div>
+										<span className="title-font font-medium text-2xl text-gray-400 dark:text-gray-600 pr-2 line-through">{"$" + renderedPrice}</span>
+										<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-200 pl-2">{"$" + renderedPriceAfterDiscount}</span>
+									</div>
+							}
                         </div>
+						
+						{ hasDiscount && <p className="text-lg text-gray-900 dark:text-gray-300">{renderedDiscountText}</p> }
                     </div>
                 </div>
             </div>

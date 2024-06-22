@@ -36,7 +36,8 @@ export default function Card( {product}: {product: Product}) {
 									  : <span className="tracking-wider text-gray-900 dark:text-white"> {"$" + renderedPrice} </span>
 						}
                     </p>
-					<p className='text-indigo-600 dark:text-indigo-400'>{renderedDiscountText}</p>
+					
+					{ hasDiscount && <p className='text-indigo-600 dark:text-indigo-400'>{renderedDiscountText}</p> }
 
 					<span> <StarRating rating={product.rating}/> </span>
                 </div>
