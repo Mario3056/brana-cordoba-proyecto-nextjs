@@ -4,7 +4,7 @@ import StarRating from '@/app/ui/starRating';
 import TitleEffect from '@/app/ui/setTitle';
 import Image from 'next/image';
 
-function renderDescription(description) {
+function renderDescription(description: string) {
 	return description.split("\r\n").map((line, i) => <p key={i} className="leading-relaxed dark:text-gray-400">{line}</p>);
 }
 

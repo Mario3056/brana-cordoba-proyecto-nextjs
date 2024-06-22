@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TitleEffect from '@/app/ui/setTitle';
 
-function renderDescription(description) {
+function renderDescription(description: string) {
 	return description.split("\r\n").map((line, i) => <p key={i} className="leading-relaxed dark:text-gray-400">{line}</p>);
 }
 
