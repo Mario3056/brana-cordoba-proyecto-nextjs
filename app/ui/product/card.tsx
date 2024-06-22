@@ -5,7 +5,16 @@ import TitleEffect from '@/app/ui/setTitle';
 import Image from 'next/image';
 
 function renderDescription(description: string) {
-	return description.split("\r\n").map((line, i) => <p key={i} className="leading-relaxed dark:text-gray-400">{line}</p>);
+	/* // Debug
+		console.log("~~~~~~<>~~~~~~");
+		console.log(description);
+		console.log("~~~~~~<>~~~~~~");
+		console.log(description.replaceAll("\t", "").replaceAll("\r\n", "\n").replaceAll("\\r\\n", "\n").split("\n"));
+		console.log("~~~~~~**~~~~~~");
+	*/
+	return description.replaceAll("\t", "").replaceAll("\r\n", "\n").replaceAll("\\r\\n", "\n").split("\n")
+					  .map( (line, i) => <p key={i} className="leading-relaxed dark:text-gray-400"> {line} </p>
+	);
 }
 
 // import { getProductById, getAvgRating } from '@/app/lib/queries_local';
