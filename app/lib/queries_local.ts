@@ -296,7 +296,7 @@ export async function getAllSales(): Promise<SalesRecord[]> {
 	}
 }
 
-export async function getAllSalesStats(): number {
+export async function getAllSalesStats(): Promise<Number> {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		await client.connect()

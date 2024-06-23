@@ -232,7 +232,7 @@ export async function getAllSales(): Promise<SalesRecord[]> {
 	}
 }
 
-export async function getAllSalesStats(): number {
+export async function getAllSalesStats(): Promise<Number> {
 	noStore()
 	try {
 		const total_earnings = await sql`select sum(amount)/100 as total_earnings from tienda.mercadopago_records`;
