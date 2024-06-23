@@ -190,7 +190,7 @@ const CommentFormSchema = z.object({
 	related_product_id: z.string(),
 	name: z.string({
 		invalid_type_error: 'Por favor ingrese un nombre.',
-	}).min(1, "El nombre debe tener al menos 1 letra.").max(10, "El nombre no debe superar las 10 letras."),
+	}).min(1, "El nombre debe tener al menos 1 letra.").max(30, "El nombre no debe superar las 30 letras."),
 	rating: z.coerce.number({
 		invalid_type_error: "La puntuación debe ser un número real.",
 	}),
