@@ -89,3 +89,12 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
 		totalPages,
 	];
 };
+
+export function shortenString(input: string): string {
+    const maxLength = 98;
+    if (input.length <= maxLength) {
+        return input;
+    } else {
+        return input.slice(0, maxLength) + '...';
+    }
+}

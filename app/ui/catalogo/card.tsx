@@ -1,7 +1,6 @@
-import { renderPriceWithDiscount } from '@/app/lib/utils';
+import { renderPriceWithDiscount, shortenString } from '@/app/lib/utils';
 import type { Product } from '@/app/lib/types';
 import StarRating from '@/app/ui/starRating';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -26,7 +25,7 @@ export default function Card( {product}: {product: Product}) {
 
                 <div className="relative bg-base-100 pt-3 ">
                     <h3 className="text-xs text-gray-700 dark:text-slate-400 group-hover:underline group-hover:underline-offset-4">
-                        {product.name}
+                        {shortenString(product.name)}
                     </h3>
 
 					<p className="mt-2">					
