@@ -48,7 +48,7 @@ export default function Carrito() {
                 <div className="w-screen max-w-lg space-y-4">
                   <div className="space-y-0.5 text-base text-gray-700 dark:text-gray-400 flex justify-between font-medium">
                     <span className="text-lg">Total</span>
-                    <span>{"$" + currentCarritoPrice/100}</span>
+                    <span>{"$" + (currentCarritoPrice/100).toLocaleString()}</span>
                   </div>
 
                   <MercadoPagoButton />

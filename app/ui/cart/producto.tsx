@@ -4,14 +4,18 @@ import type { CartProduct, Product } from "@/app/lib/types";
 import { useCartStore } from "@/app/lib/cart/useCartStore";
 import { DeleteSymbol } from '@/app/ui/icons';
 import Image from "next/image";
+import { renderPriceWithDiscount } from '@/app/lib/utils';
 
 export default function Producto({ product }: { product: CartProduct }) {
   const removeFromCarrito = useCartStore((state) => state.removeFromCart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
-  const renderedPrice = (product.price / 100);
-	const hasDiscount = (product.discount != undefined) && (product.discount != null) && (product.discount != 0.0);
-	const renderDiscountText = (!hasDiscount) ? "" : Math.floor(product.discount*100) + "% OFF!";
-	const discountedPrice = (!hasDiscount) ? renderedPrice : ((product.price / 100) - ((product.price / 100)*product.discount)).toFixed(2);
+  
+  const {
+    renderedPrice,
+    hasDiscount,
+    renderedPriceAfterDiscount,
+    renderedDiscountText
+  } = renderPriceWithDiscount(product.price, product.discount);
 
   return (
     <>
@@ -28,14 +32,14 @@ export default function Producto({ product }: { product: CartProduct }) {
         <div className="mt-0.5 space-y-px text-[11px] text-gray-600 dark:text-gray-400">
           <span>{product.category}</span>
         </div>
-        <h3 className="text-sm text-indigo-500 dark:text-indigo-400">{renderDiscountText}</h3>
+        <h3 className="text-sm text-indigo-500 dark:text-indigo-400">{renderedDiscountText}</h3>
       </div>
 
       <div className="flex flex-1 items-center justify-end gap-2">
         { hasDiscount ? 
           <>
             <h3 className="text-base tracking-wider text-gray-400 dark:text-gray-500 line-through">{"$" + renderedPrice}</h3>
-            <h3 className="text-base text-gray-900 dark:text-gray-300">{"$" + discountedPrice}</h3>
+            <h3 className="text-base text-gray-900 dark:text-gray-300">{"$" + renderedPriceAfterDiscount}</h3>
           </>
           :
           <h3 className="text-base text-gray-900 dark:text-gray-300">{"$" + renderedPrice}</h3>

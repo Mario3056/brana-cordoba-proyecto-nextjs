@@ -10,10 +10,14 @@ import { getAllSales, getAllSalesStats } from '@/app/lib/queries'
 export default async function Ventas() {
 	const salesRecords = await getAllSales();
 	const salesStats = await getAllSalesStats();
+
+	// redundant, but toLocaleString doesn't seem to be called on salesStats unless something like this is done
+	const totalSales: string = parseFloat(salesStats.toString() ?? 0.0).toLocaleString();
+	
 	return (
 		<div className="mx-auto">
 			<h1 className="text-center font-bold text-2xl underline"> Ventas </h1>
-			<h2 className="text-center font-bold text-lg"> Ganancias totales: ${salesStats?.toLocaleString() ?? "0"} </h2>
+			<h2 className="text-center font-bold text-lg"> Ganancias totales: ${ totalSales } </h2>
 			
 			<div className="flex flex-col">
 			{ salesRecords.map((record,idx) =>

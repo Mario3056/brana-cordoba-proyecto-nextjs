@@ -9,7 +9,9 @@ import { useRouter } from 'next/navigation';
 import TitleEffect from '@/app/ui/setTitle';
 
 function renderDescription(description: string) {
-	return description.split("\r\n").map((line, i) => <p key={i} className="leading-relaxed dark:text-gray-400">{line}</p>);
+	return description.replaceAll("\t", "").replaceAll("\\r", "\n").replaceAll("\r\n", "\n").replaceAll("\\n", "\n").split("\n")
+					  .map( (line, i) => <p key={i} className="leading-relaxed dark:text-gray-400"> {line} </p>
+	);
 }
 
 export default function Card({ product }: { product: Product }) {
