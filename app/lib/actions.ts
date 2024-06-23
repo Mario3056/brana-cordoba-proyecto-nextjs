@@ -84,31 +84,30 @@ const CreateProductSchema = z.object({
 	id: z.string(),
 
 	name: z.string({
-		invalid_type_error: 'Please enter a name.',
-	}).min(1, "Name must have at least 1 letter"),
+		invalid_type_error: 'Indique un nombre para el producto.',
+	}).min(1, "El nombre debe tener al menos una letra"),
 	description: z.string({
-		invalid_type_error: 'Please enter a description.',
-	}).min(1, "Description must have at least 1 letter"),
+		invalid_type_error: 'Indique una descripción para el producto.',
+	}).min(1, "La descripción debe tener al menos una letra"),
 	category: z.string({
-		invalid_type_error: 'Please enter a category.',
-	}).min(1, "Category must have at least 1 letter"),
+		invalid_type_error: 'Indique una categoria para el producto.',
+	}).min(1, "La categoria debe tener al menos una letra"),
 
 	rating: z.coerce.number({
-		invalid_type_error: "The product's rating must be a real number.",
+		invalid_type_error: "La puntuación debe ser un numero entre 0.0 y 5.0.",
 	}),
 
 	price: z.coerce
 		.number()
-		.gt(0, { message: 'Please enter an amount greater than $0.' })
+		.gt(0, { message: 'El precio debe ser mayor a $0.' })
 		.transform((price) => price * 100),
 
 	created_at: z.string(), // string?
 	modified_at: z.string(), // string?
 
 	image: z.any()
-		.refine((file) => validFile(file), "Provide an image for the product. Valid formats are .jpg, .jpeg, .png, .avif, and .webp")
-		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
-	// .refine((file) => !validFile(file) || ACCEPTED_IMAGE_TYPES.includes(file?.type), "Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
+		.refine((file) => validFile(file), "Por favor agregue una imagen para el producto. Se aceptan .jpg, .jpeg, .png, .avif, y .webp (tamaño maximo: 5MB)")
+		.refine((file) => file?.size <= MAX_FILE_SIZE, "El tamaño maximo de imagen es 5MB.")
 });
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
@@ -117,31 +116,31 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/avi
 const EditProductSchema = z.object({
 	id: z.string(),
 	name: z.string({
-		invalid_type_error: 'Please enter a name.',
-	}).min(1, "Name must have at least 1 letter"),
+		invalid_type_error: 'Indique un nombre para el producto.',
+	}).min(1, "El nombre debe tener al menos una letra"),
 	description: z.string({
-		invalid_type_error: 'Please enter a description.',
-	}).min(1, "Description must have at least 1 letter"),
+		invalid_type_error: 'Indique una descripción para el producto.',
+	}).min(1, "La descripción debe tener al menos una letra"),
 	category: z.string({
-		invalid_type_error: 'Please enter a category.',
-	}).min(1, "Category must have at least 1 letter"),
+		invalid_type_error: 'Indique una categoria para el producto.',
+	}).min(1, "La categoria debe tener al menos una letra"),
 
 	rating: z.coerce.number({
-		invalid_type_error: "The product's rating must be a real number.",
+		invalid_type_error: "La puntuación debe ser un numero entre 0.0 y 5.0.",
 	}),
 
 	price: z.coerce
 		.number()
-		.gt(0, { message: 'Please enter an amount greater than $0.' })
+		.gt(0, { message: 'Indique un precio mayor a $0' })
 		.transform((price) => price * 100),
 
 	created_at: z.string(), // string?
 	modified_at: z.string(), // string?
 
 	image: z.object({ size: z.literal(0), name: z.literal('undefined'), type: z.literal('application/octet-stream'), lastModified: z.number() }).or(z.any()
-		.refine((file) => file?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
+		.refine((file) => file?.size <= MAX_FILE_SIZE, "El tamaño maximo de imagen es 5MB.")
 		.refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-			"Only .jpg, .jpeg, .png, .avif, and .webp formats are supported.")
+			"Solo se aceptan .jpg, .jpeg, .png, .avif, y .webp")
 	)
 });
 
@@ -149,12 +148,6 @@ const SchemaForCreation = CreateProductSchema.omit({ id: true, created_at: true,
 const SchemaForEdition = EditProductSchema.omit({ created_at: true, modified_at: true });
 
 export async function createProduct(productFormState: ProductFormState, fd: FormData) {
-	console.log("~~~~~~~~~~~~~~");
-	console.log("create: ");
-	console.log(fd);
-	console.log(fd.get("image"));
-	console.log("~~~~~~~~~~~~~~");
-
 	const fields = SchemaForCreation.safeParse(extractFormData(fd));
 	console.log(fields);
 
@@ -163,7 +156,7 @@ export async function createProduct(productFormState: ProductFormState, fd: Form
 		console.log(fields.error.flatten().fieldErrors);
 		return {
 			errors: fields.error.flatten().fieldErrors,
-			message: 'Missing fields. Failed to create product.',
+			message: 'Faltan campos. No se puede crear el producto',
 		};
 	}
 
@@ -223,7 +216,7 @@ export async function createComment(prevState: State, formData: FormData) {
 	if (!validatedFields.success) {
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
-			message: 'Missing Fields. Failed to Create Comment.',
+			message: 'Faltan campos. No se pudo crear el comentario.',
 		};
 	}
 
@@ -251,7 +244,7 @@ export async function editProduct(product: Product, productEditFormState: Produc
 
 		return {
 			errors: fields.error.flatten().fieldErrors,
-			message: 'Missing fields. Failed to create product.',
+			message: 'Error en alguno de los campos. No se pudo editar el producto.',
 		};
 	}
 
