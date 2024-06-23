@@ -23,14 +23,14 @@ export default function Navbar() {
 			
                 <div className="flex flex-row text-gray-500 dark:text-gray-300 font-semibold">
                     <Link href="/catalogo" aria-label="Ir al catálogo de productos"
-                        className={pathName === "/catalogo" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
+                        className={pathName === "/catalogo" ? "mx-2 active text-indigo-500" : "mx-2 hover:text-indigo-400"}>
                             Catálogo
                     </Link>
 					
-					<p className="px-4"> | </p>
+					<p className="mx-2"> | </p>
 					
                     <Link href="/admin/login" aria-label="Iniciar sesión para el administrador"
-                        className={pathName === "/admin/login" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
+                        className={pathName === "/admin/login" ? "mx-2 active text-indigo-500" : "mx-2 hover:text-indigo-400"}>
                             Login
                     </Link>
                 </div>
