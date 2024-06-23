@@ -12,11 +12,10 @@ export default function ToggleButton() {
     const params = new URLSearchParams(searchParams);
 
     useEffect(() => {
-        if (params.has('discounted') && (params.get('discounted') == 'true')) {
-            setIsDiscounted(true);
-        } else if (params.has('discounted') && (params.get('discounted') == 'false')) {
-            setIsDiscounted(false);
-        }
+        if (params.has('discounted')) {
+            const isDiscountedValue = params.get('discounted') === 'true';
+            setIsDiscounted(isDiscountedValue);
+          }
     }, [params]);
 
     const handleToggle = () => {
@@ -31,7 +30,7 @@ export default function ToggleButton() {
         <>
             <div className="flex flex-row-reverse pr-16 py-5 mx-auto">
                 <label htmlFor="Toggle1"
-                    className="inline-flex items-center space-x-4 cursor-pointer text-gray-800"
+                    className="inline-flex items-center space-x-4 cursor-pointer text-gray-800 dark:text-gray-300"
                 >
                     <span>Todos</span>
                     <span className="relative">
