@@ -29,11 +29,16 @@
  *  }
 */
 export function renderPriceWithDiscount(price: number, discount?: number) {
-	const renderedPrice = (price / 100);
+	const renderedPrice = (price / 100).toLocaleString();
 	const hasDiscount = (discount != undefined) && (discount != null) && (discount != 0.0);
 	const priceAfterDiscount = (!hasDiscount) ? price : Math.trunc(price - (price * discount));
-	const renderedPriceAfterDiscount = (!hasDiscount) ? renderedPrice : ((price / 100) - ((price / 100)*discount)).toFixed(2);
 	const renderedDiscountText = (!hasDiscount) ? "" : Math.floor(discount*100) + "% OFF!";
+	
+	const renderedPriceAfterDiscount = (!hasDiscount) ?
+										renderedPrice :
+										(priceAfterDiscount/100).toLocaleString();
+										
+	console.log("[",price,"]","{",discount,"} -> ", renderedPriceAfterDiscount);
 	
 	return {
 		renderedPrice: renderedPrice,

@@ -1,7 +1,7 @@
 // import { getRandomProducts } from '@/app/lib/queries_local';
 import { getRandomProducts } from '@/app/lib/queries';
 
-import { renderPriceWithDiscount } from '@/app/lib/utils';
+import { renderPriceWithDiscount, shortenString } from '@/app/lib/utils';
 import type { Product } from '@/app/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,7 +31,7 @@ function FrontpageCard({product}:{product: Product}) {
 			<Link href={"/producto/" + product.id} aria-label={"Ver producto " + product.name} className="group block overflow-hidden">
 				<Image src={product.image} width={600} height={450} priority alt={product.name} className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]" />
 				<div className="relative pt-3 bg-base-100">
-					<h3 className="text-xs text-gray-700 dark:text-slate-400 group-hover:underline group-hover:underline-offset-4">{product.name}</h3>
+					<h3 className="text-xs text-gray-700 dark:text-slate-400 group-hover:underline group-hover:underline-offset-4">{shortenString(product.name)}</h3>
 					{ !hasDiscount ?
 							<span className="title-font font-medium text-2xl text-gray-900 dark:text-gray-300">{"$" + renderedPrice}</span>
 						:
