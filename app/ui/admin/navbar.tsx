@@ -19,7 +19,18 @@ export default function Navbar() {
                 <span className="ml-3 text-xl">LibreMercado</span>
             </Link>
 			
-            <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+            <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
+			
+				<div className="pl-4" />
+				
+				<div className="text-gray-500 dark:text-gray-300 font-semibold">
+                    <Link href="/admin/ventas"
+                        className={pathName === "/admin/ventas" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
+                            Ventas
+                    </Link>
+                </div>
+				
+				<p className="px-4"> | </p>
 			
                 <div className="text-gray-500 dark:text-gray-300 font-semibold">
                     <Link href="/admin/productos" 
@@ -27,6 +38,8 @@ export default function Navbar() {
                             Listado de productos
                     </Link>
                 </div>
+				
+				<p className="px-4"> | </p>
 				
 				<div className="text-gray-500 font-semibold">
                     <Link href="/admin/productos_eliminados" 

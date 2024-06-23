@@ -1,5 +1,3 @@
-// TODO: check whether server actions need noStore()
-
 'use server';
 
 import { z } from 'zod';
@@ -14,7 +12,6 @@ import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export async function storePayment(paymentInfo: PaymentInformation) {
-	// noStore();
 	try {
 		const paymentUploadInfo = await sql`INSERT INTO tienda.mercadopago_records (paymentId, amount, status, timestamp) VALUES (
 			${paymentInfo.id},
@@ -293,7 +290,6 @@ export async function editProduct(product: Product, productEditFormState: Produc
 // const uploadedURL = await URL_promise;
 
 async function uploadToCloudinary(imageBlob: File) {
-	// does this have to be called every time or once per run?
 	cloudinary.config({
 		cloud_name: process.env.CLOUDINARY_NAME,
 		api_key: process.env.CLOUDINARY_KEY,
@@ -312,7 +308,6 @@ async function uploadToCloudinary(imageBlob: File) {
 	const publicId = Date.now();
 	const cloudExtension = ".jpg";
 	const imageName = publicId + "." + imageBlob.type.split("/")[1];
-	// console.log("<DEBUG> [uploadToCloudinary]", imageName);
 
 	// https://gist.github.com/colbyfayock/f0778baf2684d49fdaace5ee37e70138
 	const arrayBuffer = await imageBlob.arrayBuffer();
@@ -328,19 +323,10 @@ async function uploadToCloudinary(imageBlob: File) {
 	}, (err, image) => {
 		// this callback function is called after the upload is done or some error has been returned
 
-		if (!err) {
-			// console.log("~~~~~~~~~~~~~~~");
-			// console.log("Success?");
-			// console.log(image);
-			// console.log("To DB: ", image.secure_url);
-			// return image.secure_url;
-			// console.log("~~~~~~~~~~~~~~~");
-		} else {
+		if (err) {
 			console.log(err);
-			// return "/products/placeholder.png";
 		}
 	});
 
-	// console.log(">>>>>>>>>>>>", x, "<<<<<<<<<<<<<");
 	return x.secure_url;
 }

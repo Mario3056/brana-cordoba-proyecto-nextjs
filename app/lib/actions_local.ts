@@ -169,12 +169,6 @@ const SchemaForCreation = CreateProductSchema.omit({ id: true, created_at: true,
 const SchemaForEdition = EditProductSchema.omit({ id: true, created_at: true, modified_at: true });
 
 export async function createProduct(productFormState: ProductFormState, fd: FormData) {
-	console.log("~~~~~~~~~~~~~~");
-	console.log("create: ");
-	console.log(fd);
-	console.log(fd.get("image"));
-	console.log("~~~~~~~~~~~~~~");
-
 	const fields = SchemaForCreation.safeParse(extractFormData(fd));
 	console.log(fields);
 
@@ -270,13 +264,6 @@ export async function createComment(prevState: State, formData: FormData) {
 }
 
 export async function editProduct(product: Product, productFormState: ProductFormState, fd: FormData) {
-	console.log("~~~~~~~~~~~~~~");
-	console.log("edit");
-	console.log(fd);
-	console.log(fd.get('image'));
-	console.log(fd.get('id')); // testing the hidden field in the form
-	console.log("~~~~~~~~~~~~~~");
-
 	const fields = SchemaForEdition.safeParse(extractFormData(fd));
 	console.log(fields);
 
@@ -330,7 +317,6 @@ export async function editProduct(product: Product, productFormState: ProductFor
 // const uploadedURL = await URL_promise;
 
 async function uploadToCloudinary(imageBlob: File) {
-	// does this have to be called every time or once per run?
 	cloudinary.config({
 		cloud_name: process.env.CLOUDINARY_NAME,
 		api_key: process.env.CLOUDINARY_KEY,
@@ -338,7 +324,7 @@ async function uploadToCloudinary(imageBlob: File) {
 		secure: true,
 	});
 
-	console.log(imageBlob);
+	// console.log(imageBlob);
 	// File {
 	//    size: 1238357,
 	//    type: 'image/jpeg',
@@ -365,19 +351,10 @@ async function uploadToCloudinary(imageBlob: File) {
 	}, (err, image) => {
 		// this callback function is called after the upload is done or some error has been returned
 
-		if (!err) {
-			// console.log("~~~~~~~~~~~~~~~");
-			// console.log("Success?");
-			// console.log(image);
-			// console.log("To DB: ", image.secure_url);
-			// return image.secure_url;
-			// console.log("~~~~~~~~~~~~~~~");
-		} else {
+		if (err) {
 			console.log(err);
-			// return "/products/placeholder.png";
 		}
 	});
 
-	// console.log(">>>>>>>>>>>>", x, "<<<<<<<<<<<<<");
 	return x.secure_url;
 }

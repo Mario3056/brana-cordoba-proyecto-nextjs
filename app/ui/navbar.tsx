@@ -26,6 +26,9 @@ export default function Navbar() {
                         className={pathName === "/catalogo" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
                             Catálogo
                     </Link>
+					
+					<p className="px-4"> | </p>
+					
                     <Link href="/admin/login" aria-label="Iniciar sesión para el administrador"
                         className={pathName === "/admin/login" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
                             Login

@@ -5,21 +5,6 @@ import type { SalesRecord, AdminUser, Product, ProductComment } from '@/app/lib/
 export const ITEMS_PER_PAGE = 8;
 export const COMMENTS_PER_PAGE = 6;
 
-// later: getAllSalesPages(pageNumber: number)
-export async function getAllSales(): Promise<SalesRecord[]> {
-	try {
-		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
-		await client.connect()
-		const salesRecords = await client.query("SELECT * FROM tienda.mercadopago_records ORDER BY timestamp ASC");
-		await client.end();
-
-		return salesRecords.rows as SalesRecord[];
-	} catch (error) {
-		console.error('Failed to fetch sales records:', error);
-		throw new Error('Failed to fetch sales records');
-	}
-}
-
 export async function getDeletedProducts(): Promise<Product[]> {
 	try {
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
@@ -294,5 +279,37 @@ export async function getAvgRating(product_id: string) {
 	} catch (error) {
 		console.error('Database Error:', error);
 		throw new Error('Failed to get average rating of comments for the product');
+	}
+}
+
+export async function getAllSales(): Promise<SalesRecord[]> {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect()
+		const salesRecords = await client.query("SELECT id, paymentid, amount, status, timestamp::date FROM tienda.mercadopago_records ORDER BY timestamp DESC");
+		await client.end();
+
+		return salesRecords.rows as SalesRecord[];
+	} catch (error) {
+		console.error('Failed to fetch sales records:', error);
+		throw new Error('Failed to fetch sales records');
+	}
+}
+
+export async function getAllSalesStats(): number {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect()
+		
+		const total_earnings = await client.query("select sum(amount)/100 as total_earnings from tienda.mercadopago_records");
+		// const yearly_earnings = await client.query("select date_trunc('year', timestamp::date) as year, sum(amount)/100 as yearly_earnings from tienda.mercadopago_records group by year");
+		// const monthly_earnings = await client.query("select date_trunc('month', timestamp::date) as month, sum(amount)/100 as monthly_earnings from tienda.mercadopago_records group by year");
+		
+		await client.end();
+
+		return total_earnings.rows[0].total_earnings;
+	} catch (error) {
+		console.error('Failed to fetch sales records stats:', error);
+		throw new Error('Failed to fetch sales records stats');
 	}
 }

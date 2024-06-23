@@ -5,17 +5,6 @@ import type { SalesRecord, AdminUser, Product, ProductComment } from '@/app/lib/
 export const ITEMS_PER_PAGE = 8;
 export const COMMENTS_PER_PAGE = 6;
 
-// later: getAllSalesPages(pageNumber: number)
-export async function getAllSales(): Promise<SalesRecord[]> {
-	try {
-		const salesRecords = await sql`SELECT * FROM tienda.mercadopago_records ORDER BY timestamp ASC`;
-		return salesRecords.rows as SalesRecord[];
-	} catch (error) {
-		console.error('Failed to fetch sales records:', error);
-		throw new Error('Failed to fetch sales records');
-	}
-}
-
 export async function getDeletedProducts(): Promise<Product[]> {
 	noStore();
 	try {
@@ -230,5 +219,26 @@ export async function getAvgRating(product_id: string) {
 	} catch (error) {
 		console.error('Database Error:', error);
 		throw new Error('Failed to get average rating of comments for the product');
+	}
+}
+
+export async function getAllSales(): Promise<SalesRecord[]> {
+	try {
+		const salesRecords = await sql`SELECT id, paymentid, amount, status, timestamp::date FROM tienda.mercadopago_records ORDER BY timestamp DESC`;
+		return salesRecords.rows as SalesRecord[];
+	} catch (error) {
+		console.error('Failed to fetch sales records:', error);
+		throw new Error('Failed to fetch sales records');
+	}
+}
+
+export async function getAllSalesStats(): number {
+	noStore()
+	try {
+		const total_earnings = await sql`select sum(amount)/100 as total_earnings from tienda.mercadopago_records`;
+		return total_earnings.rows[0].total_earnings;
+	} catch (error) {
+		console.error('Failed to fetch sales records stats:', error);
+		throw new Error('Failed to fetch sales records stats');
 	}
 }
