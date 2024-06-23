@@ -1,6 +1,6 @@
 import pg from 'pg'
 const { Client } = pg;
-import type { SalesRecord, AdminUser, Product, ProductComment } from '@/app/lib/types';
+import type { SalesRecord, AdminUser, Product, ProductComment, ProductFilter } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
 export const COMMENTS_PER_PAGE = 6;
@@ -294,5 +294,133 @@ export async function getAvgRating(product_id: string) {
 	} catch (error) {
 		console.error('Database Error:', error);
 		throw new Error('Failed to get average rating of comments for the product');
+	}
+}
+
+export async function getProductsByPageWithFilters(pageNumber: number, filter: ProductFilter): Promise<Product[]> {
+	if (pageNumber < 1) { return [] }; // throw an error instead?
+
+	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
+
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+		let page;
+
+		// [DEBUG] Test for skeletons - remove before production
+		console.log('Fetching products by page...');
+		await new Promise((resolve) => setTimeout(resolve, 1500));
+
+		if (filter.discounted) {
+			page = await client.query(`SELECT * FROM tienda.catalogo
+				WHERE discount > 0
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+			);
+		} else {
+			page = await client.query(`SELECT * FROM tienda.catalogo
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+			);
+		}
+
+		console.log('Data fetch completed after 1.5 seconds.'); // [DEBUG]
+		// console.log(page.rows); // [DEBUG]
+
+		await client.end()
+		return page.rows as Product[];
+
+	} catch (error) {
+		console.error('Failed to fetch page of products:', error);
+		throw new Error('Failed to fetch page of products');
+	}
+}
+
+export async function getSearchedProductsByPageWithFilters(pageNumber: number, query: string, filter: ProductFilter): Promise<Product[]> {
+	if (pageNumber < 1) { return [] }; // throw an error instead?
+	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
+
+	// sanitize query: escape all characters? prepared statements?
+	// https://www.postgresql.org/docs/current/sql-prepare.html
+	const escapeAll = (s: string) => s.split("").map(c => "\\" + c).join("");
+	query = escapeAll(query);
+
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		let page;
+
+		console.log(`SELECT * FROM tienda.catalogo
+				WHERE name ILIKE '%${query}%' OR
+					  description ILIKE '%${query}%' OR
+					  category ILIKE '%${query}%'
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
+		;
+
+		await client.connect();
+
+		if (filter.discounted) {
+			page = await client.query(`SELECT * FROM tienda.catalogo
+				WHERE discount > 0
+				AND (
+					name ILIKE '%${query}%' OR
+					description ILIKE '%${query}%' OR
+					category ILIKE '%${query}%'
+				)
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
+			;
+		}else{
+			page = await client.query(`SELECT * FROM tienda.catalogo
+				WHERE name ILIKE '%${query}%' OR
+					  description ILIKE '%${query}%' OR
+					  category ILIKE '%${query}%'
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
+			;
+		}
+
+		await client.end();
+		return page.rows as Product[];
+
+	} catch (error) {
+		console.error('Failed to fetch page of filtered products:', error);
+		throw new Error('Failed to fetch page of filtered products');
+	}
+}
+
+export async function fetchProductsPagesWithFilters(query: string, filter: ProductFilter): Promise<number> {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+		let count;
+
+		if (filter.discounted){
+			count = await client.query(`SELECT COUNT(*) 
+			FROM tienda.catalogo
+			WHERE discount > 0
+			AND (
+				name ILIKE '%${query}%' OR
+				description ILIKE '%${query}%' OR
+				category ILIKE '%${query}%'	
+			)`
+		);
+
+		}else{
+			count = await client.query(`SELECT COUNT(*) 
+			FROM tienda.catalogo
+			WHERE 
+				name ILIKE '%${query}%' OR
+				description ILIKE '%${query}%' OR
+				category ILIKE '%${query}%'`
+		);
+		}
+		
+		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+		await client.end();
+		return totalPages;
+	} catch (error) {
+		console.error('Database Error:', error);
+		throw new Error('Failed to fetch total number of products.');
 	}
 }

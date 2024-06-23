@@ -110,3 +110,7 @@ export type ProductComment = {
   rating: number;
   content: string;
 }
+
+export type ProductFilter = {
+	discounted: boolean;
+}
