@@ -19,9 +19,9 @@ export default function Navbar() {
                 <span className="ml-3 text-xl">LibreMercado</span>
             </Link>
 			
-            <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+            <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
 			
-                <div className="text-gray-500 dark:text-gray-300 font-semibold">
+                <div className="flex flex-row text-gray-500 dark:text-gray-300 font-semibold">
                     <Link href="/catalogo" aria-label="Ir al catálogo de productos"
                         className={pathName === "/catalogo" ? "mr-5 active text-indigo-500" : "mr-5 hover:text-indigo-400"}>
                             Catálogo
