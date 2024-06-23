@@ -38,8 +38,6 @@ export function renderPriceWithDiscount(price: number, discount?: number) {
 										renderedPrice :
 										(priceAfterDiscount/100).toLocaleString();
 										
-	console.log("[",price,"]","{",discount,"} -> ", renderedPriceAfterDiscount);
-	
 	return {
 		renderedPrice: renderedPrice,
 		hasDiscount: hasDiscount,

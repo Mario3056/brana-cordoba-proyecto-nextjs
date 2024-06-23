@@ -11,6 +11,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { renderPriceWithDiscount } from "@/app/lib/utils";
+import type { Product } from '@/app/lib/types.d';
 
 export default async function Table({
     query,
@@ -38,7 +39,7 @@ export default async function Table({
     )
 }
 
-function TableRow({product}: { p: Product} ) {
+function TableRow({product}: { product: Product} ) {
 	const {
 		renderedPrice,
 		hasDiscount,

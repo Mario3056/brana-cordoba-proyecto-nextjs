@@ -16,7 +16,7 @@ export default async function Table({products}: {products: Product[]}) {
     )
 }
 
-function DeletedTableRow({product}: { p: Product} ) {
+function DeletedTableRow({product}: { product: Product} ) {
 	const {
 		renderedPrice,
 		hasDiscount,
