@@ -311,6 +311,8 @@ export async function getAllSalesStats(): Promise<Number> {
 	} catch (error) {
 		console.error('Failed to fetch sales records stats:', error);
 		throw new Error('Failed to fetch sales records stats');
+	}
+}	
 export async function getProductsByPageWithFilters(pageNumber: number, filter: ProductFilter): Promise<Product[]> {
 	if (pageNumber < 1) { return [] }; // throw an error instead?
 
