@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { SalesRecord, AdminUser, Product, ProductComment } from '@/app/lib/types';
+import type { SalesRecord, AdminUser, Product, ProductComment, ProductFilter } from '@/app/lib/types';
 
 export const ITEMS_PER_PAGE = 8;
 export const COMMENTS_PER_PAGE = 6;
@@ -8,7 +8,7 @@ export const COMMENTS_PER_PAGE = 6;
 export async function getDeletedProducts(): Promise<Product[]> {
 	noStore();
 	try {
-		const deletedProducts = await sql`SELECT * FROM tienda.deleted_products ORDER BY created_at ASC`;		
+		const deletedProducts = await sql`SELECT * FROM tienda.deleted_products ORDER BY created_at ASC`;
 		return deletedProducts.rows as Product[];
 	} catch (error) {
 		console.error('Failed to fetch deleted products:', error);
@@ -18,10 +18,10 @@ export async function getDeletedProducts(): Promise<Product[]> {
 
 export async function getProductsByPage(pageNumber: number): Promise<Product[]> {
 	noStore();
-	
+
 	if (pageNumber < 1) { return [] }; // throw an error instead?
 	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
-	
+
 	try {
 		const page = await sql`SELECT * FROM tienda.catalogo
 				ORDER BY created_at ASC
@@ -47,15 +47,15 @@ export async function getRandomProducts(n: number): Promise<Product[]> {
 
 export async function getFilteredProductsByPage(pageNumber: number, query: string): Promise<Product[]> {
 	noStore();
-	
+
 	if (pageNumber < 1) { return [] }; // throw an error instead?
 	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
-	
+
 	// sanitize query: escape all characters? prepared statements?
 	// https://www.postgresql.org/docs/current/sql-prepare.html
 	const escapeAll = (s: string) => s.split("").map(c => "\\" + c).join("");
 	query = escapeAll(query);
-	
+
 	try {
 		const page = await sql`SELECT * FROM tienda.catalogo
 				WHERE name ILIKE ${'%' + query + '%'} OR
@@ -63,7 +63,7 @@ export async function getFilteredProductsByPage(pageNumber: number, query: strin
 					  category ILIKE ${'%' + query + '%'}
 				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`;
-				
+
 		return page.rows as Product[];
 	} catch (error) {
 		console.error('Failed to fetch page of products:', error);
@@ -82,7 +82,7 @@ export async function getProductsByCategory(category: string, pageNumber: number
 				WHERE category LIKE ${category}
 				ORDER BY created_at ASC
 				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`;
-		
+
 		return page.rows as Product[];
 	} catch (error) {
 		console.error('Failed to fetch page of category ' + category + ':', error);
@@ -157,10 +157,10 @@ export async function getCommentsByPage(
 	pageNumber: number
 ): Promise<ProductComment[]> {
 	noStore();
-	
+
 	if (pageNumber < 1) { return [] }; // throw an error instead?
 	const pageOffset = (pageNumber - 1) * COMMENTS_PER_PAGE;
-	
+
 	try {
 		// [DEBUG] Test for skeletons - remove before production
 		console.log('Fetching comments...');
@@ -240,5 +240,109 @@ export async function getAllSalesStats(): Promise<Number> {
 	} catch (error) {
 		console.error('Failed to fetch sales records stats:', error);
 		throw new Error('Failed to fetch sales records stats');
+export async function getProductsByPageWithFilters(pageNumber: number, filter: ProductFilter): Promise<Product[]> {
+	noStore();
+
+	if (pageNumber < 1) { return [] }; // throw an error instead?
+	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
+
+	try {
+		let page;
+
+		if (filter.discounted) {
+			page = await sql`SELECT * FROM tienda.catalogo
+				WHERE discount > 0
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				;
+		} else {
+			page = await sql`SELECT * FROM tienda.catalogo
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				;
+		}
+
+		return page.rows as Product[];
+	} catch (error) {
+		console.error('Failed to fetch page of products:', error);
+		throw new Error('Failed to fetch page of products');
+	}
+}
+
+export async function getSearchedProductsByPageWithFilters(pageNumber: number, query: string, filter: ProductFilter): Promise<Product[]> {
+	noStore();
+
+	if (pageNumber < 1) { return [] }; // throw an error instead?
+	const pageOffset = (pageNumber - 1) * ITEMS_PER_PAGE;
+
+	// sanitize query: escape all characters? prepared statements?
+	// https://www.postgresql.org/docs/current/sql-prepare.html
+	const escapeAll = (s: string) => s.split("").map(c => "\\" + c).join("");
+	query = escapeAll(query);
+
+	try {
+		let page;
+
+		if (filter.discounted) {
+			page = await sql`SELECT * FROM tienda.catalogo
+				WHERE discount > 0
+				AND (
+					name ILIKE ${'%' + query + '%'} OR
+					description ILIKE ${'%' + query + '%'} OR
+					category ILIKE ${'%' + query + '%'}					
+				)
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				;
+		} else {
+			page = await sql`SELECT * FROM tienda.catalogo
+				WHERE name ILIKE ${'%' + query + '%'} OR
+					  description ILIKE ${'%' + query + '%'} OR
+					  category ILIKE ${'%' + query + '%'}
+				ORDER BY created_at ASC
+				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				;
+		}
+
+		return page.rows as Product[];
+
+	} catch (error) {
+		console.error('Failed to fetch page of filtered products:', error);
+		throw new Error('Failed to fetch page of filtered products');
+	}
+}
+
+export async function fetchProductsPagesWithFilters(query: string, filter: ProductFilter): Promise<number> {
+	noStore();
+
+	try {
+		let count;
+
+		if (filter.discounted) {
+			count = await sql`SELECT COUNT(*) 
+				FROM tienda.catalogo
+				WHERE discount > 0
+				AND (
+					name ILIKE ${'%' + query + '%'} OR
+					description ILIKE ${'%' + query + '%'} OR
+					category ILIKE ${'%' + query + '%'}			
+				)`
+			;
+		} else {
+			count = await sql`SELECT COUNT(*) 
+				FROM tienda.catalogo
+				WHERE 
+					name ILIKE ${'%' + query + '%'} OR
+					description ILIKE ${'%' + query + '%'} OR
+					category ILIKE ${'%' + query + '%'}
+				`
+			;
+		}
+
+		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+		return totalPages;
+	} catch (error) {
+		console.error('Database Error:', error);
+		throw new Error('Failed to fetch total number of products.');
 	}
 }
