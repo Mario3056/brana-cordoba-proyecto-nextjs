@@ -6,15 +6,13 @@ import { getProductsByPage, getFilteredProductsByPage, getProductsByPageWithFilt
 export default async function Cards({
     query,
     currentPage,
-    discounted,
-    categories
+    discounted
 }: {
     query: string;
     currentPage: number;
     discounted: boolean;
-    categories: string[]
 }) {
-    const filters = { discounted, categories };
+    const filters = { discounted };
     const products = (query == '')
 		? await getProductsByPageWithFilters(currentPage, filters)
 		: await getSearchedProductsByPageWithFilters(currentPage, query, filters)

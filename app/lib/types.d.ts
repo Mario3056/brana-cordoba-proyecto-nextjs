@@ -113,5 +113,4 @@ export type ProductComment = {
 
 export type ProductFilter = {
 	discounted: boolean;
-	categories: string[]
 }
