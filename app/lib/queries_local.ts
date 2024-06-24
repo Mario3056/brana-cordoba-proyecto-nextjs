@@ -307,25 +307,39 @@ export async function getProductsByPageWithFilters(pageNumber: number, filter: P
 		await client.connect();
 		let page;
 
-		// [DEBUG] Test for skeletons - remove before production
-		console.log('Fetching products by page...');
-		await new Promise((resolve) => setTimeout(resolve, 1500));
-
 		if (filter.discounted) {
-			page = await client.query(`SELECT * FROM tienda.catalogo
-				WHERE discount > 0
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
-			);
-		} else {
-			page = await client.query(`SELECT * FROM tienda.catalogo
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
-			);
-		}
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
 
-		console.log('Data fetch completed after 1.5 seconds.'); // [DEBUG]
-		// console.log(page.rows); // [DEBUG]
+				page = await client.query(`SELECT * FROM tienda.catalogo
+					WHERE discount > 0
+					AND category IN (${categoryList})
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				);
+			}else{
+				page = await client.query(`SELECT * FROM tienda.catalogo
+					WHERE discount > 0
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				);
+			}
+		} else {
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				page = await client.query(`SELECT * FROM tienda.catalogo
+					WHERE category IN (${categoryList})
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				);
+			}else{
+				page = await client.query(`SELECT * FROM tienda.catalogo
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				);
+			}
+		}
 
 		await client.end()
 		return page.rows as Product[];
@@ -349,35 +363,58 @@ export async function getSearchedProductsByPageWithFilters(pageNumber: number, q
 		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
 		let page;
 
-		console.log(`SELECT * FROM tienda.catalogo
-				WHERE name ILIKE '%${query}%' OR
-					  description ILIKE '%${query}%' OR
-					  category ILIKE '%${query}%'
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
-		;
-
 		await client.connect();
 
 		if (filter.discounted) {
-			page = await client.query(`SELECT * FROM tienda.catalogo
-				WHERE discount > 0
-				AND (
-					name ILIKE '%${query}%' OR
-					description ILIKE '%${query}%' OR
-					category ILIKE '%${query}%'
-				)
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
-			;
-		}else{
-			page = await client.query(`SELECT * FROM tienda.catalogo
-				WHERE name ILIKE '%${query}%' OR
-					  description ILIKE '%${query}%' OR
-					  category ILIKE '%${query}%'
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
-			;
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				page = await client.query(`SELECT * FROM tienda.catalogo
+					WHERE discount > 0
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'
+					)
+					AND category IN (${categoryList})
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
+					;
+			}else{
+				page = await client.query(`SELECT * FROM tienda.catalogo
+					WHERE discount > 0
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'
+					)
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
+					;
+			}
+		} else {
+			if (filter.categories.length > 0){
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				page = await client.query(`SELECT * FROM tienda.catalogo
+					WHERE category IN (${categoryList})
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'
+					)
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
+					;
+			}else{
+				page = await client.query(`SELECT * FROM tienda.catalogo
+					WHERE name ILIKE '%${query}%' OR
+						  description ILIKE '%${query}%' OR
+						  category ILIKE '%${query}%'
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`)
+					;
+			}
 		}
 
 		await client.end();
@@ -395,32 +432,79 @@ export async function fetchProductsPagesWithFilters(query: string, filter: Produ
 		await client.connect();
 		let count;
 
-		if (filter.discounted){
-			count = await client.query(`SELECT COUNT(*) 
-			FROM tienda.catalogo
-			WHERE discount > 0
-			AND (
-				name ILIKE '%${query}%' OR
-				description ILIKE '%${query}%' OR
-				category ILIKE '%${query}%'	
-			)`
-		);
+		if (filter.discounted) {
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
 
-		}else{
-			count = await client.query(`SELECT COUNT(*) 
-			FROM tienda.catalogo
-			WHERE 
-				name ILIKE '%${query}%' OR
-				description ILIKE '%${query}%' OR
-				category ILIKE '%${query}%'`
-		);
+				count = await client.query(`SELECT COUNT(*) 
+					FROM tienda.catalogo
+					WHERE discount > 0
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'	
+					)
+					AND category IN (${categoryList})`
+				);
+			} else {
+				count = await client.query(`SELECT COUNT(*) 
+					FROM tienda.catalogo
+					WHERE discount > 0
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'	
+					)`
+				);
+			}
+		} else {
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				count = await client.query(`SELECT COUNT(*) 
+					FROM tienda.catalogo
+					WHERE category IN (${categoryList})
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'
+					)`
+				);
+			} else {
+				count = await client.query(`SELECT COUNT(*) 
+					FROM tienda.catalogo
+					WHERE
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'`
+				);
+			}
 		}
-		
+
 		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
 		await client.end();
 		return totalPages;
 	} catch (error) {
 		console.error('Database Error:', error);
 		throw new Error('Failed to fetch total number of products.');
+	}
+}
+
+export async function getProductsCategories(): Promise<string[]> {
+	try {
+		const client = new Client({ host: "localhost", user: "postgres", password: "postgres", database: "VercelTest", port: 5432 });
+		await client.connect();
+
+		const result = await client.query(`SELECT DISTINCT category FROM tienda.catalogo`);
+
+		await client.end();
+
+		const categories = result.rows.map(row => row.category);
+
+		return categories;
+
+	} catch (error) {
+		console.error('Failed to fetch page of products:', error);
+		throw new Error('Failed to fetch page of products');
 	}
 }

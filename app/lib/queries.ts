@@ -243,16 +243,37 @@ export async function getProductsByPageWithFilters(pageNumber: number, filter: P
 		let page;
 
 		if (filter.discounted) {
-			page = await sql`SELECT * FROM tienda.catalogo
-				WHERE discount > 0
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				page = await sql`SELECT * FROM tienda.catalogo
+					WHERE discount > 0
+					AND category IN (${categoryList})
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
 				;
+			}else{
+				page = await sql`SELECT * FROM tienda.catalogo
+					WHERE discount > 0
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				;
+			}
 		} else {
-			page = await sql`SELECT * FROM tienda.catalogo
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				page = await sql`SELECT * FROM tienda.catalogo
+					WHERE category IN (${categoryList})
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
 				;
+			}else{
+				page = await sql`SELECT * FROM tienda.catalogo
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+				;
+			}
 		}
 
 		return page.rows as Product[];
@@ -277,24 +298,55 @@ export async function getSearchedProductsByPageWithFilters(pageNumber: number, q
 		let page;
 
 		if (filter.discounted) {
-			page = await sql`SELECT * FROM tienda.catalogo
-				WHERE discount > 0
-				AND (
-					name ILIKE ${'%' + query + '%'} OR
-					description ILIKE ${'%' + query + '%'} OR
-					category ILIKE ${'%' + query + '%'}					
-				)
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
-				;
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				page = await sql`SELECT * FROM tienda.catalogo
+					WHERE discount > 0
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'
+					)
+					AND category IN (${categoryList})
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+					;
+			}else{
+				page = await sql`SELECT * FROM tienda.catalogo
+					WHERE discount > 0
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'
+					)
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+					;
+			}
 		} else {
-			page = await sql`SELECT * FROM tienda.catalogo
-				WHERE name ILIKE ${'%' + query + '%'} OR
-					  description ILIKE ${'%' + query + '%'} OR
-					  category ILIKE ${'%' + query + '%'}
-				ORDER BY created_at ASC
-				OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
-				;
+			if (filter.categories.length > 0){
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				page = await sql`SELECT * FROM tienda.catalogo
+					WHERE category IN (${categoryList})
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'
+					)
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+					;
+			}else{
+				page = await sql`SELECT * FROM tienda.catalogo
+					WHERE name ILIKE '%${query}%' OR
+						  description ILIKE '%${query}%' OR
+						  category ILIKE '%${query}%'
+					ORDER BY created_at ASC
+					OFFSET ${pageOffset} LIMIT ${ITEMS_PER_PAGE}`
+					;
+			}
 		}
 
 		return page.rows as Product[];
@@ -312,24 +364,52 @@ export async function fetchProductsPagesWithFilters(query: string, filter: Produ
 		let count;
 
 		if (filter.discounted) {
-			count = await sql`SELECT COUNT(*) 
-				FROM tienda.catalogo
-				WHERE discount > 0
-				AND (
-					name ILIKE ${'%' + query + '%'} OR
-					description ILIKE ${'%' + query + '%'} OR
-					category ILIKE ${'%' + query + '%'}			
-				)`
-			;
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				count = await sql`SELECT COUNT(*) 
+					FROM tienda.catalogo
+					WHERE discount > 0
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'	
+					)
+					AND category IN (${categoryList})`
+				;
+			} else {
+				count = await sql`SELECT COUNT(*) 
+					FROM tienda.catalogo
+					WHERE discount > 0
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'	
+					)`
+				;
+			}
 		} else {
-			count = await sql`SELECT COUNT(*) 
-				FROM tienda.catalogo
-				WHERE 
-					name ILIKE ${'%' + query + '%'} OR
-					description ILIKE ${'%' + query + '%'} OR
-					category ILIKE ${'%' + query + '%'}
-				`
-			;
+			if (filter.categories.length > 0) {
+				const categoryList = filter.categories.map(category => `'${category}'`).join(', ');
+
+				count = await sql`SELECT COUNT(*) 
+					FROM tienda.catalogo
+					WHERE category IN (${categoryList})
+					AND (
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'
+					)`
+				;
+			} else {
+				count = await sql`SELECT COUNT(*) 
+					FROM tienda.catalogo
+					WHERE
+						name ILIKE '%${query}%' OR
+						description ILIKE '%${query}%' OR
+						category ILIKE '%${query}%'`
+				;
+			}
 		}
 
 		const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
@@ -337,5 +417,19 @@ export async function fetchProductsPagesWithFilters(query: string, filter: Produ
 	} catch (error) {
 		console.error('Database Error:', error);
 		throw new Error('Failed to fetch total number of products.');
+	}
+}
+
+export async function getProductsCategories(): Promise<string[]> {
+	try {
+		const result = await sql`SELECT DISTINCT category FROM tienda.catalogo`;
+
+		const categories = result.rows.map(row => row.category);
+
+		return categories;
+
+	} catch (error) {
+		console.error('Failed to fetch page of products:', error);
+		throw new Error('Failed to fetch page of products');
 	}
 }
